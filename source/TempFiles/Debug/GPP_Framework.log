@@ -1,7 +1,39 @@
-﻿  Flock.cpp
-C:\DAE\_FRAMEWORK\_FRAMEWORK\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(223,25): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\_FRAMEWORK\_FRAMEWORK\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(228,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\DAE\_FRAMEWORK\_FRAMEWORK\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(241,25): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\_FRAMEWORK\_FRAMEWORK\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(246,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-  GPP_Framework.vcxproj -> C:\DAE\_FRAMEWORK\_FRAMEWORK\bin\Debug\GPP_Framework.exe
+﻿  stdafx.cpp
+  EGeometry2DTypes.cpp
+  EInputManager.cpp
+  EMatrix2x3.cpp
+  ERigidBodyBox2D.cpp
+  EPhysicsWorldBox2D.cpp
+  ECamera2D.cpp
+  SDLDebugRenderer2D.cpp
+  SDLFrame.cpp
+  ETimer_SDL.cpp
+  EImmediateUI.cpp
+  SDLWindow.cpp
+  gl3w.c
+  main.cpp
+  App_Sandbox.cpp
+  SandboxAgent.cpp
+C:\DAE\GameplayProgramming\source\projects\Movement\Sandbox\SandboxAgent.cpp(65,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\DAE\GameplayProgramming\source\projects\Movement\Sandbox\SandboxAgent.cpp(68,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  App_CombinedSteering.cpp
+  CombinedSteeringBehaviors.cpp
+  App_Flocking.cpp
+  Flock.cpp
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(223,25): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(228,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(241,25): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(246,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+  FlockingSteeringBehaviors.cpp
+  Generating Code...
+  Compiling...
+  SpacePartitioning.cpp
+  App_SteeringBehaviors.cpp
+  Obstacle.cpp
+  SteeringAgent.cpp
+  SteeringBehaviors.cpp
+  BaseAgent.cpp
+  Generating Code...
+  LINK : C:\DAE\GameplayProgramming\source\..\bin\Debug\GPP_Framework.exe not found or not built by the last incremental link; performing full link
+  GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
   0 File(s) copied

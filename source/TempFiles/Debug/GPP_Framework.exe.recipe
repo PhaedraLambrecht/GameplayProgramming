@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\DAE\_FRAMEWORK\_FRAMEWORK\bin\Debug\GPP_Framework.exe</FullPath>
+      <FullPath>C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
