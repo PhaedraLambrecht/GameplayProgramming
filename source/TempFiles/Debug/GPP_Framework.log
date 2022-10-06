@@ -1,0 +1,7 @@
+﻿  Flock.cpp
+C:\DAE\_FRAMEWORK\_FRAMEWORK\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(223,25): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\_FRAMEWORK\_FRAMEWORK\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(228,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\DAE\_FRAMEWORK\_FRAMEWORK\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(241,25): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\_FRAMEWORK\_FRAMEWORK\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(246,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+  GPP_Framework.vcxproj -> C:\DAE\_FRAMEWORK\_FRAMEWORK\bin\Debug\GPP_Framework.exe
+  0 File(s) copied
