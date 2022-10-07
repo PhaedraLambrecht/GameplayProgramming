@@ -33,17 +33,13 @@ SteeringOutput Separation::CalculateSteering(float deltaT, SteeringAgent* pAgent
 
 
 	// go trough every neighbor and adjust the length
-	for(const auto neighbor: m_pFlock->GetNeighbors())
+	for(int idx{}; idx < m_pFlock->GetNrOfNeighbors(); ++idx)
 	{
-		if(neighbor != nullptr)
-		{
-			// calculate distance
-			Elite::Vector2 distance{ pAgent->GetPosition() - neighbor->GetPosition() };
+		// calculate distance
+		Elite::Vector2 distance{ pAgent->GetPosition() - m_pFlock->GetNeighbors()[idx]->GetPosition()};
 
-			// Distance / by it's magnitude squared
-			steering.LinearVelocity +=  distance / distance.MagnitudeSquared() ;
-
-		}
+		// Distance / by it's magnitude squared
+		steering.LinearVelocity +=  distance / distance.MagnitudeSquared() ;
 	}
 	steering.LinearVelocity.Normalize();
 	steering.LinearVelocity *= pAgent->GetMaxLinearSpeed();// Rescale to max speed

@@ -9,17 +9,17 @@ using namespace Elite;
 
 //Constructor & Destructor
 Flock::Flock(
-	int flockSize /*= 50*/, 
-	float worldSize /*= 100.f*/, 
-	SteeringAgent* pAgentToEvade /*= nullptr*/, 
+	int flockSize /*= 50*/,
+	float worldSize /*= 100.f*/,
+	SteeringAgent* pAgentToEvade /*= nullptr*/,
 	bool trimWorld /*= false*/)
 
 	:m_WorldSize{ worldSize }
-	,m_FlockSize{ flockSize }
-	,m_TrimWorld { trimWorld }
-	,m_pAgentToEvade{pAgentToEvade}
-	,m_NeighborhoodRadius{ 15 }
-	,m_NrOfNeighbors{0}
+	, m_FlockSize{ flockSize }
+	, m_TrimWorld{ trimWorld }
+	, m_pAgentToEvade{ pAgentToEvade }
+	, m_NeighborhoodRadius{ 15 }
+	, m_NrOfNeighbors{ 0 }
 {
 	// Behaviors
 	m_pSeekBehavior = new Seek();
@@ -31,38 +31,42 @@ Flock::Flock(
 	m_pEvadeBehavior = new Evade();
 
 
-	// Adding blendedSteering
+	// BlendedSteering
 	m_pBlendedSteering = new BlendedSteering({ {m_pSeekBehavior, 0.5f},
 																{m_pSeparationBehavior, 0.5f},
 																{m_pCohesionBehavior, 0.5f},
 																{m_pVelMatchBehavior, 0.5f},
-																{m_pWanderBehavior, 0.5f},
-																{m_pEvadeBehavior, 0.5f} } );
-	
+																{m_pWanderBehavior, 0.5f} });
+	// Priority steering
+	m_pPrioritySteering = new PrioritySteering({ m_pEvadeBehavior, m_pBlendedSteering });
+
 
 	// initialize the flock and the memory pool
 	m_Agents.resize(m_FlockSize);
 	m_Neighbors.resize(m_FlockSize);
 
-
 	for (size_t idx{}; idx < m_Agents.size(); ++idx)
 	{
 		m_Agents[idx] = new SteeringAgent();
-		m_Agents[idx]->SetPosition(randomVector2( 0, m_WorldSize));
-		m_Agents[idx]->SetMaxLinearSpeed(randomFloat (1.0f, m_Agents[idx]->GetMaxLinearSpeed() ) );
-		m_Agents[idx]->SetSteeringBehavior(m_pBlendedSteering);
+		m_Agents[idx]->SetMaxLinearSpeed(15.0f);
+		m_Agents[idx]->SetSteeringBehavior(m_pPrioritySteering);
 		m_Agents[idx]->SetAutoOrient(true);
+		m_Agents[idx]->SetPosition(randomVector2(0, m_WorldSize));
+		m_Agents[idx]->SetMass(0.3f);
 	}
-	m_Agents[45]->SetRenderBehavior(true);
 
 
-	m_pAgentToEvade = new SteeringAgent(10.0f);
+	// Initialize the AgentToEvade
+	m_pAgentToEvade = new SteeringAgent();
+	m_pAgentToEvade->SetSteeringBehavior(m_pSeekBehavior);
+	m_pAgentToEvade->SetPosition(randomVector2(0, m_WorldSize));
+	m_pAgentToEvade->SetMaxLinearSpeed(15.0f);
+	m_pAgentToEvade->SetAutoOrient(true);
+	m_pAgentToEvade->SetBodyColor({ 1.0f, 0.0f, 0.f, 1.0f });
 
 
-	//Adding Priority steering
-	m_pPrioritySteering = new PrioritySteering( {m_pSeekBehavior, m_pBlendedSteering} );
-
-}
+	m_CanDebug = false;
+};
 
 Flock::~Flock()
 {
@@ -88,8 +92,17 @@ Flock::~Flock()
 
 void Flock::Update(float deltaT)
 {
-	// TODO: update the flock
+	// Sets target to evade
+	TargetData targetData{
+							m_pAgentToEvade->GetPosition(),
+				  m_pAgentToEvade->GetDirection().Normalize(),
+							m_pAgentToEvade->GetLinearVelocity(),
+							m_pAgentToEvade->GetAngularVelocity()
+	};
 
+	m_pEvadeBehavior->SetTarget(targetData);
+
+	// Update the flock and AgentToEvade
 	for(const auto agent: m_Agents)
 	{
 		// Neighbors
@@ -101,24 +114,75 @@ void Flock::Update(float deltaT)
 		{
 			agent->TrimToWorld(m_WorldSize);
 		}
+	}
+
+	m_pAgentToEvade->Update(deltaT);
+
+	// If needed trim the world size (AgentToEvade
+	if(m_TrimWorld)
+	{
+		m_pAgentToEvade->TrimToWorld(m_WorldSize);
+	}
 
 
 
-		if(agent->CanRenderBehavior())// draws green line
+	// Shows render behavior
+	if(m_CanDebug)
+	{
+		for (const auto agent : m_Agents)
 		{
-		
+			agent->SetRenderBehavior(true);
 		}
 	}
+	else
+	{
+		for (const auto agent : m_Agents)
+		{
+			agent->SetRenderBehavior(false);
+		}
+		m_Agents[45]->SetRenderBehavior(true);
+	}
+
+	// Show neighborhood circle + change color to green if in it
+	if (m_NeighborhoodDebug)
+	{
+		DEBUGRENDERER2D->DrawCircle(m_Agents[45]->GetPosition(), m_NeighborhoodRadius, { 1.0f, 1.0f, 1.0f, 1.0f }, 0.0f);
+
+		// loop over all agents
+		for (const auto agent : m_Agents)
+		{
+			// Calculate distance between agent[45] and 1 out of the flock
+			float distance{ Distance(m_Agents[45]->GetPosition(), agent->GetPosition())};
+
+			// check for self assignment
+			if (agent != m_Agents[45])
+			{
+				// If  0 < distance < m_NeighborhoodRadius
+				if ((distance > 0) && (distance < m_NeighborhoodRadius))
+				{
+					agent->SetBodyColor({ 0.0f, 1.0f, 0.0f, 1.0f });
+				}
+				else
+				{
+					agent->SetBodyColor({1.0f, 1.0f, 0.0f, 1.0f});
+				}
+			}
+		}
+		
+	}
+
 
 }
 
 void Flock::Render(float deltaT)
 {
-	// TODO: render the flock
+	// Render flock and AgentToEvade
 	for(SteeringAgent* pAgent: m_Agents)
 	{
 		pAgent->Render(deltaT);
 	}
+
+	m_pAgentToEvade->Render(deltaT);
 }
 
 void Flock::UpdateAndRenderUI()
@@ -163,8 +227,9 @@ void Flock::UpdateAndRenderUI()
 
 	//checkbox
 	ImGui::Checkbox("Trim World", &m_TrimWorld);
-
-//	ImGui::Checkbox("Trim World", &m_Agents[45]->CanRenderBehavior());
+	ImGui::Checkbox("Debug render Steering", &m_CanDebug);
+	ImGui::Checkbox("Debug render Neighborhood", &m_NeighborhoodDebug);
+	
 
 
 	ImGui::Spacing();
@@ -181,7 +246,6 @@ void Flock::UpdateAndRenderUI()
 	ImGui::SliderFloat("Cohesion", &m_pBlendedSteering->GetWeightedBehaviorsRef()[2].weight, 0.f, 1.f, "%.2");
 	ImGui::SliderFloat("Alignment", &m_pBlendedSteering->GetWeightedBehaviorsRef()[3].weight, 0.f, 1.f, "%.2");
 	ImGui::SliderFloat("Wander", &m_pBlendedSteering->GetWeightedBehaviorsRef()[4].weight, 0.f, 1.f, "%.2");
-	ImGui::SliderFloat("Evade", &m_pBlendedSteering->GetWeightedBehaviorsRef()[5].weight, 0.f, 1.f, "%.2");
 
 
 
@@ -252,11 +316,6 @@ Elite::Vector2 Flock::GetAverageNeighborVelocity() const
 void Flock::SetTarget_Seek(TargetData target)
 {
 	m_pSeekBehavior->SetTarget(target);
-	m_pEvadeBehavior->SetTarget(target);
-
-	m_pSeparationBehavior->SetTarget(target);
-	m_pCohesionBehavior->SetTarget(target);
-	m_pVelMatchBehavior->SetTarget(target);
 }
 
 

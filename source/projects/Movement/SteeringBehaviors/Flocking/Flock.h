@@ -59,6 +59,8 @@ private:
 
 	float* GetWeight(ISteeringBehavior* pBehaviour);
 
+	bool m_CanDebug;
+	bool m_NeighborhoodDebug;
 
 private:
 
