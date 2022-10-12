@@ -26,7 +26,7 @@ struct Cell
 
 	std::vector<Elite::Vector2> GetRectPoints() const;
 	
-	// all the agents currently in this cell
+	// all the agents currently in this m_Cell
 	std::list<SteeringAgent*> agents;
 	Elite::Rect boundingBox;
 };
@@ -66,6 +66,7 @@ private:
 	// Members to avoid memory allocation on every frame
 	std::vector<SteeringAgent*> m_Neighbors;
 	int m_NrOfNeighbors;
+
 
 	// Helper functions
 	int PositionToIndex(const Elite::Vector2 pos) const;

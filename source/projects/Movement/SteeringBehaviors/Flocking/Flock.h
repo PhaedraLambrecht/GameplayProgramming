@@ -1,11 +1,14 @@
 #pragma once
 #include "../SteeringHelpers.h"
 #include "FlockingSteeringBehaviors.h"
+#include "projects/Movement/SteeringBehaviors/SpacePartitioning/SpacePartitioning.h"
 
 class ISteeringBehavior;
 class SteeringAgent;
 class BlendedSteering;
 class PrioritySteering;
+class CellSpace;
+
 
 class Flock final
 {
@@ -61,6 +64,10 @@ private:
 
 	bool m_CanDebug;
 	bool m_NeighborhoodDebug;
+
+
+	CellSpace* m_CellSpace;
+	
 
 private:
 

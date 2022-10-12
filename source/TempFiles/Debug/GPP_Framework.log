@@ -1,7 +1,6 @@
-﻿  Flock.cpp
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(287,25): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(292,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(305,25): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(310,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+﻿  SpacePartitioning.cpp
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(104,24): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(153,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(154,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
   0 File(s) copied
