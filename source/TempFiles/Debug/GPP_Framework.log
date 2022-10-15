@@ -1,11 +1,8 @@
-﻿  SpacePartitioning.cpp
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(93,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(94,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(226,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(227,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(239,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(240,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(260,13): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\SpacePartitioning\SpacePartitioning.cpp(271,13): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+﻿  Flock.cpp
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(117,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(327,25): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(332,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(345,25): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(350,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
   GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
   0 File(s) copied

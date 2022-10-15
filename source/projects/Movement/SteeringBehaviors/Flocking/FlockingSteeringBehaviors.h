@@ -33,10 +33,10 @@ private:
 
 //VELOCITY MATCH - FLOCKING
 //************************
-class VelocityMatch : public Evade
+class Alignment : public Evade
 {
 public:
-	VelocityMatch(Flock* pFlock) :m_pFlock(pFlock) {};
+	Alignment(Flock* pFlock) :m_pFlock(pFlock) {};
 
 	//Cohesion Behavior
 	SteeringOutput CalculateSteering(float deltaT, SteeringAgent* pAgent) override;

@@ -25,51 +25,49 @@ Flock::Flock(
 	m_pSeekBehavior = new Seek();
 	m_pSeparationBehavior = new Separation(this);
 	m_pCohesionBehavior = new Cohesion(this);
-	m_pVelMatchBehavior = new VelocityMatch(this);
+	m_pAlignmentBehavior = new Alignment(this);
 
 	m_pWanderBehavior = new Wander();
 	m_pEvadeBehavior = new Evade();
 
 
 	// BlendedSteering
-	m_pBlendedSteering = new BlendedSteering({ {m_pSeekBehavior, 0.5f},
-																{m_pSeparationBehavior, 0.5f},
-																{m_pCohesionBehavior, 0.5f},
-																{m_pVelMatchBehavior, 0.0f},
-																{m_pWanderBehavior, 0.5f} });
+	std::vector<BlendedSteering::WeightedBehavior> weightedSteeringBehaviors;
+	weightedSteeringBehaviors.push_back({ m_pSeekBehavior, 0.2f });
+	weightedSteeringBehaviors.push_back({ m_pSeparationBehavior, 0.4f });
+	weightedSteeringBehaviors.push_back({ m_pCohesionBehavior, 0.2f });
+	weightedSteeringBehaviors.push_back({ m_pAlignmentBehavior, 0.4f });
+	weightedSteeringBehaviors.push_back({ m_pWanderBehavior, 0.4f });
+	m_pBlendedSteering = new BlendedSteering(weightedSteeringBehaviors);
+
+
 	// Priority steering
 	m_pPrioritySteering = new PrioritySteering({ m_pEvadeBehavior, m_pBlendedSteering });
 
 	// initialize the partitioning
-	m_CellSpace = new CellSpace(m_WorldSize, m_WorldSize, 10, 10, 100);
+	m_CellSpace = new CellSpace(m_WorldSize, m_WorldSize, 25, 25, m_FlockSize);
 
 
 	// initialize the flock and the memory pool
 	m_Agents.resize(m_FlockSize);
 	m_Neighbors.resize(m_FlockSize);
+	m_AgentOldPos.resize(m_FlockSize);
 
 	for (size_t idx{}; idx < m_Agents.size(); ++idx)
 	{
 		m_Agents[idx] = new SteeringAgent();
-		m_Agents[idx]->SetMaxLinearSpeed(15.0f);
+		m_Agents[idx]->SetMaxLinearSpeed(55.0f);
+		m_Agents[idx]->SetMaxAngularSpeed(25.0f);
 		m_Agents[idx]->SetSteeringBehavior(m_pPrioritySteering);
 		m_Agents[idx]->SetAutoOrient(true);
 		m_Agents[idx]->SetPosition(randomVector2(0, m_WorldSize));
-		m_Agents[idx]->SetMass(0.3f);
+		m_Agents[idx]->SetMass(1.0f);
 
 		// Add the agents to the space partitioning
 		m_CellSpace->AddAgent(m_Agents[idx]);
+
+		m_AgentOldPos[idx] = m_Agents[idx]->GetPosition();
 	}
-
-
-	// Initialize the AgentToEvade
-	m_pAgentToEvade = new SteeringAgent();
-	m_pAgentToEvade->SetSteeringBehavior(m_pSeekBehavior);
-	m_pAgentToEvade->SetPosition(randomVector2(0, m_WorldSize));
-	m_pAgentToEvade->SetMaxLinearSpeed(20.0f);
-	m_pAgentToEvade->SetAutoOrient(true);
-	m_pAgentToEvade->SetBodyColor({ 1.0f, 0.0f, 0.f, 1.0f });
-
 
 
 
@@ -86,7 +84,7 @@ Flock::~Flock()
 	SAFE_DELETE(m_pSeekBehavior);
 	SAFE_DELETE(m_pSeparationBehavior);
 	SAFE_DELETE(m_pCohesionBehavior);
-	SAFE_DELETE(m_pVelMatchBehavior);
+	SAFE_DELETE(m_pAlignmentBehavior);
 	SAFE_DELETE(m_pWanderBehavior);
 	SAFE_DELETE(m_pEvadeBehavior);
 
@@ -110,24 +108,29 @@ Flock::~Flock()
 
 void Flock::Update(float deltaT)
 {
+	if(m_pAgentToEvade != nullptr)
+	{
+		m_pEvadeBehavior->SetTarget(m_pAgentToEvade->GetPosition() );
+	}
+
+
 	// Update the flock and AgentToEvade
-	for(const auto agent: m_Agents)
+	for (int idx{}; idx < m_Agents.size(); ++idx)
 	{
 		// If Spatial partitioning is used
 		if(m_SpatialPartitioning)
 		{
-			const Vector2 agentOldPos{ agent->GetPosition() };
+			m_CellSpace->RegisterNeighbors(m_Agents[idx], m_NeighborhoodRadius);
+			m_Agents[idx]->Update(deltaT);
+			m_CellSpace->UpdateAgentCell(m_Agents[idx], m_AgentOldPos[idx]);
 
-			m_CellSpace->RegisterNeighbors(agent, m_NeighborhoodRadius);
-			agent->Update(deltaT);
-			m_CellSpace->UpdateAgentCell(agent, agentOldPos);
-
+			m_AgentOldPos[idx] = m_Agents[idx]->GetPosition();
 		}
 		// If Spatial Partitioning is not used
 		else
 		{
-			RegisterNeighbors(agent);
-			agent->Update(deltaT);
+			RegisterNeighbors(m_Agents[idx]);
+			m_Agents[idx]->Update(deltaT);
 		}
 
 
@@ -135,7 +138,7 @@ void Flock::Update(float deltaT)
 		// Updating the World Boundry
 		if (m_TrimWorld)
 		{
-			agent->TrimToWorld(m_WorldSize);
+			m_Agents[idx]->TrimToWorld(m_WorldSize);
 		}
 
 
@@ -143,11 +146,11 @@ void Flock::Update(float deltaT)
 		// Shows render behavior
 		if (m_CanDebug)
 		{
-			agent->SetRenderBehavior(true);
+			m_Agents[idx]->SetRenderBehavior(true);
 		}
 		else
 		{
-			agent->SetRenderBehavior(false);
+			m_Agents[idx]->SetRenderBehavior(false);
 			m_Agents[0]->SetRenderBehavior(true);
 
 		}
@@ -161,66 +164,45 @@ void Flock::Update(float deltaT)
 
 
 			// Calculate distance between agent[0] and 1 out of the flock
-			float distance{ (m_Agents[0]->GetPosition() - agent->GetPosition()).Magnitude() };
+			float distance{ (m_Agents[0]->GetPosition() - m_Agents[idx]->GetPosition()).Magnitude() };
 
 			// check for self assignment
-			if (agent != m_Agents[0])
+			if (m_Agents[idx] != m_Agents[0])
 			{
 				// If  0 < distance < m_NeighborhoodRadius
 				if ((distance > 0) && (distance < m_NeighborhoodRadius))
 				{
-					agent->SetBodyColor({ 0.0f, 1.0f, 0.0f, 1.0f });
+					m_Agents[idx]->SetBodyColor({ 0.0f, 1.0f, 0.0f, 1.0f });
 				}
 				else
 				{
-					agent->SetBodyColor({ 1.0f, 1.0f, 0.0f, 1.0f });
+					m_Agents[idx]->SetBodyColor({ 1.0f, 1.0f, 0.0f, 1.0f });
 				}
 			}
 		}
 		else
 		{
-			agent->SetBodyColor({ 1.0f, 1.0f, 0.0f, 1.0f });
+			m_Agents[idx]->SetBodyColor({ 1.0f, 1.0f, 0.0f, 1.0f });
 		}
-	}
-
-
-
-	// Sets target to evade
-	TargetData targetData{
-							m_pAgentToEvade->GetPosition(),
-				  m_pAgentToEvade->GetDirection().Normalize(),
-							m_pAgentToEvade->GetLinearVelocity(),
-							m_pAgentToEvade->GetAngularVelocity()
-	};
-
-	m_pEvadeBehavior->SetTarget(targetData);
-
-
-	m_pAgentToEvade->Update(deltaT);
-
-	// If needed trim the world size (AgentToEvade
-	if (m_TrimWorld)
-	{
-		m_pAgentToEvade->TrimToWorld(m_WorldSize);
 	}
 }
 
 void Flock::Render(float deltaT)
 {
-	if(m_SpatialPartitioning)
-	{
-		m_CellSpace->RenderCells();
-	}
-
-
-	// Render flock and AgentToEvade
-	for(SteeringAgent* pAgent: m_Agents)
-	{
-		pAgent->Render(deltaT);
-	}
-
-
-	m_pAgentToEvade->Render(deltaT);
+	//if(m_SpatialPartitioning)
+	//{
+	//	m_CellSpace->RenderCells();
+	//}
+	//
+	//
+	//// Render flock and AgentToEvade
+	//for(SteeringAgent* pAgent: m_Agents)
+	//{
+	//	pAgent->Render(deltaT);
+	//}
+	//
+	//
+	//m_pAgentToEvade->Render(deltaT);
 }
 
 void Flock::UpdateAndRenderUI()
@@ -295,7 +277,6 @@ void Flock::UpdateAndRenderUI()
 }
 
 void Flock::RegisterNeighbors(SteeringAgent* pAgent)
-
 {
 	m_NrOfNeighbors = 0;
 

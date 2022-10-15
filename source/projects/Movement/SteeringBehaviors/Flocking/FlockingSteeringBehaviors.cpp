@@ -29,6 +29,12 @@ SteeringOutput Cohesion::CalculateSteering(float deltaT, SteeringAgent* pAgent)
 //SEPARATION (FLOCKING)
 SteeringOutput Separation::CalculateSteering(float deltaT, SteeringAgent* pAgent)
 {
+	if (m_pFlock->GetNrOfNeighbors() == 0)
+	{
+		return SteeringOutput(Elite::ZeroVector2, 0, false);
+	}
+
+
 	SteeringOutput steering{};
 
 
@@ -51,7 +57,7 @@ SteeringOutput Separation::CalculateSteering(float deltaT, SteeringAgent* pAgent
 
 //*************************
 //VELOCITY MATCH (FLOCKING)
-SteeringOutput VelocityMatch::CalculateSteering(float deltaT, SteeringAgent* pAgent)
+SteeringOutput Alignment::CalculateSteering(float deltaT, SteeringAgent* pAgent)
 {
 	SteeringOutput steering{};
 

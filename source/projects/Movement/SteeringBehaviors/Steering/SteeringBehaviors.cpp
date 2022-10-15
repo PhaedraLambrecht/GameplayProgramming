@@ -212,12 +212,10 @@ SteeringOutput Evade::CalculateSteering(float deltaT, SteeringAgent* pAgent)
 	}
 	else // If far enough stop fleeing
 	{
-		
 		steering.LinearVelocity = Elite::Vector2{ 0.0f, 0.0f };
 		steering.IsValid = false;
-	
-		
 	}
+
 
 	if (pAgent->CanRenderBehavior())// draws green line - does not work!
 	{

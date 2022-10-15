@@ -2,6 +2,8 @@
 #include "SpacePartitioning.h"
 #include "projects\Movement\SteeringBehaviors\SteeringAgent.h"
 
+
+
 // --- Cell ---
 // ------------
 Cell::Cell(float left, float bottom, float width, float height)
@@ -80,7 +82,6 @@ void CellSpace::UpdateAgentCell(SteeringAgent* pAgent, Elite::Vector2 oldPos)
 		// add pAgent to new cell
 		m_Cells[newCellIdx].agents.push_back(pAgent);
 	}
-	
 
 }
 
@@ -90,8 +91,9 @@ void CellSpace::RegisterNeighbors(SteeringAgent* pAgent, float queryRadius)
 
 
 	// amount of cols and rows for neighborhood square
-	int amountCols = ( queryRadius * 2) / m_CellWidth;
-	int amountRows = ( queryRadius * 2) / m_CellHeight;
+	int amountCols = (queryRadius * 2) / m_CellWidth;
+	//int amountRows = ( queryRadius * 2) / m_CellHeight;
+
 
 	// Bottom left coordinate of the binding box
 	Elite::Vector2 leftbottomBindingBox
@@ -99,10 +101,7 @@ void CellSpace::RegisterNeighbors(SteeringAgent* pAgent, float queryRadius)
 		pAgent->GetPosition().x - queryRadius,
 		pAgent->GetPosition().y - queryRadius
 	};
-
-	int cellsIdx{ PositionToIndex(leftbottomBindingBox) };// Get the index
-
-	// Bottom left coordinate of the binding box
+	// top right coordinate of the binding box
 	Elite::Vector2 rightTopBindingBox
 	{
 		pAgent->GetPosition().x + queryRadius,
@@ -110,16 +109,17 @@ void CellSpace::RegisterNeighbors(SteeringAgent* pAgent, float queryRadius)
 	};
 
 
+	// Get the Positions for max/min row/column
 	int maxRow{ PositionToRow(rightTopBindingBox) };
 	int maxCol{ PositionToCol(rightTopBindingBox) };
 	int minRow{ PositionToRow(leftbottomBindingBox) };
 	int minCol{ PositionToCol(leftbottomBindingBox) };
 
 
+	//int cellsIdx{ PositionToIndex(leftbottomBindingBox) };// Get the index
 	// Get the lowerBound
-	int lowerBoundX{ int(IndexToColmRow(cellsIdx).x) };
-	int lowerBoundY{ int(IndexToColmRow(cellsIdx).y) };
-
+	//int lowerBoundX{ int(IndexToColmRow(cellsIdx).x) };
+	//int lowerBoundY{ int(IndexToColmRow(cellsIdx).y) };
 
 
 	for(int row{minRow}; row <= maxRow; ++row)
@@ -127,19 +127,17 @@ void CellSpace::RegisterNeighbors(SteeringAgent* pAgent, float queryRadius)
 		for (int col{ minCol }; col <= maxCol; ++col)
 		{
 			// rendering the active cells
+			// TODO: show bounding box
 			if (pAgent->CanRenderBehavior())
 			{
-				auto rectPoints{ m_Cells[row * amountCols + col].GetRectPoints() };
-
+				auto rectPoints{ m_Cells[row * m_NrOfCols + col].GetRectPoints() };
 				DEBUGRENDERER2D->DrawPolygon(rectPoints.data(), rectPoints.size(), { 0.0f, 0.0f, 1.0f }, 0.0f);
-
 			}
 
 
 			// puts agents in the neighborhood vector
 			for (const auto& foundAgent : m_Cells[row * amountCols + col].agents)
 			{
-
 				m_Neighbors[m_NrOfNeighbors] = pAgent;
 				++m_NrOfNeighbors;
 			}
@@ -156,77 +154,50 @@ void CellSpace::EmptyCells()
 
 void CellSpace::RenderCells() const
 {
-	// loop trough all the cells 
-	for(size_t idx{}; idx < m_Cells.size(); ++idx)
+	// loop trough all the cells
+	for(const Cell& cell: m_Cells)
 	{
-		const std::vector <Elite::Vector2> cellRect{ m_Cells[idx].GetRectPoints() };
+		const std::vector <Elite::Vector2> cellRect{ cell.GetRectPoints() };
 
-		// Draws the segments for each cell
-		DEBUGRENDERER2D->DrawSegment(cellRect[0], cellRect[1], { 1.0f, 0.0f, 0.0f });
-		DEBUGRENDERER2D->DrawSegment(cellRect[1], cellRect[2], { 1.0f, 0.0f, 0.0f });
-		DEBUGRENDERER2D->DrawSegment(cellRect[2], cellRect[3], { 1.0f, 0.0f, 0.0f });
-		DEBUGRENDERER2D->DrawSegment(cellRect[0], cellRect[3], { 1.0f, 0.0f, 0.0f });
+		// Draws the  cell
+		DEBUGRENDERER2D->DrawPolygon(cellRect.data(), cellRect.size(), { 1.0f, 0.0f, 0.f }, 0.0f);
 
 
-		// TODO: add the cells agent num
-			
-		std::string agentCount{ std::to_string( m_Cells[idx].agents.size() ) };
-
-		DEBUGRENDERER2D->DrawString({ cellRect[1].x, cellRect[1].y }, agentCount.c_str() );
-
-
-
-		// TODO: show bounding box
-
-			//float width{ m_Cells[idx].boundingBox.width};
-			//float height{ m_Cells[idx].boundingBox.height };
-
-			//Elite::Vector2 bototmLeft { m_Cells[idx].boundingBox.bottomLeft.x,
-			//							m_Cells[idx].boundingBox.bottomLeft.y};
-
-			//Elite::Vector2 topLeft{ bototmLeft.x, bototmLeft.y + height };
-			//Elite::Vector2 botomRight{ bototmLeft.x + width, bototmLeft.y };
-			//Elite::Vector2 topRight{ bototmLeft.x + width, bototmLeft.y + height };
-
-			//DEBUGRENDERER2D->DrawSegment(bototmLeft, topLeft, { 0.0f, 0.0f, 1.0f });
-			//DEBUGRENDERER2D->DrawSegment(topLeft, topRight, { 0.0f, 0.0f, 1.0f });
-			//DEBUGRENDERER2D->DrawSegment(topRight, botomRight, { 0.0f, 0.0f, 1.0f });
-			//DEBUGRENDERER2D->DrawSegment(bototmLeft, botomRight, { 0.0f, 0.0f, 1.0f });
-		
+		// num of agents
+		std::string agentCount{ std::to_string(cell.agents.size()) };
+		DEBUGRENDERER2D->DrawString({ cellRect[1].x, cellRect[1].y }, agentCount.c_str());
 	}
-
 }
+
+
 
 int CellSpace::PositionToIndex(const Elite::Vector2 pos) const
 {
-	//// checking for pos x
-	//if(pos.x <0)
-	//{
-	//	return 0;
-	//}
-	//if(pos.x > m_NrOfCols)
-	//{
-	//	return m_NrOfCols / m_NrOfRows;
-	//}
-	//
-	//
-	//// checking for pos y
-	//if(pos.y < 0)
-	//{
-	//	return 0;
-	//}
-	//if(pos.y > m_NrOfRows)
-	//{
-	//	return m_NrOfRows / m_NrOfCols;
-	//}
-
-
 	int finalIdx{};
 
-	int Tx = pos.x / m_CellWidth;
-	int Ty = pos.y / m_CellHeight;
+	int colIdx = pos.x / m_CellWidth;
+	int rowIdx = pos.y / m_CellHeight;
 
-	finalIdx = m_NrOfCols * Ty + Tx;
+
+	if (colIdx < 0)
+	{
+		colIdx = 0;
+	}
+	else if(colIdx >= m_NrOfCols)
+	{
+		colIdx = m_NrOfRows - 1;
+	}
+	if(rowIdx < 0)
+	{
+		rowIdx = 0;
+	}
+	else if(rowIdx >= m_NrOfRows)
+	{
+		rowIdx = m_NrOfRows - 1;
+	}
+
+
+	finalIdx = m_NrOfCols * rowIdx + colIdx;
 
 
 	return finalIdx;
@@ -254,6 +225,7 @@ Elite::Vector2 CellSpace::IndexToColmRow(const int index) const
 	return  colmAndRow;
 
 }
+
 
 int CellSpace::PositionToCol(const Elite::Vector2 & pos) const
 {

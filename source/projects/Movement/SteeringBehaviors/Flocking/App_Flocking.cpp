@@ -10,7 +10,7 @@ using namespace Elite;
 
 //Destructor
 App_Flocking::~App_Flocking()
-{	
+{
 	SAFE_DELETE(m_pFlock);
 	SAFE_DELETE(m_pAgentToEvade);
 }
@@ -21,7 +21,18 @@ void App_Flocking::Start()
 	DEBUGRENDERER2D->GetActiveCamera()->SetZoom(55.0f);
 	DEBUGRENDERER2D->GetActiveCamera()->SetCenter(Elite::Vector2(m_TrimWorldSize / 1.5f, m_TrimWorldSize / 2));
 
+
+	m_pWanderBehavior = new Wander();
+
+	m_pAgentToEvade = new SteeringAgent();
+	m_pAgentToEvade->SetSteeringBehavior(m_pWanderBehavior);
+	m_pAgentToEvade->SetMaxLinearSpeed(50.f);
+	m_pAgentToEvade->SetBodyColor({ 1, 0, 0 });
+	m_pAgentToEvade->SetAutoOrient(true);
+
 	m_pFlock = new Flock(m_FlockSize, m_TrimWorldSize, m_pAgentToEvade, true);
+
+
 }
 
 void App_Flocking::Update(float deltaTime)
@@ -37,6 +48,11 @@ void App_Flocking::Update(float deltaTime)
 	m_pFlock->Update(deltaTime);
 	if (m_UseMouseTarget)
 		m_pFlock->SetTarget_Seek(m_MouseTarget);
+
+
+	m_pAgentToEvade->Update(deltaTime);
+	m_pAgentToEvade->TrimToWorld(m_TrimWorldSize);
+
 }
 
 void App_Flocking::Render(float deltaTime) const
@@ -46,6 +62,6 @@ void App_Flocking::Render(float deltaTime) const
 	m_pFlock->Render(deltaTime);
 
 	//Render Target
-	if(m_VisualizeMouseTarget)
-		DEBUGRENDERER2D->DrawSolidCircle(m_MouseTarget.Position, 0.3f, { 0.f,0.f }, { 1.f,0.f,0.f },-0.8f);
+	if (m_VisualizeMouseTarget)
+		DEBUGRENDERER2D->DrawSolidCircle(m_MouseTarget.Position, 0.3f, { 0.f,0.f }, { 1.f,0.f,0.f }, -0.8f);
 }

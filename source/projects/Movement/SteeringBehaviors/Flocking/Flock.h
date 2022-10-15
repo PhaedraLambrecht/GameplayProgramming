@@ -41,6 +41,9 @@ private:
 	std::vector<SteeringAgent*> m_Agents;
 	std::vector<SteeringAgent*> m_Neighbors;
 
+	std::vector<Elite::Vector2> m_AgentOldPos;
+
+
 	bool m_TrimWorld = false;
 	float m_WorldSize = 0.f;
 
@@ -53,7 +56,7 @@ private:
 	Seek* m_pSeekBehavior = nullptr;
 	Separation* m_pSeparationBehavior = nullptr;
 	Cohesion* m_pCohesionBehavior = nullptr;
-	VelocityMatch* m_pVelMatchBehavior = nullptr;
+	Alignment* m_pAlignmentBehavior = nullptr;
 	Wander* m_pWanderBehavior = nullptr;
 	Evade* m_pEvadeBehavior = nullptr;
 

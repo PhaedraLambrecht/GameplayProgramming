@@ -29,9 +29,11 @@ private:
 	TargetData m_MouseTarget = {};
 	bool m_UseMouseTarget = true;
 	bool m_VisualizeMouseTarget = true;
-	
-	float m_TrimWorldSize = 100.f;
-	int m_FlockSize = 100;
+
+	float m_TrimWorldSize = 250.f;
+	int m_FlockSize = 4000;
+
+	Wander* m_pWanderBehavior = nullptr;
 
 	Flock* m_pFlock = nullptr;
 	SteeringAgent* m_pAgentToEvade = nullptr;
