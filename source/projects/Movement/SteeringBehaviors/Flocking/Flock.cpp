@@ -41,7 +41,8 @@ Flock::Flock(
 	m_pPrioritySteering = new PrioritySteering({ m_pEvadeBehavior, m_pBlendedSteering });
 
 	// initialize the partitioning
-	m_CellSpace = new CellSpace(m_WorldSize, m_WorldSize, 4, 4, 100);
+	m_CellSpace = new CellSpace(m_WorldSize, m_WorldSize, 10, 10, 100);
+
 
 	// initialize the flock and the memory pool
 	m_Agents.resize(m_FlockSize);
@@ -70,8 +71,13 @@ Flock::Flock(
 	m_pAgentToEvade->SetBodyColor({ 1.0f, 0.0f, 0.f, 1.0f });
 
 
+
+
+
+	// initialize the bools
 	m_CanDebug = false;
 	m_NeighborhoodDebug = false;
+	m_SpatialPartitioning = true;
 
 };
 
@@ -88,6 +94,7 @@ Flock::~Flock()
 	SAFE_DELETE(m_pPrioritySteering);
 
 
+
 	SAFE_DELETE(m_pAgentToEvade);
 
 	for(auto pAgent: m_Agents)
@@ -96,22 +103,33 @@ Flock::~Flock()
 	}
 	m_Agents.clear();
 
-	SAFE_DELETE(m_CellSpace);
 
+
+	SAFE_DELETE(m_CellSpace);
 }
 
 void Flock::Update(float deltaT)
 {
-
 	// Update the flock and AgentToEvade
 	for(const auto agent: m_Agents)
 	{
-		// Neighbors and CellsSpace
-		const Vector2 agentOldPos{ agent->GetPosition() };
+		// If Spatial partitioning is used
+		if(m_SpatialPartitioning)
+		{
+			const Vector2 agentOldPos{ agent->GetPosition() };
 
-		m_CellSpace->RegisterNeighbors(agent, m_NeighborhoodRadius);
-		agent->Update(deltaT);
-		m_CellSpace->UpdateAgentCell(agent, agentOldPos);
+			m_CellSpace->RegisterNeighbors(agent, m_NeighborhoodRadius);
+			agent->Update(deltaT);
+			m_CellSpace->UpdateAgentCell(agent, agentOldPos);
+
+		}
+		// If Spatial Partitioning is not used
+		else
+		{
+			RegisterNeighbors(agent);
+			agent->Update(deltaT);
+		}
+
 
 
 		// Updating the World Boundry
@@ -130,7 +148,7 @@ void Flock::Update(float deltaT)
 		else
 		{
 			agent->SetRenderBehavior(false);
-			m_Agents[45]->SetRenderBehavior(true);
+			m_Agents[0]->SetRenderBehavior(true);
 
 		}
 
@@ -139,14 +157,14 @@ void Flock::Update(float deltaT)
 		// Show neighborhood circle + change color to green if in it
 		if (m_NeighborhoodDebug)
 		{
-			DEBUGRENDERER2D->DrawCircle(m_Agents[45]->GetPosition(), m_NeighborhoodRadius, { 1.0f, 1.0f, 1.0f, 1.0f }, 0.0f);
+			DEBUGRENDERER2D->DrawCircle(m_Agents[0]->GetPosition(), m_NeighborhoodRadius, { 1.0f, 1.0f, 1.0f, 1.0f }, 0.0f);
 
 
-			// Calculate distance between agent[45] and 1 out of the flock
-			float distance{ (m_Agents[45]->GetPosition() - agent->GetPosition()).Magnitude() };
+			// Calculate distance between agent[0] and 1 out of the flock
+			float distance{ (m_Agents[0]->GetPosition() - agent->GetPosition()).Magnitude() };
 
 			// check for self assignment
-			if (agent != m_Agents[45])
+			if (agent != m_Agents[0])
 			{
 				// If  0 < distance < m_NeighborhoodRadius
 				if ((distance > 0) && (distance < m_NeighborhoodRadius))
@@ -189,7 +207,11 @@ void Flock::Update(float deltaT)
 
 void Flock::Render(float deltaT)
 {
-	m_CellSpace->RenderCells();
+	if(m_SpatialPartitioning)
+	{
+		m_CellSpace->RenderCells();
+	}
+
 
 	// Render flock and AgentToEvade
 	for(SteeringAgent* pAgent: m_Agents)
@@ -197,8 +219,8 @@ void Flock::Render(float deltaT)
 		pAgent->Render(deltaT);
 	}
 
-	m_pAgentToEvade->Render(deltaT);
 
+	m_pAgentToEvade->Render(deltaT);
 }
 
 void Flock::UpdateAndRenderUI()
@@ -245,7 +267,7 @@ void Flock::UpdateAndRenderUI()
 	ImGui::Checkbox("Trim World", &m_TrimWorld);
 	ImGui::Checkbox("Debug render Steering", &m_CanDebug);
 	ImGui::Checkbox("Debug render Neighborhood", &m_NeighborhoodDebug);
-	
+	ImGui::Checkbox("Spatial Partitioning", &m_SpatialPartitioning);
 
 
 	ImGui::Spacing();
@@ -273,6 +295,7 @@ void Flock::UpdateAndRenderUI()
 }
 
 void Flock::RegisterNeighbors(SteeringAgent* pAgent)
+
 {
 	m_NrOfNeighbors = 0;
 

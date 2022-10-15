@@ -38,10 +38,10 @@ class CellSpace
 public:
 	CellSpace(float width, float height, int rows, int cols, int maxEntities);
 
-	void AddAgent(SteeringAgent* agent);
-	void UpdateAgentCell(SteeringAgent* agent, Elite::Vector2 oldPos);
+	void AddAgent(SteeringAgent* pAgent);
+	void UpdateAgentCell(SteeringAgent* pAgent, Elite::Vector2 oldPos);
 
-	void RegisterNeighbors(SteeringAgent* agent, float queryRadius);
+	void RegisterNeighbors(SteeringAgent* pAgent, float queryRadius);
 	const std::vector<SteeringAgent*>& GetNeighbors() const { return m_Neighbors; }
 	int GetNrOfNeighbors() const { return m_NrOfNeighbors; }
 
@@ -70,4 +70,10 @@ private:
 
 	// Helper functions
 	int PositionToIndex(const Elite::Vector2 pos) const;
+	Elite::Vector2 IndexToColmRow(const int index ) const;
+
+	int CellSpace::PositionToCol(const Elite::Vector2& pos) const;
+	int CellSpace::PositionToRow(const Elite::Vector2& pos) const;
 };
+
+

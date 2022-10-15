@@ -64,6 +64,7 @@ private:
 
 	bool m_CanDebug;
 	bool m_NeighborhoodDebug;
+	bool m_SpatialPartitioning;
 
 
 	CellSpace* m_CellSpace;
