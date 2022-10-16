@@ -48,11 +48,13 @@ Flock::Flock(
 	m_CellSpace = new CellSpace(m_WorldSize, m_WorldSize, 25, 25, m_FlockSize);
 
 
-	// initialize the flock and the memory pool
+	// initialize the memory pool
 	m_Agents.resize(m_FlockSize);
 	m_Neighbors.resize(m_FlockSize);
 	m_AgentOldPos.resize(m_FlockSize);
 
+
+	// Initializing the flock
 	for (size_t idx{}; idx < m_Agents.size(); ++idx)
 	{
 		m_Agents[idx] = new SteeringAgent();
@@ -68,7 +70,6 @@ Flock::Flock(
 
 		m_AgentOldPos[idx] = m_Agents[idx]->GetPosition();
 	}
-
 
 
 
@@ -92,15 +93,11 @@ Flock::~Flock()
 	SAFE_DELETE(m_pPrioritySteering);
 
 
-
-	SAFE_DELETE(m_pAgentToEvade);
-
 	for(auto pAgent: m_Agents)
 	{
 		SAFE_DELETE(pAgent);
 	}
 	m_Agents.clear();
-
 
 
 	SAFE_DELETE(m_CellSpace);
@@ -140,9 +137,29 @@ void Flock::Update(float deltaT)
 		{
 			m_Agents[idx]->TrimToWorld(m_WorldSize);
 		}
+	}
+}
+
+void Flock::Render(float deltaT)
+{
+	//if(m_SpatialPartitioning)
+	//{
+	//	m_CellSpace->RenderCells();
+	//}
+	//
+	//
+	//// Render flock and AgentToEvade
+	//for(SteeringAgent* pAgent: m_Agents)
+	//{
+	//	pAgent->Render(deltaT);
+	//}
+	//
+	//
+	//m_pAgentToEvade->Render(deltaT);
 
 
-
+	for (int idx{}; idx < m_Agents.size(); ++idx)
+	{
 		// Shows render behavior
 		if (m_CanDebug)
 		{
@@ -154,7 +171,6 @@ void Flock::Update(float deltaT)
 			m_Agents[0]->SetRenderBehavior(true);
 
 		}
-
 
 
 		// Show neighborhood circle + change color to green if in it
@@ -185,24 +201,6 @@ void Flock::Update(float deltaT)
 			m_Agents[idx]->SetBodyColor({ 1.0f, 1.0f, 0.0f, 1.0f });
 		}
 	}
-}
-
-void Flock::Render(float deltaT)
-{
-	//if(m_SpatialPartitioning)
-	//{
-	//	m_CellSpace->RenderCells();
-	//}
-	//
-	//
-	//// Render flock and AgentToEvade
-	//for(SteeringAgent* pAgent: m_Agents)
-	//{
-	//	pAgent->Render(deltaT);
-	//}
-	//
-	//
-	//m_pAgentToEvade->Render(deltaT);
 }
 
 void Flock::UpdateAndRenderUI()

@@ -135,10 +135,12 @@ void CellSpace::RegisterNeighbors(SteeringAgent* pAgent, float queryRadius)
 			}
 
 
+
 			// puts agents in the neighborhood vector
 			for (const auto& foundAgent : m_Cells[row * amountCols + col].agents)
 			{
-				m_Neighbors[m_NrOfNeighbors] = pAgent;
+
+				m_Neighbors[m_NrOfNeighbors] = foundAgent;
 				++m_NrOfNeighbors;
 			}
 		}
