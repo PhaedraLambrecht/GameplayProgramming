@@ -51,6 +51,7 @@ public:
 	void RenderCells()const;
 
 private:
+
 	// Cells and properties
 	std::vector<Cell> m_Cells;
 
@@ -69,10 +70,10 @@ private:
 
 
 	// Helper functions
+	void InitializeGrid();
+
+
 	int PositionToIndex(const Elite::Vector2 pos) const;
-	Elite::Vector2 IndexToColmRow(const int index ) const;
-
-
 	int CellSpace::PositionToCol(const Elite::Vector2& pos) const;
 	int CellSpace::PositionToRow(const Elite::Vector2& pos) const;
 };

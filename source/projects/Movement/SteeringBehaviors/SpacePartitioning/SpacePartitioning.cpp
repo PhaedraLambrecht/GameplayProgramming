@@ -40,15 +40,20 @@ CellSpace::CellSpace(float width, float height, int rows, int cols, int maxEntit
 	, m_NrOfCols(cols)
 	, m_Neighbors(maxEntities)
 	, m_NrOfNeighbors(0)
+	, m_CellWidth{width / cols}
+	, m_CellHeight{height / rows}
+{
+
+	InitializeGrid();
+}
+
+void CellSpace::InitializeGrid()
 {
 	float left{};
 	float bottom{};
-	m_CellWidth = m_SpaceWidth / m_NrOfCols;
-	m_CellHeight = m_SpaceHeight / m_NrOfRows;
-
 
 	// add cells
-	for(int rowIdx{}; rowIdx < m_NrOfRows; ++rowIdx)
+	for (int rowIdx{}; rowIdx < m_NrOfRows; ++rowIdx)
 	{
 		bottom = m_CellHeight * rowIdx; // += with the cells height
 
@@ -61,9 +66,11 @@ CellSpace::CellSpace(float width, float height, int rows, int cols, int maxEntit
 	}
 }
 
+
 void CellSpace::AddAgent(SteeringAgent* pAgent)
 {
-	m_Cells[PositionToIndex(pAgent->GetPosition())].agents.push_back(pAgent);
+	int idx{ PositionToIndex(pAgent->GetPosition()) };
+	m_Cells[idx].agents.push_back(pAgent);
 }
 
 void CellSpace::UpdateAgentCell(SteeringAgent* pAgent, Elite::Vector2 oldPos)
@@ -75,39 +82,29 @@ void CellSpace::UpdateAgentCell(SteeringAgent* pAgent, Elite::Vector2 oldPos)
 	// Check if they aren't the same
 	if( oldCellIdx != newCellIdx )
 	{
-		// delete pAgent from old cell
-		m_Cells[oldCellIdx].agents.remove(pAgent);
-		
-
-		// add pAgent to new cell
-		m_Cells[newCellIdx].agents.push_back(pAgent);
+		m_Cells[oldCellIdx].agents.remove(pAgent); // Delete pAgent from old cell
+		m_Cells[newCellIdx].agents.push_back(pAgent); // Add pAgent to new cell
 	}
-
 }
 
 void CellSpace::RegisterNeighbors(SteeringAgent* pAgent, float queryRadius)
 {
 	m_NrOfNeighbors = 0;// set neighbor count to 0
 
-
-	// amount of cols and rows for neighborhood square
-	int amountCols = (queryRadius * 2) / m_CellWidth;
-	//int amountRows = ( queryRadius * 2) / m_CellHeight;
+	const Elite::Vector2 agentPosition{ pAgent->GetPosition() };
 
 
-	// Bottom left coordinate of the binding box
+	// Gets the start and end index
 	Elite::Vector2 leftbottomBindingBox
 	{
-		pAgent->GetPosition().x - queryRadius,
-		pAgent->GetPosition().y - queryRadius
+		agentPosition.x - queryRadius,
+		agentPosition.y - queryRadius
 	};
-	// top right coordinate of the binding box
 	Elite::Vector2 rightTopBindingBox
 	{
-		pAgent->GetPosition().x + queryRadius,
-		pAgent->GetPosition().y + queryRadius
+		agentPosition.x + queryRadius,
+		agentPosition.y + queryRadius
 	};
-
 
 	// Get the Positions for max/min row/column
 	int maxRow{ PositionToRow(rightTopBindingBox) };
@@ -116,10 +113,8 @@ void CellSpace::RegisterNeighbors(SteeringAgent* pAgent, float queryRadius)
 	int minCol{ PositionToCol(leftbottomBindingBox) };
 
 
-	//int cellsIdx{ PositionToIndex(leftbottomBindingBox) };// Get the index
-	// Get the lowerBound
-	//int lowerBoundX{ int(IndexToColmRow(cellsIdx).x) };
-	//int lowerBoundY{ int(IndexToColmRow(cellsIdx).y) };
+	// amount of cols for neighborhood square
+	int amountCols = (queryRadius * 2) / m_CellWidth;
 
 
 	for(int row{minRow}; row <= maxRow; ++row)
@@ -127,7 +122,6 @@ void CellSpace::RegisterNeighbors(SteeringAgent* pAgent, float queryRadius)
 		for (int col{ minCol }; col <= maxCol; ++col)
 		{
 			// rendering the active cells
-			// TODO: show bounding box
 			if (pAgent->CanRenderBehavior())
 			{
 				auto rectPoints{ m_Cells[row * m_NrOfCols + col].GetRectPoints() };
@@ -135,12 +129,11 @@ void CellSpace::RegisterNeighbors(SteeringAgent* pAgent, float queryRadius)
 			}
 
 
-
+			int cellIndex{ row * amountCols + col };
 			// puts agents in the neighborhood vector
-			for (const auto& foundAgent : m_Cells[row * amountCols + col].agents)
+			for (const auto& cellAgent : m_Cells[cellIndex].agents)
 			{
-
-				m_Neighbors[m_NrOfNeighbors] = foundAgent;
+				m_Neighbors[m_NrOfNeighbors] = cellAgent;
 				++m_NrOfNeighbors;
 			}
 		}
@@ -157,7 +150,7 @@ void CellSpace::EmptyCells()
 void CellSpace::RenderCells() const
 {
 	// loop trough all the cells
-	for(const Cell& cell: m_Cells)
+	for (const Cell& cell : m_Cells)
 	{
 		const std::vector <Elite::Vector2> cellRect{ cell.GetRectPoints() };
 
@@ -172,7 +165,6 @@ void CellSpace::RenderCells() const
 }
 
 
-
 int CellSpace::PositionToIndex(const Elite::Vector2 pos) const
 {
 	int finalIdx{};
@@ -181,6 +173,7 @@ int CellSpace::PositionToIndex(const Elite::Vector2 pos) const
 	int rowIdx = pos.y / m_CellHeight;
 
 
+	// clamping the max and min positions
 	if (colIdx < 0)
 	{
 		colIdx = 0;
@@ -204,30 +197,6 @@ int CellSpace::PositionToIndex(const Elite::Vector2 pos) const
 
 	return finalIdx;
 }
-
-Elite::Vector2 CellSpace::IndexToColmRow(const int index) const
-{
-	Elite::Vector2 colmAndRow{};
-
-	colmAndRow.x = index / m_NrOfCols;
-	colmAndRow.y = index % m_NrOfCols;
-
-
-	// check if it is not under 0
-	if (colmAndRow.x < 0)
-	{
-		colmAndRow.x = 0;
-	}
-	if (colmAndRow.y < 0)
-	{
-		colmAndRow.y = 0;
-	}
-
-
-	return  colmAndRow;
-
-}
-
 
 int CellSpace::PositionToCol(const Elite::Vector2 & pos) const
 {

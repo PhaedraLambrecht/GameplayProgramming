@@ -21,6 +21,8 @@ public:
 
 	~Flock();
 
+
+
 	void Update(float deltaT);
 	void UpdateAndRenderUI() ;
 	void Render(float deltaT);
@@ -36,23 +38,36 @@ public:
 	void SetWorldTrimSize(float size) { m_WorldSize = size; }
 
 private:
-	//Datamembers
+
+	// Initialising consts
+	const float m_DefaultSeekWeight;
+	const float m_DefaultSeparationWeight;
+	const float m_DefaultCohesionWeight;
+	const float m_DefaultAlignmentWeight;
+	const float m_DefaultWanderWeight;
+
+
+	// Datamembers
 	int m_FlockSize = 0;
 	std::vector<SteeringAgent*> m_Agents;
 	std::vector<SteeringAgent*> m_Neighbors;
-
 	std::vector<Elite::Vector2> m_AgentOldPos;
 
 
 	bool m_TrimWorld = false;
 	float m_WorldSize = 0.f;
+	bool m_CanDebug;
+	bool m_CanNeighborhoodDebug;
+	bool m_CanSpatialPartitioning;
+
 
 	float m_NeighborhoodRadius = 10.f;
 	int m_NrOfNeighbors = 0;
 
 	SteeringAgent* m_pAgentToEvade = nullptr;
-	
-	//Steering Behaviors
+
+
+	// Steering Behaviors
 	Seek* m_pSeekBehavior = nullptr;
 	Separation* m_pSeparationBehavior = nullptr;
 	Cohesion* m_pCohesionBehavior = nullptr;
@@ -63,15 +78,35 @@ private:
 	BlendedSteering* m_pBlendedSteering = nullptr;
 	PrioritySteering* m_pPrioritySteering = nullptr;
 
+
+	// Cells space
+	CellSpace* m_pCellSpace;
+
+
+	// Functions
 	float* GetWeight(ISteeringBehavior* pBehaviour);
 
-	bool m_CanDebug;
-	bool m_NeighborhoodDebug;
-	bool m_SpatialPartitioning;
+
+	// Initializer
+	void InitializeAgents();
+	void InitializeBehaviours();
 
 
-	CellSpace* m_CellSpace;
-	
+	// Updates
+	void UpdateAgentToEvade();
+	void UpdateCellSpace(int index, float deltaT);
+	void UpdateDebugRendering(int index);
+
+
+	// Render helpers
+	void RenderNeighbourhood(float deltaT);
+
+
+	// UI
+	void SetupUI();
+	void DisplayUI();
+	void DisplayCheckBoxes();
+	void DisplaySliders();
 
 private:
 

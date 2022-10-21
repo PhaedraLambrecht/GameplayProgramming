@@ -1,8 +1,0 @@
-﻿  Flock.cpp
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(117,22): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(327,25): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(332,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(345,25): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(350,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-  GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
-  0 File(s) copied
