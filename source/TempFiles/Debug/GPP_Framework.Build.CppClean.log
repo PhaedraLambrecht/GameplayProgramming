@@ -17,7 +17,6 @@ c:\dae\gameplayprogramming\source\tempfiles\debug\erigidbodybox2d.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\ematrix2x3.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\einputmanager.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\egeometry2dtypes.obj
-c:\dae\gameplayprogramming\source\tempfiles\debug\enavgraph.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\egraphrenderer.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\egrapheditor.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\egraphnodetypes.obj
@@ -37,6 +36,7 @@ c:\dae\gameplayprogramming\source\tempfiles\debug\app_combinedsteering.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\sandboxagent.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_sandbox.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_navmeshgraph.obj
+c:\dae\gameplayprogramming\source\tempfiles\debug\enavgraph.obj
 c:\dae\gameplayprogramming\bin\debug\gpp_framework.exe
 c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.ilk
 c:\dae\gameplayprogramming\bin\debug\gpp_framework.pdb
