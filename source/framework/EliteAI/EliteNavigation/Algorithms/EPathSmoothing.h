@@ -80,21 +80,103 @@ namespace Elite
 			{
 				//Local
 				const auto& portal = portals[portalIdx];
+				
+
 
 				//--- RIGHT CHECK ---
+				Vector2 newRightLeg{ portal.Line.p1 - apexPos };
+				
 				//1. See if moving funnel inwards - RIGHT
-
+				auto rightCross{ Elite::Cross(newRightLeg, rightLeg) };
+				
+				if (rightCross <= 0.0f)// Going inwards
+				{
 					//2. See if new line degenerates a line segment - RIGHT
+					auto crossingLeftCross{ Elite::Cross(newRightLeg, leftLeg) };
+
+					if (crossingLeftCross <= 0.0f) // it crosses the left leg
+					{
+						apexPos += leftLeg;
+						apexIdx = leftLegIdx;
+						portalIdx = leftLegIdx + 1;
+
+
+						// New itterator
+						auto newIterrator { apexIdx + 1 };
+						portalIdx = newIterrator;
+						leftLegIdx = newIterrator;
+						rightLegIdx = newIterrator;
+
+						vPath.push_back(apexPos);
+						
+
+						// Using the new iterators calculate the new legs if it smaller than the size of the portals 
+						if (newIterrator < amtPortals)
+						{
+							rightLeg = portals[rightLegIdx].Line.p1 - apexPos;
+							leftLeg = portals[leftLegIdx].Line.p2 - apexPos;
+							continue;
+						}
+					}
+					else
+					{
+						rightLeg = newRightLeg;
+						rightLegIdx = portalIdx;
+					}
+				}
+
+
 
 
 				//--- LEFT CHECK ---
+				auto newLeftLeg{ portal.Line.p2 - apexPos };
+				
 				//1. See if moving funnel inwards - LEFT
+				auto leftCross{ Elite::Cross(newLeftLeg, leftLeg) };
 
+				if (leftCross <= 0.0f)// Going inwards
+				{
 					//2. See if new line degenerates a line segment - LEFT
+					auto crossingRightCross{ Elite::Cross(newLeftLeg, rightLeg) };
+
+					if (crossingRightCross <= 0.0f) // it crosses the right leg
+					{
+						apexPos += rightLeg;
+						apexIdx = rightLegIdx;
+						portalIdx = rightLegIdx + 1;
+
+
+						// New itterator
+						auto newIterrator{ apexIdx + 1 };
+						portalIdx = newIterrator;
+						leftLegIdx = newIterrator;
+						rightLegIdx = newIterrator;
+
+						vPath.push_back(apexPos);
+
+
+						// Using the new iterators calculate the new legs if it smaller than the size of the portals 
+						if (newIterrator < amtPortals)
+						{
+							rightLeg = portals[rightLegIdx].Line.p1 - apexPos;
+							leftLeg = portals[leftLegIdx].Line.p2 - apexPos;
+							continue;
+						}
+					}
+					else
+					{
+						leftLeg = newLeftLeg;
+						leftLegIdx = portalIdx;
+					}
+				}
+
+					
 
 			}
 
 			// Add last path point (You can use the last portal p1 or p2 points as both are equal to the endPoint of the path
+			vPath.push_back(portals[portals.size() - 1].Line.p1);
+
 
 			return vPath;
 		}

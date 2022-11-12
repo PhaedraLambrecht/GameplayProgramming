@@ -1,3 +1,9 @@
-﻿  App_NavMeshGraph.cpp
+﻿  main.cpp
+C:\DAE\GameplayProgramming\source\framework\EliteAI\EliteNavigation\Algorithms\EPathSmoothing.h(114,24): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\framework\EliteAI\EliteNavigation\Algorithms\EPathSmoothing.h(159,24): warning C4018: '<': signed/unsigned mismatch
+  App_NavMeshGraph.cpp
+C:\DAE\GameplayProgramming\source\framework\EliteAI\EliteNavigation\Algorithms\EPathSmoothing.h(114,24): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\framework\EliteAI\EliteNavigation\Algorithms\EPathSmoothing.h(159,24): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
   0 File(s) copied
