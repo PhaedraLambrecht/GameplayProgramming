@@ -182,6 +182,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="framework\EliteAI\EliteGraphs\EGraphConnectionTypes.cpp" />
+    <ClCompile Include="framework\EliteAI\EliteGraphs\EGraphNodeTypes.cpp" />
+    <ClCompile Include="framework\EliteAI\EliteGraphs\EliteGraphUtilities\EGraphEditor.cpp" />
+    <ClCompile Include="framework\EliteAI\EliteGraphs\EliteGraphUtilities\EGraphRenderer.cpp" />
+    <ClCompile Include="framework\EliteAI\EliteGraphs\ENavGraph.cpp" />
     <ClCompile Include="framework\EliteGeometry\EGeometry2DTypes.cpp" />
     <ClCompile Include="framework\EliteInput\EInputManager.cpp" />
     <ClCompile Include="framework\EliteMath\EMatrix2x3.cpp" />
@@ -195,6 +200,9 @@
     <ClCompile Include="framework\EliteWindow\SDLWindow\SDLWindow.cpp" />
     <ClCompile Include="framework\EliteRendering\SDLIntegration\SDLHelpers\gl3w.c" />
     <ClCompile Include="framework\main.cpp" />
+    <ClCompile Include="projects\Movement\Pathfinding\AStar\App_PathfindingAStar\App_PathfindingAStar.cpp" />
+    <ClCompile Include="projects\Movement\Pathfinding\GraphTheory\App_GraphTheory.cpp" />
+    <ClCompile Include="projects\Movement\Pathfinding\NavMeshGraph\App_NavMeshGraph.cpp" />
     <ClCompile Include="projects\Movement\Sandbox\App_Sandbox.cpp" />
     <ClCompile Include="projects\Movement\Sandbox\SandboxAgent.cpp" />
     <ClCompile Include="projects\Movement\SteeringBehaviors\CombinedSteering\App_CombinedSteering.cpp" />
@@ -208,6 +216,7 @@
     <ClCompile Include="projects\Movement\SteeringBehaviors\SteeringAgent.cpp" />
     <ClCompile Include="projects\Movement\SteeringBehaviors\Steering\SteeringBehaviors.cpp" />
     <ClCompile Include="projects\Shared\BaseAgent.cpp" />
+    <ClCompile Include="projects\Shared\NavigationColliderElement.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Exam|Win32'">Create</PrecompiledHeader>
@@ -216,6 +225,23 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EGraph2D.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EGraphConnectionTypes.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EGraphEnums.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EGraphNodeTypes.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EGridGraph.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EIGraph.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EAStar.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EBFS.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EEularianPath.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphUtilities\EGraphEditor.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphUtilities\EGraphRenderer.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphUtilities\EGraphVisuals.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\ENavGraph.h" />
+    <ClInclude Include="framework\EliteAI\EliteNavigation\Algorithms\ENavGraphPathfinding.h" />
+    <ClInclude Include="framework\EliteAI\EliteNavigation\Algorithms\EPathSmoothing.h" />
+    <ClInclude Include="framework\EliteAI\EliteNavigation\EHeuristicFunctions.h" />
+    <ClInclude Include="framework\EliteAI\EliteNavigation\ENavigation.h" />
     <ClInclude Include="projects\App_MachineLearning\DirectedGraph.h" />
     <ClInclude Include="framework\EliteMath\FMatrix.h" />
     <ClInclude Include="framework\EliteHelpers\ESingleton.h" />
@@ -259,6 +285,9 @@
     <ClInclude Include="framework\EliteRendering\SDLIntegration\SDLHelpers\gl3w.h" />
     <ClInclude Include="framework\EliteRendering\SDLIntegration\SDLHelpers\glcorearb.h" />
     <ClInclude Include="framework\EliteInterfaces\EIApp.h" />
+    <ClInclude Include="projects\Movement\Pathfinding\AStar\App_PathfindingAStar\App_PathfindingAStar.h" />
+    <ClInclude Include="projects\Movement\Pathfinding\GraphTheory\App_GraphTheory.h" />
+    <ClInclude Include="projects\Movement\Pathfinding\NavMeshGraph\App_NavMeshGraph.h" />
     <ClInclude Include="projects\Movement\Sandbox\App_Sandbox.h" />
     <ClInclude Include="projects\Movement\Sandbox\SandboxAgent.h" />
     <ClInclude Include="projects\App_Selector.h" />
@@ -274,6 +303,7 @@
     <ClInclude Include="projects\Movement\SteeringBehaviors\Steering\SteeringBehaviors.h" />
     <ClInclude Include="projects\Movement\SteeringBehaviors\SteeringHelpers.h" />
     <ClInclude Include="projects\Shared\BaseAgent.h" />
+    <ClInclude Include="projects\Shared\NavigationColliderElement.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

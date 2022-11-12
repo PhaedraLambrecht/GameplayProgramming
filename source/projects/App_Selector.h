@@ -5,7 +5,10 @@
 //#define ActiveApp_Sandbox
 //#define ActiveApp_Steering
 //#define ActiveApp_CombinedSteering
-#define ActiveApp_Flocking
+//#define ActiveApp_Flocking
+//#define ActiveApp_GraphTheory
+//#define ActiveApp_AStar
+#define ActiveApp_NavMesh
 
 
 //---------- Registered Applications -----------
@@ -31,6 +34,22 @@ typedef App_CombinedSteering CurrentApp;
 #include "projects/Movement/SteeringBehaviors/Flocking/App_Flocking.h"
 typedef App_Flocking CurrentApp;
 #endif // ActiveApp_Flocking
+
+#ifdef ActiveApp_GraphTheory
+#include "projects/Movement/Pathfinding/GraphTheory/App_GraphTheory.h"
+typedef App_GraphTheory CurrentApp;
+#endif // ActiveApp_GraphTheory
+
+
+#ifdef ActiveApp_AStar
+#include "projects/Movement/Pathfinding/AStar/App_PathfindingAStar/App_PathfindingAStar.h"
+typedef App_PathfindingAStar CurrentApp;
+#endif // ActiveApp_AStar
+
+#ifdef ActiveApp_NavMesh
+#include "projects/Movement/Pathfinding/NavMeshGraph/App_NavMeshGraph.h"
+typedef App_NavMeshGraph CurrentApp;
+#endif // ActiveApp_NavMesh
 
 
 
