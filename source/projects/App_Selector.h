@@ -6,8 +6,8 @@
 //#define ActiveApp_Steering
 //#define ActiveApp_CombinedSteering
 //#define ActiveApp_Flocking
-#define ActiveApp_GraphTheory
-//#define ActiveApp_AStar
+//#define ActiveApp_GraphTheory
+#define ActiveApp_AStar
 //#define ActiveApp_NavMesh
 
 

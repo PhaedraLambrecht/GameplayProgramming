@@ -64,7 +64,7 @@ namespace Elite
 		openList.push_back(currentRecord);
 
 
-		while ( !openList.empty() )
+		while (!openList.empty())
 		{
 			// connection with lowest f
 			currentRecord = *std::min_element(openList.begin(), openList.end());
@@ -89,7 +89,7 @@ namespace Elite
 				// Check if any of those connections lead to a node already on the closed list
 				for (const NodeRecord& closedListRecord : closedList)
 				{
-					if ( connection->GetTo() == closedListRecord.pNode->GetIndex() )
+					if (connection->GetTo() == closedListRecord.pNode->GetIndex())
 					{
 						// Check if the already existing connection is cheaper
 						if (connection->GetCost() <= totalCostSoFar)
@@ -100,13 +100,13 @@ namespace Elite
 						closedList.erase(std::remove(closedList.begin(), closedList.end(), closedListRecord));
 					}
 				}
-		
+
 				// Check if any of those connections lead to a node already on the open list
 				if (!skipConnection)
 				{
 					for (const NodeRecord& openListRecord : openList)
 					{
-						if ( connection->GetTo() == openListRecord.pNode->GetIndex() )
+						if (connection->GetTo() == openListRecord.pNode->GetIndex())
 						{
 							// Check if the already existing connection is cheaper
 							if (connection->GetCost() <= totalCostSoFar)
@@ -117,7 +117,7 @@ namespace Elite
 						}
 					}
 				}
-			
+
 
 				// Make new NodeRecord, and add it to the open list
 				if (skipConnection == false)
@@ -130,20 +130,14 @@ namespace Elite
 					openList.push_back(newNodeRecord);
 				}
 			}
-		
+
 			// Erase current node from the open list and add it to the closed list
 			openList.erase(std::remove(openList.begin(), openList.end(), currentRecord));
 			closedList.push_back(currentRecord);
 		}
-				
-			
-		//check if path doesn't lead to end point
-		if (currentRecord.pNode != pGoalNode)
-		{
-			return path;
-		}
 
 
+		// Geting a fall back path
 		// Reconstruct path from last connection to start node
 		NodeRecord currentPathRecord = currentRecord;
 		while (currentPathRecord.pNode != pStartNode)
@@ -152,6 +146,26 @@ namespace Elite
 
 			for (const NodeRecord& nodeRecord : closedList)
 			{
+				// this does not work and breaks it --> this requires to not have noderecord be const
+				//currentPathRecord.estimatedTotalCost = GetHeuristicCost(currentPathRecord.pNode, pGoalNode);
+				//nodeRecord.estimatedTotalCost = GetHeuristicCost(nodeRecord.pNode, pGoalNode);
+				//
+				//if (currentPathRecord.pConnection->GetFrom() == nodeRecord.pNode->GetIndex())
+				//{
+				//	// If the cost of Noderecord is lower then you can change currentPath
+				//	if (nodeRecord.estimatedTotalCost <= currentPathRecord.estimatedTotalCost)
+				//	{
+				//		currentPathRecord = nodeRecord;
+				//		break;
+				//	}
+				//	else // else it stays the same
+				//	{
+				//		currentPathRecord = currentPathRecord;
+				//		break;
+				//	}
+				//}
+
+
 				if (currentPathRecord.pConnection->GetFrom() == nodeRecord.pNode->GetIndex())
 				{
 					currentPathRecord = nodeRecord;
@@ -160,8 +174,18 @@ namespace Elite
 			}
 		}
 
+
+
+		// Reverse the path, don't forget the startNode
 		path.push_back(pStartNode);
 		std::reverse(path.begin(), path.end());
+
+		//check if path doesn't lead to end point
+		if (currentRecord.pNode != pGoalNode)
+		{
+			return path;
+		}
+
 
 		return path;
 	}
