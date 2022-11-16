@@ -134,12 +134,12 @@ namespace Elite
 				//1. See if moving funnel inwards - LEFT
 				auto leftCross{ Elite::Cross(newLeftLeg, leftLeg) };
 
-				if (leftCross <= 0.0f)// Going inwards
+				if (leftCross >= 0.0f)// Going inwards
 				{
 					//2. See if new line degenerates a line segment - LEFT
 					auto crossingRightCross{ Elite::Cross(newLeftLeg, rightLeg) };
 
-					if (crossingRightCross <= 0.0f) // it crosses the right leg
+					if (crossingRightCross >= 0.0f) // it crosses the right leg
 					{
 						apexPos += rightLeg;
 						apexIdx = rightLegIdx;
@@ -169,7 +169,6 @@ namespace Elite
 						leftLegIdx = portalIdx;
 					}
 				}
-
 					
 
 			}

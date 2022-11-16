@@ -204,8 +204,8 @@ void App_PathfindingAStar::CalculatePath()
 		&& startPathIdx != endPathIdx)
 	{
 		//BFS Pathfinding
-		//auto pathfinder = BFS<GridTerrainNode, GraphConnection>(m_pGridGraph);
-		auto pathfinder = AStar<GridTerrainNode, GraphConnection>(m_pGridGraph, m_pHeuristicFunction);
+		auto pathfinder = BFS<GridTerrainNode, GraphConnection>(m_pGridGraph);
+		//auto pathfinder = AStar<GridTerrainNode, GraphConnection>(m_pGridGraph, m_pHeuristicFunction);
 		auto startNode = m_pGridGraph->GetNode(startPathIdx);
 		auto endNode = m_pGridGraph->GetNode(endPathIdx);
 

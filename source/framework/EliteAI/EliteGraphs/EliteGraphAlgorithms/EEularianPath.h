@@ -36,70 +36,70 @@ namespace Elite
 	template<class T_NodeType, class T_ConnectionType>
 	inline Eulerianity EulerianPath<T_NodeType, T_ConnectionType>::IsEulerian() const
 	{
-		// If the graph is not connected, there can be no Eulerian Trail
+		// Not connected --> not eulerian
 		if (IsConnected() == false)
 			return Eulerianity::notEulerian;
 
 
-		// Count nodes with odd degree 
-		auto nodes = m_pGraph->GetAllNodes();
-		int oldCount = 0;
-
-		for(auto n: nodes)
+		// Count the nodes
+		int nodeCount{};
+		for (const auto& node : m_pGraph->GetAllNodes())
 		{
-			auto connections = m_pGraph->GetNodeConnections(n);
+			 auto nodeConnections{ m_pGraph->GetNodeConnections(node) };
 
-			if (connections.size() & 1)
-				oldCount++;
+			if (nodeConnections.size() % 2 == 1)
+				++nodeCount;
 		}
 
 
-		// A connected graph with more than 2 nodes with an odd degree (an odd amount of connections) is not Eulerian
-		if (oldCount > 2)
+		// Connected graph with....
+
+		// More than 2 nodes & an odd degree --> not eulerian
+		if (nodeCount > 2)
 			return Eulerianity::notEulerian;
 
 
-		// A connected graph with exactly 2 nodes with an odd degree is Semi-Eulerian (unless there are only 2 nodes)
-		// An Euler trail can be made, but only starting and ending in these 2 nodes
-		if (oldCount == 2 && nodes.size() != 2)
+		// Exactly 2 nodes & an odd degree --> semi-eulerian
+		if (nodeCount == 2)
 			return Eulerianity::semiEulerian;
 
 
-		// A connected graph with no odd nodes is Eulerian
-		return Eulerianity::notEulerian; // REMOVE AFTER IMPLEMENTING
+		// No odd nodes -->  Eulerian
+		return Eulerianity::eulerian;
 	}
 
 	template<class T_NodeType, class T_ConnectionType>
 	inline std::vector<T_NodeType*> EulerianPath<T_NodeType, T_ConnectionType>::FindPath(Eulerianity& eulerianity) const
 	{
-		// TODO: FindPath- milestone
+			// TODO: FindPath- milestone
 
-		// Get a copy of the graph because this algorithm involves removing edges
-		auto graphCopy = m_pGraph->Clone();
-		auto path = std::vector<T_NodeType*>();
-		int nrOfNodes = graphCopy->GetNrOfNodes();
+			// Get a copy of the graph because this algorithm involves removing edges
+			auto graphCopy = m_pGraph->Clone();
+			auto path = std::vector<T_NodeType*>();
+			int nrOfNodes = graphCopy->GetNrOfNodes();
 
-		// Check if there can be an Euler path
-		
+			// Check if there can be an Euler path
+			
 
-	/*	int nrOfConnections{};
-		auto CurrentNode{};
-		for (int idx{}; idx < nrOfNodes; ++idx)
-		{
-			CurrentNode = graphCopy[idx];
-		}
-		nrOfConnections = CurrentNode.GetNrOfConnections();*/
-
-
-		// If this graph is not eulerian, return the empty path
-		// Else we need to find a valid starting index for the algorithm
-		
-		// Start algorithm loop
-		std::stack<int> nodeStack;
+		/*	int nrOfConnections{};
+			auto CurrentNode{};
+			for (int idx{}; idx < nrOfNodes; ++idx)
+			{
+				CurrentNode = graphCopy[idx];
+			}
+			nrOfConnections = CurrentNode.GetNrOfConnections();*/
 
 
-		std::reverse(path.begin(), path.end()); // reverses order of the path
-		return path;
+			// If this graph is not eulerian, return the empty path
+			// Else we need to find a valid starting index for the algorithm
+			
+			// Start algorithm loop
+			std::stack<int> nodeStack;
+
+
+			std::reverse(path.begin(), path.end()); // reverses order of the path
+			return path;
+
 	}
 
 	template<class T_NodeType, class T_ConnectionType>
@@ -111,48 +111,60 @@ namespace Elite
 		// recursively visit any valid connected nodes that were not visited before
 
 
+		/*
+				// mark the visited node
+		visited[startIdx] = true;
+
+		// recursively visit any valid connected nodes that were not visited before
+		for (T_ConnectionType* connection : m_pGraph->GetNodeConnections(startIdx))
+		{
+			if (visited[connection->GetTo()] == false)
+
+
+		}
+		*/
 	}
 
-	template<class T_NodeType, class T_ConnectionType>
-	inline bool EulerianPath<T_NodeType, T_ConnectionType>::IsConnected() const
-	{
-		auto nodes = m_pGraph->GetAllNodes();
-		vector<bool> visited(m_pGraph->GetNrOfNodes(), false);
-
-
-		// find a valid starting node that has connections
-		if (nodes.size() > 1 && m_pGraph->GetAllConnections().size() == 0)
-			return false;
-
-		int connectionIdx = invalid_node_index;
-		for(auto n: nodes)
+		template<class T_NodeType, class T_ConnectionType>
+		inline bool EulerianPath<T_NodeType, T_ConnectionType>::IsConnected() const
 		{
-			auto connections = m_pGraph->GetNodeConnections(n);
+			auto nodes = m_pGraph->GetAllNodes();
+			vector<bool> visited(m_pGraph->GetNrOfNodes(), false);
 
-			if(connections.size() != 0)
+
+			// find a valid starting node that has connections
+			if (nodes.size() > 1 && m_pGraph->GetAllConnections().size() == 0)
+				return false;
+
+			int connectionIdx = invalid_node_index;
+			for (auto n : nodes)
 			{
-				connectionIdx = n->GetIndex();
-				break;
+				auto connections = m_pGraph->GetNodeConnections(n);
+
+				if (connections.size() != 0)
+				{
+					connectionIdx = n->GetIndex();
+					break;
+				}
 			}
-		}
 
 
-		// if no valid node could be found, return false
-		if (connectionIdx == invalid_node_index)
-			return false;
-
-
-		// start a depth-first-search traversal from the node that has at least one connection
-		VisitAllNodesDFS(connectionIdx, visited);
-
-
-		// if a node was never visited, this graph is not connected
-		for (auto n : nodes)
-			if (visited[n->GetIndex()] == false)
+			// if no valid node could be found, return false
+			if (connectionIdx == invalid_node_index)
 				return false;
 
 
-		return true;
-	}
+			// start a depth-first-search traversal from the node that has at least one connection
+			VisitAllNodesDFS(connectionIdx, visited);
+
+
+			// if a node was never visited, this graph is not connected
+			for (auto n : nodes)
+				if (visited[n->GetIndex()] == false)
+					return false;
+
+
+			return true;
+		}
 
 }
