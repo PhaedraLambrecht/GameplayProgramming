@@ -1,6 +1,4 @@
-﻿  App_GraphTheory.cpp
-C:\DAE\GameplayProgramming\source\framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EEularianPath.h(70,3): error C2561: 'Elite::EulerianPath<Elite::GraphNode2D,Elite::GraphConnection2D>::IsEulerian': function must return a value
-C:\DAE\GameplayProgramming\source\framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EEularianPath.h(20): message : see declaration of 'Elite::EulerianPath<Elite::GraphNode2D,Elite::GraphConnection2D>::IsEulerian'
-C:\DAE\GameplayProgramming\source\framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EEularianPath.h(38): message : while compiling class template member function 'Elite::Eulerianity Elite::EulerianPath<Elite::GraphNode2D,Elite::GraphConnection2D>::IsEulerian(void) const'
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\GraphTheory\App_GraphTheory.cpp(88): message : see reference to function template instantiation 'Elite::Eulerianity Elite::EulerianPath<Elite::GraphNode2D,Elite::GraphConnection2D>::IsEulerian(void) const' being compiled
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\GraphTheory\App_GraphTheory.cpp(86): message : see reference to class template instantiation 'Elite::EulerianPath<Elite::GraphNode2D,Elite::GraphConnection2D>' being compiled
+﻿  StatesAndTransitions.cpp
+C:\DAE\GameplayProgramming\source\projects\DecisionMaking\FiniteStateMachines\StatesAndTransitions.cpp(158): warning C4715: 'FSMConditions::NoFoodNearBYCondition::Evaluate': not all control paths return a value
+  GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
+  0 File(s) copied
