@@ -25,11 +25,11 @@ App_AgarioGame::~App_AgarioGame()
 	}
 	m_pFoodVec.clear();
 
-	for (auto& a : m_pAgentVec)
+	for (auto& a : m_pDumbAgentVec)
 	{
 		SAFE_DELETE(a);
 	}
-	m_pAgentVec.clear();
+	m_pDumbAgentVec.clear();
 
 	SAFE_DELETE(m_pContactListener);
 	SAFE_DELETE(m_pSmartAgent);
@@ -63,7 +63,7 @@ void App_AgarioGame::Start()
 	m_pStates.push_back(pWanderState);
 
 	//Create default agents
-	m_pAgentVec.reserve(m_AmountOfAgents);
+	m_pDumbAgentVec.reserve(m_AmountOfAgents);
 	for (int i = 0; i < m_AmountOfAgents; i++)
 	{
 		Elite::Vector2 randomPos = randomVector2(0, m_TrimWorldSize * (2.0f / 3));
@@ -74,12 +74,12 @@ void App_AgarioGame::Start()
 		// HandsOn - dumb agent
 		Blackboard* pBlackBoard = CreateBlackboard(newAgent);
 
-	//	FiniteStateMachine* pStateMachine = new FiniteStateMachine(pWanderState, pBlackBoard);
-		//newAgent->SetDecisionMaking(pStateMachine);
+		FiniteStateMachine* pStateMachine = new FiniteStateMachine(pWanderState, pBlackBoard);
+		newAgent->SetDecisionMaking(pStateMachine);
 
 
 
-		m_pAgentVec.push_back(newAgent);
+		m_pDumbAgentVec.push_back(newAgent);
 	}
 
 
@@ -96,18 +96,35 @@ void App_AgarioGame::Start()
 	Blackboard* pBlackBoard = CreateBlackboard(m_pSmartAgent);
 
 	//2. Create the different agent states
+	
+	// Food State
 	SeekFoodState* pSeekFoodState = new SeekFoodState();
 	m_pStates.push_back(pSeekFoodState);
 
+
+	// Evdade State
+	EvadeState* pEvadeState = new EvadeState();
+	m_pStates.push_back(pEvadeState);
+
+
+
 	//3. Create the conditions beetween those states
 
-	// If there is food
-	FoodNearBYCondition* pFoodNearByCondition = new FoodNearBYCondition();
+	// Food Conditions
+	FoodNearByCondition* pFoodNearByCondition = new FoodNearByCondition(); // If there is food
 	m_pConditions.push_back(pFoodNearByCondition);
 
-	// If there is no food
-	NoFoodNearBYCondition* pNoFoodNearByCondition = new NoFoodNearBYCondition();
+	NoFoodNearByCondition* pNoFoodNearByCondition = new NoFoodNearByCondition(); // If there is no food
 	m_pConditions.push_back(pNoFoodNearByCondition);
+
+
+	// EvadeCondition
+	EvadeAgentCondition* pEvadeBiggerAgent = new EvadeAgentCondition(); // If there is a bigger agent
+	m_pConditions.push_back(pEvadeBiggerAgent);
+
+	NoBiggerAgentNearByCondition* pNoAgentNearBy = new NoBiggerAgentNearByCondition(); // If there is no bigger agent nearby
+	m_pConditions.push_back(pNoAgentNearBy);
+
 
 
 
@@ -115,13 +132,24 @@ void App_AgarioGame::Start()
 	//4. Create the finite state machine with a starting state and the blackboard
 	FiniteStateMachine* pStateMachine = new FiniteStateMachine(pWanderState, pBlackBoard);
 
+
+
 	//5. Add the transitions for the states to the state machine
 	// stateMachine->AddTransition(startState, toState, condition)
 	// startState: active state for which the transition will be checked
 	// condition: if the Evaluate function returns true => transition will fire and move to the toState
 	// toState: end state where the agent will move to if the transition fires
-	pStateMachine->AddTransition(pWanderState, pSeekFoodState, pFoodNearByCondition);
-	pStateMachine->AddTransition(pSeekFoodState, pWanderState, pNoFoodNearByCondition);
+
+	// Seeking food
+	pStateMachine->AddTransition(pWanderState, pSeekFoodState, pFoodNearByCondition); // wander --> seek food
+	pStateMachine->AddTransition(pSeekFoodState, pWanderState, pNoFoodNearByCondition); // seek food --> wander
+
+	// Evading agents
+	pStateMachine->AddTransition(pWanderState, pEvadeState, pEvadeBiggerAgent); // wander --> evade
+	pStateMachine->AddTransition(pSeekFoodState, pEvadeState, pEvadeBiggerAgent); // seek food --> evade
+	pStateMachine->AddTransition(pEvadeState, pEvadeState, pEvadeBiggerAgent); // wander --> evade
+	pStateMachine->AddTransition(pEvadeState, pWanderState, pNoAgentNearBy); // evade --> wander
+
 
 
 	//6. Activate the decision making stucture on the custom agent by calling the SetDecisionMaking function
@@ -139,7 +167,7 @@ void App_AgarioGame::Update(float deltaTime)
 
 		//Update the other agents and food
 		UpdateAgarioEntities(m_pFoodVec, deltaTime);
-		UpdateAgarioEntities(m_pAgentVec, deltaTime);
+		UpdateAgarioEntities(m_pDumbAgentVec, deltaTime);
 		return;
 	}
 	//Update the custom agent
@@ -148,7 +176,7 @@ void App_AgarioGame::Update(float deltaTime)
 
 	//Update the other agents and food
 	UpdateAgarioEntities(m_pFoodVec, deltaTime);
-	UpdateAgarioEntities(m_pAgentVec, deltaTime);
+	UpdateAgarioEntities(m_pDumbAgentVec, deltaTime);
 
 
 	//Check if we need to spawn new food
@@ -169,21 +197,38 @@ void App_AgarioGame::Render(float deltaTime) const
 		f->Render(deltaTime);
 	}
 
-	for (AgarioAgent* a : m_pAgentVec)
+	for (AgarioAgent* a : m_pDumbAgentVec)
 	{
 		a->Render(deltaTime);
 	}
 
 	m_pSmartAgent->Render(deltaTime);
+
+	// Render the agents food radius //TODO: place this in a beter position
+	//if ( m_pSmartAgent->CanRenderBehavior() )
+	{
+		DEBUGRENDERER2D->DrawCircle(m_pSmartAgent->GetPosition(), m_pSmartAgent->GetRadius() + 15.0f, Color{1.0f, 0.0f, 0.0f, 1.0f}, DEBUGRENDERER2D->NextDepthSlice());
+	}
+
+	
 }
 
 Blackboard* App_AgarioGame::CreateBlackboard(AgarioAgent* a)
 {
 	Blackboard* pBlackboard = new Blackboard();
 	pBlackboard->AddData("Agent", a);
+	
+	// Food
 	pBlackboard->AddData("FoodVecPtr", &m_pFoodVec);
 	pBlackboard->AddData("FoodNearByPtr", static_cast<AgarioFood*>(nullptr) );
+
+	// Evade
+	pBlackboard->AddData("EvadeAgentVecPtr", &m_pDumbAgentVec);
+
+	pBlackboard->AddData("BigAgent", static_cast<AgarioAgent*>(nullptr) );
 	//....
+
+
 
 	return pBlackboard;
 }

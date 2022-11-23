@@ -35,6 +35,14 @@ namespace FSMState
 
 	};
 
+	// Third State
+	class EvadeState : public Elite::FSMState
+	{
+	public:
+		EvadeState() : FSMState() {};
+		virtual void OnEnter(Elite::Blackboard* pBlackBoard) override;
+
+	};
 }
 //-----------------
 //---TRANSITIONS---
@@ -42,27 +50,53 @@ namespace FSMState
 namespace FSMConditions
 {
 	// First Condition
-	class FoodNearBYCondition : public Elite::FSMCondition
+	class FoodNearByCondition : public Elite::FSMCondition
 	{
 	public:
 
-		FoodNearBYCondition() : FSMCondition() {};
-
-		// Inherited via FSMCondition
-		virtual bool Evaluate(Elite::Blackboard* pBlackboard) const override;
-
-	};
-	class NoFoodNearBYCondition : public Elite::FSMCondition
-	{
-	public:
-
-		NoFoodNearBYCondition() : FSMCondition() {};
+		FoodNearByCondition() : FSMCondition() {};
 
 		// Inherited via FSMCondition
 		virtual bool Evaluate(Elite::Blackboard* pBlackboard) const override;
 
 	};
 
+	class NoFoodNearByCondition : public Elite::FSMCondition
+	{
+	public:
+
+		NoFoodNearByCondition() : FSMCondition() {};
+
+		// Inherited via FSMCondition
+		virtual bool Evaluate(Elite::Blackboard* pBlackboard) const override;
+
+	};
+
+
+	// Second Condition
+	class EvadeAgentCondition : public Elite::FSMCondition
+	{
+	public:
+
+		EvadeAgentCondition() : FSMCondition() {};
+
+		// Inherited via FSMCondition
+		virtual bool Evaluate(Elite::Blackboard* pBlackboard) const override;
+
+	};
+
+	class NoBiggerAgentNearByCondition : public Elite::FSMCondition
+	{
+	public:
+
+		NoBiggerAgentNearByCondition() : FSMCondition() {};
+
+		// Inherited via FSMCondition
+		virtual bool Evaluate(Elite::Blackboard* pBlackboard) const override;
+
+	};
+
+	// Third condition
 }
 
 

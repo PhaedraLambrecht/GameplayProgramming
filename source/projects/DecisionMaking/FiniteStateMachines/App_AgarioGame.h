@@ -21,7 +21,7 @@ public:
 private:
 	float m_TrimWorldSize = 100.f;
 	const int m_AmountOfAgents{ 30 };
-	std::vector<AgarioAgent*> m_pAgentVec{};
+	std::vector<AgarioAgent*> m_pDumbAgentVec{};
 
 	AgarioAgent* m_pSmartAgent = nullptr;
 

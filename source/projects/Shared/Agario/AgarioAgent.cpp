@@ -17,6 +17,7 @@ AgarioAgent::AgarioAgent(Elite::Vector2 pos, Color color)
 	m_pWander = new Wander();
 	m_pSeek = new Seek();
 	m_pFlee = new Flee();
+	m_pEvade = new Evade();
 }
 
 AgarioAgent::AgarioAgent(Elite::Vector2 pos)
@@ -30,6 +31,7 @@ AgarioAgent::~AgarioAgent()
 	SAFE_DELETE(m_pWander);
 	SAFE_DELETE(m_pSeek);
 	SAFE_DELETE(m_pFlee);
+	SAFE_DELETE(m_pEvade);
 }
 
 void AgarioAgent::Update(float dt)
@@ -86,6 +88,14 @@ void AgarioAgent::SetToFlee(Elite::Vector2 fleePos)
 {
 	m_pFlee->SetTarget(fleePos);
 	SetSteeringBehavior(m_pFlee);
+}
+
+
+// Added a SetToEvade function
+void AgarioAgent::SetToEvade(Elite::Vector2 evadePos)
+{
+	m_pEvade->SetTarget(evadePos);
+	SetSteeringBehavior(m_pEvade);
 }
 
 void AgarioAgent::OnUpgrade(float amountOfFood)
