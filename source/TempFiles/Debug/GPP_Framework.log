@@ -1,4 +1,10 @@
 ﻿  App_AgarioGame.cpp
-C:\DAE\GameplayProgramming\source\projects\DecisionMaking\FiniteStateMachines\App_AgarioGame.cpp(155,37): warning C4553: '==': result of expression not used; did you intend '='?
+C:\DAE\GameplayProgramming\source\projects\DecisionMaking\FiniteStateMachines\App_AgarioGame.cpp(93,37): warning C4553: '==': result of expression not used; did you intend '='?
+  StatesAndTransitions.cpp
+  Generating Code...
+C:\DAE\GameplayProgramming\source\projects\DecisionMaking\FiniteStateMachines\StatesAndTransitions.cpp(182): warning C4715: 'FSMConditions::NoFoodNearByCondition::Evaluate': not all control paths return a value
+C:\DAE\GameplayProgramming\source\projects\DecisionMaking\FiniteStateMachines\StatesAndTransitions.cpp(270): warning C4715: 'FSMConditions::NoBiggerAgentNearByCondition::Evaluate': not all control paths return a value
+C:\DAE\GameplayProgramming\source\projects\DecisionMaking\FiniteStateMachines\StatesAndTransitions.cpp(366): warning C4715: 'FSMConditions::NoSmallerAgentNearByCondition::Evaluate': not all control paths return a value
+  LINK : C:\DAE\GameplayProgramming\source\..\bin\Debug\GPP_Framework.exe not found or not built by the last incremental link; performing full link
   GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
   0 File(s) copied

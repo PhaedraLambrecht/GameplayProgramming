@@ -43,6 +43,18 @@ namespace FSMState
 		virtual void OnEnter(Elite::Blackboard* pBlackBoard) override;
 
 	};
+
+	// Fourth State
+	class PursueState: public Elite::FSMState
+	{
+	public:
+		PursueState() : FSMState() {};
+		virtual void OnEnter(Elite::Blackboard* pBlackBoard) override;
+
+	};
+
+
+
 }
 //-----------------
 //---TRANSITIONS---
@@ -96,7 +108,28 @@ namespace FSMConditions
 
 	};
 
+
 	// Third condition
+	class SmallerAgentNearByCondition : public Elite::FSMCondition
+	{
+	public:
+
+		SmallerAgentNearByCondition() : FSMCondition() {};
+
+		// Inherited via FSMCondition
+		virtual bool Evaluate(Elite::Blackboard* pBlackboard) const override;
+	};
+
+	class NoSmallerAgentNearByCondition : public Elite::FSMCondition
+	{
+	public:
+
+		NoSmallerAgentNearByCondition() : FSMCondition() {};
+
+		// Inherited via FSMCondition
+		virtual bool Evaluate(Elite::Blackboard* pBlackboard) const override;
+	};
+
 }
 
 

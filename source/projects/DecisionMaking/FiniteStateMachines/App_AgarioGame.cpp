@@ -95,21 +95,22 @@ void App_AgarioGame::Start()
 	//1. Create and add the necessary blackboard data
 	Blackboard* pBlackBoard = CreateBlackboard(m_pSmartAgent);
 
+
 	//2. Create the different agent states
-	
 	// Food State
 	SeekFoodState* pSeekFoodState = new SeekFoodState();
 	m_pStates.push_back(pSeekFoodState);
-
 
 	// Evdade State
 	EvadeState* pEvadeState = new EvadeState();
 	m_pStates.push_back(pEvadeState);
 
+	// Pursue State
+	PursueState* pPursueState = new PursueState();
+	m_pStates.push_back(pPursueState);
 
 
 	//3. Create the conditions beetween those states
-
 	// Food Conditions
 	FoodNearByCondition* pFoodNearByCondition = new FoodNearByCondition(); // If there is food
 	m_pConditions.push_back(pFoodNearByCondition);
@@ -119,13 +120,18 @@ void App_AgarioGame::Start()
 
 
 	// EvadeCondition
-	EvadeAgentCondition* pEvadeBiggerAgent = new EvadeAgentCondition(); // If there is a bigger agent
-	m_pConditions.push_back(pEvadeBiggerAgent);
+	EvadeAgentCondition* pEvadeCondition = new EvadeAgentCondition(); // If there is a bigger agent
+	m_pConditions.push_back(pEvadeCondition);
 
-	NoBiggerAgentNearByCondition* pNoAgentNearBy = new NoBiggerAgentNearByCondition(); // If there is no bigger agent nearby
-	m_pConditions.push_back(pNoAgentNearBy);
+	NoBiggerAgentNearByCondition* pNoEvadeCondition = new NoBiggerAgentNearByCondition(); // If there is no bigger agent nearby
+	m_pConditions.push_back(pNoEvadeCondition);
 
+	// PursueCondition
+	SmallerAgentNearByCondition* pPursueCondition = new SmallerAgentNearByCondition();
+	m_pConditions.push_back(pPursueCondition);
 
+	NoSmallerAgentNearByCondition* pNoPursueCondition = new NoSmallerAgentNearByCondition();
+	m_pConditions.push_back(pNoPursueCondition);
 
 
 
@@ -142,14 +148,25 @@ void App_AgarioGame::Start()
 
 	// Seeking food
 	pStateMachine->AddTransition(pWanderState, pSeekFoodState, pFoodNearByCondition); // wander --> seek food
-	pStateMachine->AddTransition(pSeekFoodState, pWanderState, pNoFoodNearByCondition); // seek food --> wander
-
+	
 	// Evading agents
-	pStateMachine->AddTransition(pWanderState, pEvadeState, pEvadeBiggerAgent); // wander --> evade
-	pStateMachine->AddTransition(pSeekFoodState, pEvadeState, pEvadeBiggerAgent); // seek food --> evade
-	pStateMachine->AddTransition(pEvadeState, pEvadeState, pEvadeBiggerAgent); // wander --> evade
-	pStateMachine->AddTransition(pEvadeState, pWanderState, pNoAgentNearBy); // evade --> wander
+	pStateMachine->AddTransition(pEvadeState, pEvadeState, pEvadeCondition); // evade --> evade
+	pStateMachine->AddTransition(pWanderState, pEvadeState, pEvadeCondition); // wander --> evade
+	pStateMachine->AddTransition(pSeekFoodState, pEvadeState, pEvadeCondition); // seek food --> evade
+	pStateMachine->AddTransition(pPursueState, pEvadeState, pEvadeCondition); // pursue --> evade
 
+	//// Pursue agents
+	pStateMachine->AddTransition(pWanderState, pPursueState, pPursueCondition); // wander --> pursue
+
+
+
+	// Swapping back to wander
+	pStateMachine->AddTransition(pSeekFoodState, pWanderState, pNoFoodNearByCondition); // seek food --> wander
+	pStateMachine->AddTransition(pEvadeState, pWanderState, pNoEvadeCondition); // evade --> wander
+	pStateMachine->AddTransition(pPursueState, pWanderState, pNoPursueCondition); // pursue --> wander
+
+
+	
 
 
 	//6. Activate the decision making stucture on the custom agent by calling the SetDecisionMaking function
@@ -204,13 +221,11 @@ void App_AgarioGame::Render(float deltaTime) const
 
 	m_pSmartAgent->Render(deltaTime);
 
-	// Render the agents food radius //TODO: place this in a beter position
-	//if ( m_pSmartAgent->CanRenderBehavior() )
-	{
-		DEBUGRENDERER2D->DrawCircle(m_pSmartAgent->GetPosition(), m_pSmartAgent->GetRadius() + 15.0f, Color{1.0f, 0.0f, 0.0f, 1.0f}, DEBUGRENDERER2D->NextDepthSlice());
-	}
-
-	
+	//TODO: place this in a beter position
+	DEBUGRENDERER2D->DrawCircle(m_pSmartAgent->GetPosition(), m_pSmartAgent->GetRadius() + 5.0f, Color{0.0f, 0.0f, 1.0f, 1.0f}, DEBUGRENDERER2D->NextDepthSlice()); // food 
+	DEBUGRENDERER2D->DrawCircle(m_pSmartAgent->GetPosition(), m_pSmartAgent->GetRadius() + 15.0f, Color{0.0f, 1.0f, 0.0f, 1.0f}, DEBUGRENDERER2D->NextDepthSlice()); // evade 
+	DEBUGRENDERER2D->DrawCircle(m_pSmartAgent->GetPosition(), m_pSmartAgent->GetRadius() + 10.0f, Color{1.0f, 0.0f, 0.0f, 1.0f}, DEBUGRENDERER2D->NextDepthSlice()); // pursuit 
+		
 }
 
 Blackboard* App_AgarioGame::CreateBlackboard(AgarioAgent* a)
@@ -223,9 +238,11 @@ Blackboard* App_AgarioGame::CreateBlackboard(AgarioAgent* a)
 	pBlackboard->AddData("FoodNearByPtr", static_cast<AgarioFood*>(nullptr) );
 
 	// Evade
-	pBlackboard->AddData("EvadeAgentVecPtr", &m_pDumbAgentVec);
-
+	pBlackboard->AddData("AgentVecPtr", &m_pDumbAgentVec);
 	pBlackboard->AddData("BigAgent", static_cast<AgarioAgent*>(nullptr) );
+
+	// Pursue 
+	 pBlackboard->AddData("SmallAgent", static_cast<AgarioAgent*>(nullptr) );
 	//....
 
 
