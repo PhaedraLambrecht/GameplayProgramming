@@ -90,7 +90,7 @@ void App_AgarioGame::Start()
 	Elite::Vector2 randomPos = randomVector2(0, m_TrimWorldSize * (2.0f / 3));
 	Color customColor = Color{ 0.0f, 1.0f, 0.0f };
 	m_pSmartAgent = new AgarioAgent(randomPos, customColor);
-	m_pSmartAgent->CanRenderBehavior() == true;
+	m_pSmartAgent->SetRenderBehavior(true);
 
 	//1. Create and add the necessary blackboard data
 	Blackboard* pBlackBoard = CreateBlackboard(m_pSmartAgent);
@@ -146,27 +146,24 @@ void App_AgarioGame::Start()
 	// condition: if the Evaluate function returns true => transition will fire and move to the toState
 	// toState: end state where the agent will move to if the transition fires
 
-	// Seeking food
-	pStateMachine->AddTransition(pWanderState, pSeekFoodState, pFoodNearByCondition); // wander --> seek food
-	
-	// Evading agents
-	pStateMachine->AddTransition(pEvadeState, pEvadeState, pEvadeCondition); // evade --> evade
-	pStateMachine->AddTransition(pWanderState, pEvadeState, pEvadeCondition); // wander --> evade
-	pStateMachine->AddTransition(pSeekFoodState, pEvadeState, pEvadeCondition); // seek food --> evade
-	pStateMachine->AddTransition(pPursueState, pEvadeState, pEvadeCondition); // pursue --> evade
-
-	//// Pursue agents
-	pStateMachine->AddTransition(pWanderState, pPursueState, pPursueCondition); // wander --> pursue
-
-
-
 	// Swapping back to wander
 	pStateMachine->AddTransition(pSeekFoodState, pWanderState, pNoFoodNearByCondition); // seek food --> wander
 	pStateMachine->AddTransition(pEvadeState, pWanderState, pNoEvadeCondition); // evade --> wander
 	pStateMachine->AddTransition(pPursueState, pWanderState, pNoPursueCondition); // pursue --> wander
 
 
-	
+	// Seeking food
+	pStateMachine->AddTransition(pWanderState, pSeekFoodState, pFoodNearByCondition); // wander --> seek food
+
+	// Evading agents
+	pStateMachine->AddTransition(pWanderState, pEvadeState, pEvadeCondition); // wander --> evade
+	pStateMachine->AddTransition(pSeekFoodState, pEvadeState, pEvadeCondition); // seek food --> evade
+	pStateMachine->AddTransition(pPursueState, pEvadeState, pEvadeCondition); // pursue --> evade
+
+	//// Pursue agents
+	pStateMachine->AddTransition(pWanderState, pPursueState, pPursueCondition); // wander --> pursue
+	pStateMachine->AddTransition(pSeekFoodState, pPursueState, pPursueCondition); // wander --> pursue
+
 
 
 	//6. Activate the decision making stucture on the custom agent by calling the SetDecisionMaking function
@@ -176,7 +173,6 @@ void App_AgarioGame::Start()
 void App_AgarioGame::Update(float deltaTime)
 {
 	UpdateImGui();
-
 	//Check if agent is still alive
 	if (m_pSmartAgent->CanBeDestroyed())
 	{
@@ -220,29 +216,23 @@ void App_AgarioGame::Render(float deltaTime) const
 	}
 
 	m_pSmartAgent->Render(deltaTime);
-
-	//TODO: place this in a beter position
-	DEBUGRENDERER2D->DrawCircle(m_pSmartAgent->GetPosition(), m_pSmartAgent->GetRadius() + 5.0f, Color{0.0f, 0.0f, 1.0f, 1.0f}, DEBUGRENDERER2D->NextDepthSlice()); // food 
-	DEBUGRENDERER2D->DrawCircle(m_pSmartAgent->GetPosition(), m_pSmartAgent->GetRadius() + 15.0f, Color{0.0f, 1.0f, 0.0f, 1.0f}, DEBUGRENDERER2D->NextDepthSlice()); // evade 
-	DEBUGRENDERER2D->DrawCircle(m_pSmartAgent->GetPosition(), m_pSmartAgent->GetRadius() + 10.0f, Color{1.0f, 0.0f, 0.0f, 1.0f}, DEBUGRENDERER2D->NextDepthSlice()); // pursuit 
-		
 }
 
 Blackboard* App_AgarioGame::CreateBlackboard(AgarioAgent* a)
 {
 	Blackboard* pBlackboard = new Blackboard();
 	pBlackboard->AddData("Agent", a);
-	
+
 	// Food
 	pBlackboard->AddData("FoodVecPtr", &m_pFoodVec);
-	pBlackboard->AddData("FoodNearByPtr", static_cast<AgarioFood*>(nullptr) );
+	pBlackboard->AddData("FoodNearByPtr", static_cast<AgarioFood*>(nullptr));
 
 	// Evade
 	pBlackboard->AddData("AgentVecPtr", &m_pDumbAgentVec);
-	pBlackboard->AddData("BigAgent", static_cast<AgarioAgent*>(nullptr) );
+	pBlackboard->AddData("BigAgent", static_cast<AgarioAgent*>(nullptr));
 
 	// Pursue 
-	 pBlackboard->AddData("SmallAgent", static_cast<AgarioAgent*>(nullptr) );
+	pBlackboard->AddData("SmallAgent", static_cast<AgarioAgent*>(nullptr));
 	//....
 
 
@@ -291,6 +281,10 @@ void App_AgarioGame::UpdateImGui()
 		ImGui::Text("Agent Info");
 		ImGui::Text("Radius: %.1f", m_pSmartAgent->GetRadius());
 		ImGui::Text("Survive Time: %.1f", TIMER->GetTotal());
+
+		
+		//ImGui::Checkbox("render behaviour", m_pSmartAgent->CanRenderBehavior())
+
 
 		//End
 		ImGui::PopAllowKeyboardFocus();

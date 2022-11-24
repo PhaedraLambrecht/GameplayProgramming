@@ -33,6 +33,7 @@ public:
 	void SetToSeek(Elite::Vector2 seekPos);
 	void SetToFlee(Elite::Vector2 seekPos);
 	void SetToEvade(Elite::Vector2 evadePos);
+	void SetToPursuit(Elite::Vector2 pursuitPos);
 
 private:
 	Elite::IDecisionMaking* m_DecisionMaking = nullptr;
@@ -44,6 +45,7 @@ private:
 	ISteeringBehavior* m_pSeek = nullptr;
 	ISteeringBehavior* m_pFlee = nullptr;
 	ISteeringBehavior* m_pEvade = nullptr;
+	ISteeringBehavior* m_pPursuit = nullptr;
 	
 private:
 	void OnUpgrade(float amountOfFood);

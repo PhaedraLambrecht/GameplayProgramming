@@ -10,7 +10,7 @@ AgarioAgent::AgarioAgent(Elite::Vector2 pos, Color color)
 	m_BodyColor = color;
 	SetPosition(pos);
 	SetMass(0.f);
-
+	SetAutoOrient(true);
 	m_pRigidBody->SetUserData({ int(AgarioObjectTypes::Player), this });
 
 	//Create the possible steering behaviors for the agent
@@ -18,6 +18,7 @@ AgarioAgent::AgarioAgent(Elite::Vector2 pos, Color color)
 	m_pSeek = new Seek();
 	m_pFlee = new Flee();
 	m_pEvade = new Evade();
+	m_pPursuit = new Pursuit();
 }
 
 AgarioAgent::AgarioAgent(Elite::Vector2 pos)
@@ -32,6 +33,7 @@ AgarioAgent::~AgarioAgent()
 	SAFE_DELETE(m_pSeek);
 	SAFE_DELETE(m_pFlee);
 	SAFE_DELETE(m_pEvade);
+	SAFE_DELETE(m_pPursuit);
 }
 
 void AgarioAgent::Update(float dt)
@@ -96,6 +98,12 @@ void AgarioAgent::SetToEvade(Elite::Vector2 evadePos)
 {
 	m_pEvade->SetTarget(evadePos);
 	SetSteeringBehavior(m_pEvade);
+}
+
+void AgarioAgent::SetToPursuit(Elite::Vector2 pursuitPos)
+{
+	m_pPursuit->SetTarget(pursuitPos);
+	SetSteeringBehavior(m_pPursuit);
 }
 
 void AgarioAgent::OnUpgrade(float amountOfFood)

@@ -41,7 +41,7 @@ namespace FSMState
 	public:
 		EvadeState() : FSMState() {};
 		virtual void OnEnter(Elite::Blackboard* pBlackBoard) override;
-
+		virtual void Update(Elite::Blackboard* pBlackboard, float deltaTime) override;
 	};
 
 	// Fourth State
@@ -50,7 +50,7 @@ namespace FSMState
 	public:
 		PursueState() : FSMState() {};
 		virtual void OnEnter(Elite::Blackboard* pBlackBoard) override;
-
+		virtual void Update(Elite::Blackboard* pBlackboard, float deltaTime) override;
 	};
 
 
@@ -129,6 +129,7 @@ namespace FSMConditions
 		// Inherited via FSMCondition
 		virtual bool Evaluate(Elite::Blackboard* pBlackboard) const override;
 	};
+
 
 }
 

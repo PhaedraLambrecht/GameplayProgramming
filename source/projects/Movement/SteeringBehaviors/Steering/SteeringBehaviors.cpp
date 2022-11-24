@@ -18,9 +18,12 @@ SteeringOutput Seek::CalculateSteering(float deltaT, SteeringAgent* pAgent)
 	steering.LinearVelocity *= pAgent->GetMaxLinearSpeed();// Rescale to max speed
 
 
-	if (pAgent->CanRenderBehavior())// draws green line
+	if (pAgent->CanRenderBehavior())// draws green line towards target
 	{
-		DEBUGRENDERER2D->DrawDirection(pAgent->GetPosition(), steering.LinearVelocity, 5, { 0.0f, 1.0f, 0.0f, 1.0f });
+		DEBUGRENDERER2D->DrawCircle(pAgent->GetPosition(), pAgent->GetRadius() + 10.0f, { 0.0f, 1.0f, 0.0f, 1.0f }, DEBUGRENDERER2D->NextDepthSlice()); // food 
+
+		DEBUGRENDERER2D->DrawCircle(m_Target.Position, 1.5f, { 0.0f, 1.0f, 0.0f, 1.0f }, DEBUGRENDERER2D->NextDepthSlice());
+		DEBUGRENDERER2D->DrawSegment(pAgent->GetPosition(), m_Target.Position, { 0.0f, 1.0f, 0.0f, 1.0f });
 	}
 
 
@@ -47,9 +50,10 @@ SteeringOutput Flee::CalculateSteering(float deltaT, SteeringAgent* pAgent)
 	}
 
 
-	if (pAgent->CanRenderBehavior())
+	if (pAgent->CanRenderBehavior()) // Draws red line
 	{
-		DEBUGRENDERER2D->DrawDirection(pAgent->GetPosition(), steering.LinearVelocity, 5, { 0.0f, 1.0f, 0.0f, 1.0f });
+		DEBUGRENDERER2D->DrawCircle(pAgent->GetPosition(), pAgent->GetRadius() + 20.0f, { 1.0f, 0.0f, 0.0f, 1.0f }, DEBUGRENDERER2D->NextDepthSlice()); // evade 
+		DEBUGRENDERER2D->DrawDirection(pAgent->GetPosition(), steering.LinearVelocity, 10, { 1.0f, 0.0f, 0.0f, 1.0f });
 	}
 
 
@@ -136,16 +140,16 @@ SteeringOutput Wander::CalculateSteering(float deltaT, SteeringAgent* pAgent)
 
 
 	m_Target = wanderTarget;
-	if (pAgent->CanRenderBehavior())// draws green line
+	if (pAgent->CanRenderBehavior())// draws blue line
 	{
 		// Draw circle
-		DEBUGRENDERER2D->DrawCircle(offsetPoint, m_Radius, { 0.0f, 0.0f, 1.0f, 1.0f }, 0.0f);
+		DEBUGRENDERER2D->DrawCircle(offsetPoint, m_Radius, {0.0f, 0.0f, 1.0f, 1.0f}, 0.0f);
 		DEBUGRENDERER2D->DrawPoint(offsetPoint, 3.0f, { 0.0f, 0.0f, 1.0f, 1.0f });
 		DEBUGRENDERER2D->DrawPoint(wanderTarget, 3.0f, { 0.0f, 0.0f, 0.3f, 1.0f });
 	
 		// Draw direction line
 		//DEBUGRENDERER2D->DrawString(pAgent->GetPosition() + Elite::Vector2(1.5f, 1.5f), std::to_string(Elite::ToDegrees(m_WanderAngle)).c_str());// Shows angle needed to change
-		DEBUGRENDERER2D->DrawSegment(pAgent->GetPosition(), wanderTarget, Elite::Color{ 0.0f, 1.0f, 0.0f, 1.0f });
+		DEBUGRENDERER2D->DrawSegment(pAgent->GetPosition(), wanderTarget, Elite::Color{ 0.0f, 0.0f, 1.0f, 1.0f });
 	}
 
 
@@ -185,6 +189,8 @@ SteeringOutput Pursuit::CalculateSteering(float deltaT, SteeringAgent* pAgent)
 
 	if (pAgent->CanRenderBehavior())// draws green line - does not work!
 	{
+		
+		DEBUGRENDERER2D->DrawCircle(pAgent->GetPosition(), pAgent->GetRadius() + 10.0f, { 1.0f, 0.0f, 0.0f, 1.0f }, DEBUGRENDERER2D->NextDepthSlice()); // pursuit 
 		DEBUGRENDERER2D->DrawDirection(pAgent->GetPosition(), steering.LinearVelocity, 5, { 0.0f, 1.0f, 0.0f, 1.0f });
 	}
 
@@ -219,7 +225,8 @@ SteeringOutput Evade::CalculateSteering(float deltaT, SteeringAgent* pAgent)
 
 	if (pAgent->CanRenderBehavior())// draws green line - does not work!
 	{
-		DEBUGRENDERER2D->DrawDirection(pAgent->GetPosition(), steering.LinearVelocity, 5, { 0.0f, 1.0f, 0.0f, 1.0f });
+		DEBUGRENDERER2D->DrawCircle(pAgent->GetPosition(), pAgent->GetRadius() + 20.0f, { 1.0f, 0.0f, 0.0f, 1.0f }, DEBUGRENDERER2D->NextDepthSlice()); // evade 
+		DEBUGRENDERER2D->DrawDirection(pAgent->GetPosition(), steering.LinearVelocity, 5, { 1.0f, 0.0f, 0.0f, 1.0f });
 	}
 	
 
