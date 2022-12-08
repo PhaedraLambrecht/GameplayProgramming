@@ -10,7 +10,8 @@
 //#define ActiveApp_AStar
 //#define ActiveApp_NavMesh
 //#define ActiveApp_FSM
-#define ActiveApp_BHT
+//#define ActiveApp_BHT
+#define ActiveApp_InfluenceMap
 
 
 //---------- Registered Applications -----------
@@ -19,18 +20,15 @@
 typedef App_Sandbox CurrentApp;
 #endif
 
-
 #ifdef ActiveApp_Steering
 #include "projects/Movement/SteeringBehaviors/Steering/App_SteeringBehaviors.h"
 typedef App_SteeringBehaviors CurrentApp;
 #endif // ActiveApp_Steering
 
-
 #ifdef ActiveApp_CombinedSteering
 #include "projects/Movement/SteeringBehaviors/CombinedSteering/App_CombinedSteering.h"
 typedef App_CombinedSteering CurrentApp;
 #endif // ActiveApp_CombinedSteering
-
 
 #ifdef ActiveApp_Flocking
 #include "projects/Movement/SteeringBehaviors/Flocking/App_Flocking.h"
@@ -41,7 +39,6 @@ typedef App_Flocking CurrentApp;
 #include "projects/Movement/Pathfinding/GraphTheory/App_GraphTheory.h"
 typedef App_GraphTheory CurrentApp;
 #endif // ActiveApp_GraphTheory
-
 
 #ifdef ActiveApp_AStar
 #include "projects/Movement/Pathfinding/AStar/App_PathfindingAStar/App_PathfindingAStar.h"
@@ -63,7 +60,10 @@ typedef App_AgarioGame CurrentApp;
 typedef App_AgarioGame_BT CurrentApp;
 #endif // ActiveApp_BHT
 
-
+#ifdef ActiveApp_InfluenceMap
+#include "projects/DecisionMaking/InfluenceMaps/App_InfluenceMap.h"
+typedef App_InfluenceMap CurrentApp;
+#endif // ActiveApp_InfluenceMap
 
 class App_Selector {
 public:
