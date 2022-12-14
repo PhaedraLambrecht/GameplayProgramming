@@ -112,9 +112,27 @@ void App_AgarioGame_BT::Start()
 	BehaviorTree* pBehaviorTree = new BehaviorTree(pBlackBoard,
 		new BehaviorSelector(
 			{
-				new BehaviorAction(BHT_Conditions::InfluencedAgent),
-				new BehaviorAction(BHT_Conditions::GoToHighestInfluence),
-				new BehaviorAction(BHT_Actions::ChangeToSeek)
+			new BehaviorSequence(
+			{
+				new BehaviorConditional(BHT_Conditions::IsBiggerAgentNearby),
+				new BehaviorAction(BHT_Actions::ChangeToEvade)
+			}),
+
+			// Try to evade bigger agents
+			new BehaviorSequence(
+			{
+				new BehaviorConditional(BHT_Conditions::IsSmallerAgentNearby),
+				new BehaviorAction(BHT_Actions::ChangeToPursuit)
+			}),
+
+			// Try to seek Food
+			new BehaviorSequence(
+				{
+					new BehaviorConditional(BHT_Conditions::IsFoodNearby),
+					new BehaviorAction(BHT_Actions::ChangeToSeek)
+				}),
+			// Fall back to wander
+			new BehaviorAction(BHT_Actions::ChangeToWander)
 			}
 	));
 
@@ -127,12 +145,12 @@ void App_AgarioGame_BT::Update(float deltaTime)
 {
 	UpdateImGui();
 
-	AddFoodInfluance();
+	//AddFoodInfluance();
 	AddSmallAgentInfluance();
 	AddBiggAgentInfluance();
 
 
-	//Check if agent is still alive
+		//Check if agent is still alive
 	if (m_pSmartAgent->CanBeDestroyed())
 	{
 		m_GameOver = true;
@@ -177,8 +195,10 @@ void App_AgarioGame_BT::Render(float deltaTime) const
 
 	m_pSmartAgent->Render(deltaTime);
 
+
 	m_pInfluenceGrid->SetNodeColorsBasedOnInfluence();
-	m_GraphRenderer.RenderGraph(m_pInfluenceGrid, true, true);
+	m_GraphRenderer.RenderGraph(m_pInfluenceGrid, true, false, false, true);
+	//m_GraphRenderer.RenderGraph(m_pInfluenceGrid, true, true);
 
 
 }
@@ -269,27 +289,31 @@ void App_AgarioGame_BT::UpdateImGui()
 
 void App_AgarioGame_BT::AddFoodInfluance()
 {
-	for (const auto& pFood : m_pFoodVec)
+	for (const auto& treat : m_pFoodVec)
 	{
-		m_pInfluenceGrid->SetInfluenceAtPosition
-		(
-			pFood->GetPosition(),
-			7.5f + m_pInfluenceGrid->GetNodeAtWorldPos(pFood->GetPosition())->GetInfluence()
-		);
+
+			m_pInfluenceGrid->SetInfluenceAtPosition
+			(
+				treat->GetPosition(),
+				10.0f + m_pInfluenceGrid->GetNodeAtWorldPos(treat->GetPosition())->GetInfluence()
+			);
+	
 	}
 }
 
 void App_AgarioGame_BT::AddSmallAgentInfluance()
 {
-	const float MIN_AGENT_RADIUS_DIFFERENCE{ 4.0f };
-	for (AgarioAgent* pOtherAgent : m_pAgentVec)
+	const float minPursuitRadius{ 4.0f };
+	for (const auto& treat : m_pAgentVec)
 	{
-		if ((m_pSmartAgent->GetRadius() - pOtherAgent->GetRadius() > MIN_AGENT_RADIUS_DIFFERENCE))
+		float distSq( m_pSmartAgent->GetRadius() - treat->GetRadius() );
+
+		if (distSq < minPursuitRadius)
 		{
 			m_pInfluenceGrid->SetInfluenceAtPosition
 			(
-				pOtherAgent->GetPosition(),
-				(10.0f + m_pInfluenceGrid->GetNodeAtWorldPos(pOtherAgent->GetPosition())->GetInfluence())
+				treat->GetPosition(),
+				10.0f + m_pInfluenceGrid->GetNodeAtWorldPos(treat->GetPosition())->GetInfluence()
 			);
 		}
 	}
@@ -297,14 +321,18 @@ void App_AgarioGame_BT::AddSmallAgentInfluance()
 
 void App_AgarioGame_BT::AddBiggAgentInfluance()
 {
-	const float MIN_AGENT_RADIUS_DIFFERENCE{ 0.4f };
-	for (AgarioAgent* pOtherAgent : m_pAgentVec)
+	const float minEvadeRadius{ 4.0f };
+	for (const auto& enemy : m_pAgentVec)
 	{
-		if (pOtherAgent->GetRadius() - m_pSmartAgent->GetRadius() > MIN_AGENT_RADIUS_DIFFERENCE)
+		float distSq(m_pSmartAgent->GetRadius() - enemy->GetRadius());
+
+		if (distSq > minEvadeRadius)
 		{
-			m_pInfluenceGrid->SetInfluenceAtPosition(
-				pOtherAgent->GetPosition(),
-				-30.0f + m_pInfluenceGrid->GetNodeAtWorldPos(pOtherAgent->GetPosition())->GetInfluence());
+			m_pInfluenceGrid->SetInfluenceAtPosition
+			(
+				enemy->GetPosition(),
+				-30.0f + m_pInfluenceGrid->GetNodeAtWorldPos(enemy->GetPosition())->GetInfluence()
+			);
 		}
 	}
 }

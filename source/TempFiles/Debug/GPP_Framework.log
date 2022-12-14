@@ -1,4 +1,4 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1118,5): warning MSB8027: Two or more files with the name of App_AgarioGame_BT.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are projects\DecisionMaking\BehaviorTrees\App_AgarioGame_BT.cpp, projects\DecisionMaking\InfluenceMaps\App_AgarioGame_BT.cpp.
-  main.cpp
+  App_AgarioGame_BT.cpp
   GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
   0 File(s) copied

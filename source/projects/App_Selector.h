@@ -11,8 +11,8 @@
 //#define ActiveApp_NavMesh
 //#define ActiveApp_FSM
 //#define ActiveApp_BHT
-#define ActiveApp_InfluenceMap
-//#define ActiveApp_AgarioInfluenceBHT
+//#define ActiveApp_InfluenceMap
+#define ActiveApp_AgarioInfluenceBHT
 
 
 
