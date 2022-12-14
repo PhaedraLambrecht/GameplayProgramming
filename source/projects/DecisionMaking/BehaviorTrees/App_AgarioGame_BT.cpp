@@ -6,6 +6,7 @@
 #include "projects/Shared/Agario/AgarioAgent.h"
 #include "projects/Shared/Agario/AgarioContactListener.h"
 #include "projects/Shared/NavigationColliderElement.h"
+#include "App_AgarioGame_BT.h"
 
 using namespace Elite;
 App_AgarioGame_BT::App_AgarioGame_BT()

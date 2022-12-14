@@ -89,8 +89,6 @@ namespace BHT_Actions
 			return Elite::BehaviorState::Failure;
 		}
 
-
-		// TODO: get an purssuit
 		pAgent->SetToPursuit(target);
 		return Elite::BehaviorState::Success;
 	}

@@ -49,14 +49,12 @@ namespace Elite
 	template <class T_GraphType>
 	void InfluenceMap<T_GraphType>::PropagateInfluence(float deltaTime)
 	{
-		// TODO: implement
 		m_TimeSinceLastPropagation += deltaTime;
 
 		// Doing it once every interval
 		if (m_TimeSinceLastPropagation >= m_PropagationInterval)
 		{
-
-			for (const auto& node : m_Nodes)
+			for (auto& node : m_Nodes)
 			{
 				const auto connections{ GetNodeConnections(node) };
 				float highestInfluance{ 0 };
@@ -77,14 +75,13 @@ namespace Elite
 					// Calculate new influence using linearly interpolating (Lerp)
 					m_InfluenceDoubleBuffer[node->GetIndex()] = (Lerp(node->GetInfluence(), highestInfluance, m_Momentum));
 				}
-			}
 
 
-			for (auto& node : m_Nodes)
-			{
 				// Call new influences from buffer and put them in influenceMap nodes
-				node->SetInfluence( m_InfluenceDoubleBuffer[node->GetIndex()] );
+				node->SetInfluence(m_InfluenceDoubleBuffer[node->GetIndex()]);
 			}
+
+
 			m_TimeSinceLastPropagation = 0;
 		}
 	}

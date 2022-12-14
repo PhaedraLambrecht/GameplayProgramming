@@ -132,7 +132,6 @@ void App_InfluenceMap::UpdateUI()
 
 void App_InfluenceMap::Render(float deltaTime) const
 {
-
 	if (m_UseWaypointGraph)
 	{
 		m_pInfluenceGraph2D->SetNodeColorsBasedOnInfluence();

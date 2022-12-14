@@ -65,7 +65,6 @@ BehaviorState BehaviorSelector::Execute(Blackboard* pBlackBoard)
 //SEQUENCE
 BehaviorState BehaviorSequence::Execute(Blackboard* pBlackBoard)
 {
-	//TODO: FIll in this code
 	//Loop over all children in m_ChildBehaviors
 	for (auto& child : m_ChildBehaviors)
 	{

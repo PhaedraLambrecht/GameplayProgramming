@@ -12,6 +12,8 @@
 //#define ActiveApp_FSM
 //#define ActiveApp_BHT
 #define ActiveApp_InfluenceMap
+//#define ActiveApp_AgarioInfluenceBHT
+
 
 
 //---------- Registered Applications -----------
@@ -65,10 +67,16 @@ typedef App_AgarioGame_BT CurrentApp;
 typedef App_InfluenceMap CurrentApp;
 #endif // ActiveApp_InfluenceMap
 
+#ifdef ActiveApp_AgarioInfluenceBHT
+#include "projects/DecisionMaking/InfluenceMaps/App_AgarioGame_BT.h"
+typedef App_AgarioGame_BT CurrentApp;
+#endif // ActiveApp_InfluenceMap
+
+
 class App_Selector {
 public:
 	static IApp* CreateApp() {
-		IApp* myApp = new CurrentApp();
+		IApp* myApp =  new CurrentApp();
 		return myApp;
 	}
 };
