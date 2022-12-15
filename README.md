@@ -1,1 +1,1 @@
-# GameplayProgramming Research Topic
+# Gameplay Programming Research Topic
