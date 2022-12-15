@@ -84,7 +84,19 @@ void App_AgarioGame_BT::Start()
 		Blackboard* pBlackBoard = CreateBlackboard(newAgent);
 
 		//2. Create BehaviorTree
-		BehaviorTree* pBehaviorTree = new BehaviorTree(pBlackBoard, new BehaviorAction(BHT_Actions::ChangeToWander));
+		BehaviorTree* pBehaviorTree = new BehaviorTree(pBlackBoard,
+			new BehaviorSelector(
+				{
+				// Try to seek Food
+				new BehaviorSequence(
+					{
+						new BehaviorConditional(BHT_Conditions::IsFoodNearby),
+						new BehaviorAction(BHT_Actions::ChangeToSeek)
+					}),
+				// Fall back to wander
+				new BehaviorAction(BHT_Actions::ChangeToWander)
+				}
+		));
 
 		//3. Set the BehaviorTree active on the agent 
 		newAgent->SetDecisionMaking(pBehaviorTree);
@@ -145,9 +157,9 @@ void App_AgarioGame_BT::Update(float deltaTime)
 {
 	UpdateImGui();
 
-	//AddFoodInfluance();
+	AddFoodInfluance();
 	AddSmallAgentInfluance();
-	//AddBiggAgentInfluance();
+	AddBiggAgentInfluance();
 
 
 		//Check if agent is still alive
@@ -260,6 +272,23 @@ void App_AgarioGame_BT::UpdateImGui()
 		ImGui::Text("Radius: %.1f", m_pSmartAgent->GetRadius());
 		ImGui::Text("Survive Time: %.1f", TIMER->GetTotal());
 
+
+		auto momentum = m_pInfluenceGrid->GetMomentum();
+		auto decay = m_pInfluenceGrid->GetDecay();
+		auto propagationInterval = m_pInfluenceGrid->GetPropagationInterval();
+
+		ImGui::SliderFloat("Momentum", &momentum, 0.0f, 1.f, "%.2");
+		ImGui::SliderFloat("Decay", &decay, 0.f, 1.f, "%.2");
+		ImGui::SliderFloat("Propagation Interval", &propagationInterval, 0.f, 2.f, "%.2");
+		ImGui::Spacing();
+
+		//Set data
+		m_pInfluenceGrid->SetMomentum(momentum);
+		m_pInfluenceGrid->SetDecay(decay);
+		m_pInfluenceGrid->SetPropagationInterval(propagationInterval);
+
+
+
 		//End
 		ImGui::PopAllowKeyboardFocus();
 		ImGui::End();
@@ -295,7 +324,7 @@ void App_AgarioGame_BT::AddFoodInfluance()
 			m_pInfluenceGrid->SetInfluenceAtPosition
 			(
 				pTreat->GetPosition(),
-				2.0f + m_pInfluenceGrid->GetNodeAtWorldPos(pTreat->GetPosition())->GetInfluence()
+				50.0f
 			);
 	
 	}
@@ -303,17 +332,17 @@ void App_AgarioGame_BT::AddFoodInfluance()
 
 void App_AgarioGame_BT::AddSmallAgentInfluance()
 {
-	const float minPursuitRadius{ 4.0f };
+	const float minPursuitRadius{ 2.0f };  // min size diff before persuing
 	for (const auto& pTreat : m_pAgentVec)
 	{
-		float distSq( m_pSmartAgent->GetRadius() - pTreat->GetRadius() );
+		float sizeDif( m_pSmartAgent->GetRadius() - pTreat->GetRadius() );
 
-		if (distSq < minPursuitRadius)
+		if (sizeDif >= minPursuitRadius)
 		{
 			m_pInfluenceGrid->SetInfluenceAtPosition
 			(
 				pTreat->GetPosition(),
-				2.0f + m_pInfluenceGrid->GetNodeAtWorldPos(pTreat->GetPosition())->GetInfluence()
+				50.0f
 			);
 		}
 	}
@@ -321,17 +350,17 @@ void App_AgarioGame_BT::AddSmallAgentInfluance()
 
 void App_AgarioGame_BT::AddBiggAgentInfluance()
 {
-	const float minEvadeRadius{ 5.0f };
+	const float minEvadeRadius{ -2.0f };
 	for (const auto& enemy : m_pAgentVec)
 	{
-		float distSq(m_pSmartAgent->GetRadius() - enemy->GetRadius());
+		float sizeDif(m_pSmartAgent->GetRadius() - enemy->GetRadius());
 
-		if (distSq > minEvadeRadius)
+		if (sizeDif < minEvadeRadius)
 		{
 			m_pInfluenceGrid->SetInfluenceAtPosition
 			(
 				enemy->GetPosition(),
-				-50.0f + m_pInfluenceGrid->GetNodeAtWorldPos(enemy->GetPosition())->GetInfluence()
+				-60.0f
 			);
 		}
 	}
