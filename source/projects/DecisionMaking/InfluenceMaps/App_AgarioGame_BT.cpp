@@ -147,7 +147,7 @@ void App_AgarioGame_BT::Update(float deltaTime)
 
 	//AddFoodInfluance();
 	AddSmallAgentInfluance();
-	AddBiggAgentInfluance();
+	//AddBiggAgentInfluance();
 
 
 		//Check if agent is still alive
@@ -289,13 +289,13 @@ void App_AgarioGame_BT::UpdateImGui()
 
 void App_AgarioGame_BT::AddFoodInfluance()
 {
-	for (const auto& treat : m_pFoodVec)
+	for (const auto& pTreat : m_pFoodVec)
 	{
 
 			m_pInfluenceGrid->SetInfluenceAtPosition
 			(
-				treat->GetPosition(),
-				10.0f + m_pInfluenceGrid->GetNodeAtWorldPos(treat->GetPosition())->GetInfluence()
+				pTreat->GetPosition(),
+				2.0f + m_pInfluenceGrid->GetNodeAtWorldPos(pTreat->GetPosition())->GetInfluence()
 			);
 	
 	}
@@ -304,16 +304,16 @@ void App_AgarioGame_BT::AddFoodInfluance()
 void App_AgarioGame_BT::AddSmallAgentInfluance()
 {
 	const float minPursuitRadius{ 4.0f };
-	for (const auto& treat : m_pAgentVec)
+	for (const auto& pTreat : m_pAgentVec)
 	{
-		float distSq( m_pSmartAgent->GetRadius() - treat->GetRadius() );
+		float distSq( m_pSmartAgent->GetRadius() - pTreat->GetRadius() );
 
 		if (distSq < minPursuitRadius)
 		{
 			m_pInfluenceGrid->SetInfluenceAtPosition
 			(
-				treat->GetPosition(),
-				10.0f + m_pInfluenceGrid->GetNodeAtWorldPos(treat->GetPosition())->GetInfluence()
+				pTreat->GetPosition(),
+				2.0f + m_pInfluenceGrid->GetNodeAtWorldPos(pTreat->GetPosition())->GetInfluence()
 			);
 		}
 	}
@@ -321,7 +321,7 @@ void App_AgarioGame_BT::AddSmallAgentInfluance()
 
 void App_AgarioGame_BT::AddBiggAgentInfluance()
 {
-	const float minEvadeRadius{ 4.0f };
+	const float minEvadeRadius{ 5.0f };
 	for (const auto& enemy : m_pAgentVec)
 	{
 		float distSq(m_pSmartAgent->GetRadius() - enemy->GetRadius());
@@ -331,7 +331,7 @@ void App_AgarioGame_BT::AddBiggAgentInfluance()
 			m_pInfluenceGrid->SetInfluenceAtPosition
 			(
 				enemy->GetPosition(),
-				-30.0f + m_pInfluenceGrid->GetNodeAtWorldPos(enemy->GetPosition())->GetInfluence()
+				-50.0f + m_pInfluenceGrid->GetNodeAtWorldPos(enemy->GetPosition())->GetInfluence()
 			);
 		}
 	}
