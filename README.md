@@ -1,5 +1,4 @@
-# Gameplay Programming Research Topic
-# Flow Fields
+# Gameplay Programming Research Topic - Flow Fields
 
 
 # Description
