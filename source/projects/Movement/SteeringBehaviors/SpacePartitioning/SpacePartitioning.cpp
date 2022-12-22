@@ -114,7 +114,7 @@ void CellSpace::RegisterNeighbors(SteeringAgent* pAgent, float queryRadius)
 
 
 	// amount of cols for neighborhood square
-	int amountCols = (queryRadius * 2) / m_CellWidth;
+	int amountCols = int( (queryRadius * 2) / m_CellWidth );
 
 
 	for(int row{minRow}; row <= maxRow; ++row)
@@ -169,8 +169,8 @@ int CellSpace::PositionToIndex(const Elite::Vector2 pos) const
 {
 	int finalIdx{};
 
-	int colIdx = pos.x / m_CellWidth;
-	int rowIdx = pos.y / m_CellHeight;
+	int colIdx = int(pos.x / m_CellWidth);
+	int rowIdx = int(pos.y / m_CellHeight);
 
 
 	// clamping the max and min positions
@@ -200,7 +200,7 @@ int CellSpace::PositionToIndex(const Elite::Vector2 pos) const
 
 int CellSpace::PositionToCol(const Elite::Vector2 & pos) const
 {
-	int colIdx = pos.x / m_CellWidth;
+	int colIdx = int(pos.x / m_CellWidth);
 
 	if (colIdx < 0) colIdx = 0;
 	else if (colIdx >= m_NrOfCols) colIdx = m_NrOfCols - 1;
@@ -211,7 +211,7 @@ int CellSpace::PositionToCol(const Elite::Vector2 & pos) const
 
 int CellSpace::PositionToRow(const Elite::Vector2 & pos) const
 {
-	int rowIdx = pos.y / m_CellHeight;
+	int rowIdx = int(pos.y / m_CellHeight);
 
 	if (rowIdx < 0) rowIdx = 0;
 	else if (rowIdx >= m_NrOfRows) rowIdx = m_NrOfRows - 1;

@@ -12,7 +12,8 @@
 //#define ActiveApp_FSM
 //#define ActiveApp_BHT
 //#define ActiveApp_InfluenceMap
-#define ActiveApp_AgarioInfluenceBHT
+//#define ActiveApp_AgarioInfluenceBHT
+#define ActiveApp_FlowFields
 
 
 
@@ -68,10 +69,14 @@ typedef App_InfluenceMap CurrentApp;
 #endif // ActiveApp_InfluenceMap
 
 #ifdef ActiveApp_AgarioInfluenceBHT
-#include "projects/DecisionMaking/InfluenceMaps/App_AgarioGame_BT.h"
-typedef App_AgarioGame_BT CurrentApp;
+#include "projects/DecisionMaking/InfluenceMaps/App_AgarioGame_InfluenceBT.h"
+typedef App_AgarioGame_InfluenceBT CurrentApp;
 #endif // ActiveApp_InfluenceMap
 
+#ifdef ActiveApp_FlowFields
+#include "projects/Movement/Pathfinding/FlowField/App_FlowField/App_FlowField.h"
+typedef App_FlowField CurrentApp;
+#endif // ActiveApp_InfluenceMap
 
 class App_Selector {
 public:

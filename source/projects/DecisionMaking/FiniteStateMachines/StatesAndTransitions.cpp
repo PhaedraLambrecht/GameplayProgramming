@@ -201,6 +201,8 @@ bool FSMConditions::NoFoodNearByCondition::Evaluate(Blackboard* pBlackboard) con
 	{
 		return true;
 	}
+
+	return true;
 }
 
 
@@ -301,7 +303,7 @@ bool FSMConditions::NoBiggerAgentNearByCondition::Evaluate(Blackboard* pBlackboa
 		}
 	}
 
-
+	return false;
 }
 
 
@@ -397,6 +399,7 @@ bool FSMConditions::NoSmallerAgentNearByCondition::Evaluate(Elite::Blackboard* p
 	{
 		return true;
 	}
+	return true;
 }
 
 

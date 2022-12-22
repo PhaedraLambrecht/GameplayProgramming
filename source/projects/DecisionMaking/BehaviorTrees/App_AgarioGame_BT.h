@@ -19,7 +19,9 @@ public:
 	void Start() override;
 	void Update(float deltaTime) override;
 	void Render(float deltaTime) const override;
+
 private:
+
 	float m_TrimWorldSize = 150.f;
 	const int m_AmountOfAgents{ 20 };
 	std::vector<AgarioAgent*> m_pAgentVec{};

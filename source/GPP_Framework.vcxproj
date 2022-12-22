@@ -205,9 +205,10 @@
     <ClCompile Include="projects\DecisionMaking\BehaviorTrees\App_AgarioGame_BT.cpp" />
     <ClCompile Include="projects\DecisionMaking\FiniteStateMachines\App_AgarioGame.cpp" />
     <ClCompile Include="projects\DecisionMaking\FiniteStateMachines\StatesAndTransitions.cpp" />
-    <ClCompile Include="projects\DecisionMaking\InfluenceMaps\App_AgarioGame_BT.cpp" />
+    <ClCompile Include="projects\DecisionMaking\InfluenceMaps\App_AgarioGame_InfluenceBT.cpp" />
     <ClCompile Include="projects\DecisionMaking\InfluenceMaps\App_InfluenceMap.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\AStar\App_PathfindingAStar\App_PathfindingAStar.cpp" />
+    <ClCompile Include="projects\Movement\Pathfinding\FlowField\App_FlowField\App_FlowField.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\GraphTheory\App_GraphTheory.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\NavMeshGraph\App_NavMeshGraph.cpp" />
     <ClCompile Include="projects\Movement\Sandbox\App_Sandbox.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="framework\EliteAI\EliteGraphs\EInfluenceMap.h" />
     <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EAStar.h" />
     <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EBFS.h" />
+    <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EDijkstra.h" />
     <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EEularianPath.h" />
     <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphUtilities\EGraphEditor.h" />
     <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphUtilities\EGraphRenderer.h" />
@@ -304,10 +306,12 @@
     <ClInclude Include="projects\DecisionMaking\BehaviorTrees\Behaviors.h" />
     <ClInclude Include="projects\DecisionMaking\FiniteStateMachines\App_AgarioGame.h" />
     <ClInclude Include="projects\DecisionMaking\FiniteStateMachines\StatesAndTransitions.h" />
-    <ClInclude Include="projects\DecisionMaking\InfluenceMaps\App_AgarioGame_BT.h" />
+    <ClInclude Include="projects\DecisionMaking\InfluenceMaps\App_AgarioGame_InfluenceBT.h" />
     <ClInclude Include="projects\DecisionMaking\InfluenceMaps\App_InfluenceMap.h" />
     <ClInclude Include="projects\DecisionMaking\InfluenceMaps\Behaviors.h" />
+    <ClInclude Include="projects\DecisionMaking\InfluenceMaps\BehaviorsInfluence.h" />
     <ClInclude Include="projects\Movement\Pathfinding\AStar\App_PathfindingAStar\App_PathfindingAStar.h" />
+    <ClInclude Include="projects\Movement\Pathfinding\FlowField\App_FlowField\App_FlowField.h" />
     <ClInclude Include="projects\Movement\Pathfinding\GraphTheory\App_GraphTheory.h" />
     <ClInclude Include="projects\Movement\Pathfinding\NavMeshGraph\App_NavMeshGraph.h" />
     <ClInclude Include="projects\Movement\Sandbox\App_Sandbox.h" />

@@ -424,7 +424,7 @@ Elite::Vector2 Flock::GetAverageNeighborVelocity() const
 	{
 		avarage += m_Neighbors[idx]->GetLinearVelocity();
 	}
-	avarage /= m_NrOfNeighbors;
+	avarage /= float(m_NrOfNeighbors);
 
 
 	return avarage;

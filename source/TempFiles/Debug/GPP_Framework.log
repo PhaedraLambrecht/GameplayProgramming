@@ -1,4 +1,66 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1118,5): warning MSB8027: Two or more files with the name of App_AgarioGame_BT.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are projects\DecisionMaking\BehaviorTrees\App_AgarioGame_BT.cpp, projects\DecisionMaking\InfluenceMaps\App_AgarioGame_BT.cpp.
+﻿C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppClean.targets(77,5): warning : The process cannot access the file 'c:\dae\gameplayprogramming\source\tempfiles\debug\app_sandbox.obj' because it is being used by another process.
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppClean.targets(77,5): warning : The process cannot access the file 'c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.ilk' because it is being used by another process.
+  stdafx.cpp
+  EBehaviorTree.cpp
+  EFiniteStateMachine.cpp
+  EGraphConnectionTypes.cpp
+  EGraphNodeTypes.cpp
+  EGraphEditor.cpp
+  EGraphRenderer.cpp
+  ENavGraph.cpp
+  EGeometry2DTypes.cpp
+  EInputManager.cpp
+  EMatrix2x3.cpp
+  ERigidBodyBox2D.cpp
+  EPhysicsWorldBox2D.cpp
+  ECamera2D.cpp
+  SDLDebugRenderer2D.cpp
+  SDLFrame.cpp
+  ETimer_SDL.cpp
+  EImmediateUI.cpp
+  SDLWindow.cpp
+  gl3w.c
   main.cpp
+  Generating Code...
+  Compiling...
+  App_AgarioGame_BT.cpp
+  App_AgarioGame.cpp
+  StatesAndTransitions.cpp
+  App_AgarioGame_InfluenceBT.cpp
+  App_InfluenceMap.cpp
+  App_PathfindingAStar.cpp
+  App_FlowField.cpp
+  App_GraphTheory.cpp
+  App_NavMeshGraph.cpp
+C:\DAE\GameplayProgramming\source\framework\EliteAI\EliteNavigation\Algorithms\EPathSmoothing.h(114,24): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\framework\EliteAI\EliteNavigation\Algorithms\EPathSmoothing.h(159,24): warning C4018: '<': signed/unsigned mismatch
+  App_Sandbox.cpp
+  SandboxAgent.cpp
+C:\DAE\GameplayProgramming\source\projects\Movement\Sandbox\SandboxAgent.cpp(65,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\DAE\GameplayProgramming\source\projects\Movement\Sandbox\SandboxAgent.cpp(68,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  App_CombinedSteering.cpp
+  CombinedSteeringBehaviors.cpp
+  App_Flocking.cpp
+  Flock.cpp
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(129,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(283,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(408,25): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(412,13): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(423,25): warning C4018: '<': signed/unsigned mismatch
+  FlockingSteeringBehaviors.cpp
+  SpacePartitioning.cpp
+  App_SteeringBehaviors.cpp
+  Obstacle.cpp
+  SteeringAgent.cpp
+  Generating Code...
+  Compiling...
+  SteeringBehaviors.cpp
+  AgarioAgent.cpp
+  AgarioContactListener.cpp
+  AgarioFood.cpp
+  BaseAgent.cpp
+  NavigationColliderElement.cpp
+  Generating Code...
+  LINK : C:\DAE\GameplayProgramming\source\..\bin\Debug\GPP_Framework.exe not found or not built by the last incremental link; performing full link
   GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
   0 File(s) copied
