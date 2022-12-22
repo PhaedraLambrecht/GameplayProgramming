@@ -35,7 +35,6 @@ c:\dae\gameplayprogramming\source\tempfiles\debug\sandboxagent.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_sandbox.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_navmeshgraph.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_graphtheory.obj
-c:\dae\gameplayprogramming\source\tempfiles\debug\app_flowfield.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_pathfindingastar.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_influencemap.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_agariogame_influencebt.obj
@@ -48,6 +47,7 @@ c:\dae\gameplayprogramming\source\tempfiles\debug\agariofood.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\agariocontactlistener.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\agarioagent.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\steeringbehaviors.obj
+c:\dae\gameplayprogramming\source\tempfiles\debug\app_flowfield.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.ilk
 c:\dae\gameplayprogramming\bin\debug\gpp_framework.exe
 c:\dae\gameplayprogramming\bin\debug\gpp_framework.pdb

@@ -5,6 +5,7 @@
 #include "App_FlowField.h"
 #include "framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EAstar.h"
 #include "framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EBFS.h"
+#include "framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EDijkstra.h"
 
 using namespace Elite;
 
@@ -204,7 +205,8 @@ void App_FlowField::CalculatePath()
 		&& startPathIdx != endPathIdx)
 	{
 		//BFS Pathfinding
-		auto pathfinder = BFS<GridTerrainNode, GraphConnection>(m_pGridGraph);
+		auto pathfinder = Dijkstra<GridTerrainNode, GraphConnection>(m_pGridGraph);
+		//auto pathfinder = BFS<GridTerrainNode, GraphConnection>(m_pGridGraph);
 		//auto pathfinder = AStar<GridTerrainNode, GraphConnection>(m_pGridGraph, m_pHeuristicFunction);
 		auto startNode = m_pGridGraph->GetNode(startPathIdx);
 		auto endNode = m_pGridGraph->GetNode(endPathIdx);

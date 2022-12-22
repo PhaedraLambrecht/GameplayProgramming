@@ -1,6 +1,4 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppClean.targets(77,5): warning : The process cannot access the file 'c:\dae\gameplayprogramming\source\tempfiles\debug\app_sandbox.obj' because it is being used by another process.
-C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppClean.targets(77,5): warning : The process cannot access the file 'c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.ilk' because it is being used by another process.
-  stdafx.cpp
+﻿  stdafx.cpp
   EBehaviorTree.cpp
   EFiniteStateMachine.cpp
   EGraphConnectionTypes.cpp
@@ -61,6 +59,5 @@ C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\F
   BaseAgent.cpp
   NavigationColliderElement.cpp
   Generating Code...
-  LINK : C:\DAE\GameplayProgramming\source\..\bin\Debug\GPP_Framework.exe not found or not built by the last incremental link; performing full link
   GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
   0 File(s) copied
