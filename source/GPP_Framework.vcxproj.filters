@@ -46,8 +46,8 @@
     <ClCompile Include="projects\DecisionMaking\BehaviorTrees\App_AgarioGame_BT.cpp" />
     <ClCompile Include="framework\EliteAI\EliteDecisionMaking\EliteBehaviorTree\EBehaviorTree.cpp" />
     <ClCompile Include="projects\DecisionMaking\InfluenceMaps\App_InfluenceMap.cpp" />
-    <ClCompile Include="projects\Movement\Pathfinding\FlowField\App_FlowField\App_FlowField.cpp" />
     <ClCompile Include="projects\DecisionMaking\InfluenceMaps\App_AgarioGame_InfluenceBT.cpp" />
+    <ClCompile Include="projects\Movement\Pathfinding\FlowField\App_FlowField.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="projects\App_Selector.h" />
@@ -146,9 +146,9 @@
     <ClInclude Include="framework\EliteAI\EliteGraphs\EInfluenceMap.h" />
     <ClInclude Include="projects\DecisionMaking\InfluenceMaps\Behaviors.h" />
     <ClInclude Include="framework\EliteAI\EliteGraphs\EliteGraphAlgorithms\EDijkstra.h" />
-    <ClInclude Include="projects\Movement\Pathfinding\FlowField\App_FlowField\App_FlowField.h" />
     <ClInclude Include="projects\DecisionMaking\InfluenceMaps\App_AgarioGame_InfluenceBT.h" />
     <ClInclude Include="projects\DecisionMaking\InfluenceMaps\BehaviorsInfluence.h" />
+    <ClInclude Include="projects\Movement\Pathfinding\FlowField\App_FlowField.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

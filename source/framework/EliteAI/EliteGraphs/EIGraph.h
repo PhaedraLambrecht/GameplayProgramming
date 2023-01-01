@@ -32,6 +32,8 @@ namespace Elite
 		T_NodeType* GetNode(int idx) const;
 		bool IsNodeValid(int idx) const;
 		NodeVector GetAllNodes() const;
+		NodeVector GetAllActiveNodes() const;// TODO: not my code, look more into this 
+
 
 		T_ConnectionType* GetConnection(int from, int to) const;
 		const ConnectionListVector& GetAllConnections() const { return m_Connections; }

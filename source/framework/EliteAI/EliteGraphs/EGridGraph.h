@@ -14,7 +14,7 @@ namespace Elite
 {
 	template<class T_NodeType, class T_ConnectionType>
 	class GridGraph : public IGraph<T_NodeType, T_ConnectionType>
-	{
+	 {
 	public:
 		GridGraph(bool isDirectional);
 		GridGraph(int columns, int rows, int cellSize, bool isDirectionalGraph, bool isConnectedDiagonally, float costStraight = 1.f, float costDiagonal = 1.5);

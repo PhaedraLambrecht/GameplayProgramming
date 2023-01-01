@@ -182,6 +182,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="projects\Movement\Pathfinding\FlowField\App_FlowField.cpp" />
     <ClCompile Include="framework\EliteAI\EliteDecisionMaking\EliteBehaviorTree\EBehaviorTree.cpp" />
     <ClCompile Include="framework\EliteAI\EliteDecisionMaking\EliteFiniteStateMachine\EFiniteStateMachine.cpp" />
     <ClCompile Include="framework\EliteAI\EliteGraphs\EGraphConnectionTypes.cpp" />
@@ -208,7 +209,6 @@
     <ClCompile Include="projects\DecisionMaking\InfluenceMaps\App_AgarioGame_InfluenceBT.cpp" />
     <ClCompile Include="projects\DecisionMaking\InfluenceMaps\App_InfluenceMap.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\AStar\App_PathfindingAStar\App_PathfindingAStar.cpp" />
-    <ClCompile Include="projects\Movement\Pathfinding\FlowField\App_FlowField\App_FlowField.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\GraphTheory\App_GraphTheory.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\NavMeshGraph\App_NavMeshGraph.cpp" />
     <ClCompile Include="projects\Movement\Sandbox\App_Sandbox.cpp" />
@@ -236,6 +236,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="projects\Movement\Pathfinding\FlowField\App_FlowField.h" />
     <ClInclude Include="framework\EliteAI\EliteData\EBlackboard.h" />
     <ClInclude Include="framework\EliteAI\EliteDecisionMaking\EDecisionMaking.h" />
     <ClInclude Include="framework\EliteAI\EliteDecisionMaking\EliteBehaviorTree\EBehaviorTree.h" />
@@ -311,7 +312,6 @@
     <ClInclude Include="projects\DecisionMaking\InfluenceMaps\Behaviors.h" />
     <ClInclude Include="projects\DecisionMaking\InfluenceMaps\BehaviorsInfluence.h" />
     <ClInclude Include="projects\Movement\Pathfinding\AStar\App_PathfindingAStar\App_PathfindingAStar.h" />
-    <ClInclude Include="projects\Movement\Pathfinding\FlowField\App_FlowField\App_FlowField.h" />
     <ClInclude Include="projects\Movement\Pathfinding\GraphTheory\App_GraphTheory.h" />
     <ClInclude Include="projects\Movement\Pathfinding\NavMeshGraph\App_NavMeshGraph.h" />
     <ClInclude Include="projects\Movement\Sandbox\App_Sandbox.h" />

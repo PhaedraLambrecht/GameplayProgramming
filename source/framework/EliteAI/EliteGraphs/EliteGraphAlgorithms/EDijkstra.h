@@ -46,23 +46,22 @@ namespace Elite
 	template <class T_NodeType, class T_ConnectionType>
 	std::vector<T_NodeType*> Dijkstra<T_NodeType, T_ConnectionType>::FindPath(T_NodeType* pStartNode, T_NodeType* pDestinationNode)
 	{
+		std::queue<T_NodeType*> openList{}; // deque to check the next neighbors
+		std::map<T_NodeType*, T_NodeType*> closedList{};
 
-		//std::queue<T_NodeType*> openList{}; // queue to check the next neighbors
-		//std::map<T_NodeType*, T_NodeType*> closedList{}; // connection already checked
-		//
-		//NodeRecord currentRecord{}; // Holds current to be evaluated
-		//currentRecord.pNode = pStartNode;
-		//currentRecord.pConnection = nullptr;
-		//currentRecord.costSoFar = 0.0f;
-
-
-
-		//openList.push(pDestinationNode);
+	
+		NodeRecord currentRecord{}; // Holds current to be evaluated
+		currentRecord.pNode = pStartNode;
+		currentRecord.pConnection = nullptr;
+		currentRecord.costSoFar = 0.0f;
 
 
-		//while (!openList.empty())
-		//{
-		//	// keep track of current node
+		openList.push(pStartNode);
+
+
+		while (!openList.empty())
+		{
+			// keep track of current node
 		//	T_NodeType* pCurrentNode{ openList.front() };
 		//	openList.pop();// Delete it from the open list
 
@@ -98,7 +97,7 @@ namespace Elite
 		//if (closedList.find(pDestinationNode) == closedList.end())
 		//{
 		//	return std::vector<T_NodeType*>{};
-		//}
+		}
 
 
 		//// BackTracking

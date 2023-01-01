@@ -24,9 +24,11 @@ namespace Elite
 	{
 
 		std::queue<T_NodeType*> openList{}; // deque to check the next neighbors
-		std::map<T_NodeType*, T_NodeType*> closedList{};
+		std::map<T_NodeType*, T_NodeType*> closedList{};// Already visited nodes
 
 		openList.push(pStartNode);
+
+		
 
 
 		while (openList.empty() == false)
