@@ -409,7 +409,7 @@ Elite::Vector2 Flock::GetAverageNeighborPos() const
 	{
 		avarage += m_Neighbors[idx]->GetPosition();
 	}
-	avarage /= m_NrOfNeighbors;
+	avarage /= (float)m_NrOfNeighbors;
 
 
 	return avarage;

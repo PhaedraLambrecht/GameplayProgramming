@@ -4,6 +4,7 @@
 // Includes & Forward Declarations
 //-----------------------------------------------------------------
 #include "framework/EliteInterfaces/EIApp.h"
+#include "Grid.h"
 
 
 class App_FlowField final : public IApp
@@ -20,12 +21,26 @@ public:
 	void Update(float deltaTime) override;
 	void Render(float deltaTime) const override;
 
+
 private:
 
 
 	bool m_VisualizeTarget = true;
 	bool m_TrimWorld = true;
-	float m_TrimWorldSize = 50.f;
+	float m_TrimWorldSize;
+
+
+	Grid* m_pGrid;
+	bool m_MadeObstacles{ false };
+	bool m_MadeGoals{ false };
+
+
+	// For visualization toggles
+	bool m_IsGridDrawn{true};
+	bool m_IsObstacleDrawn{ true };
+	bool m_IsGoalDrawn{ true };
+	bool m_IsDirectionDrawn{ true };
+
 
 
 	// Helper functions

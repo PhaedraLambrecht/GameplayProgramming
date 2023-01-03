@@ -10,41 +10,45 @@ using namespace Elite;
 //Destructor
 App_FlowField::~App_FlowField()
 {
+	SAFE_DELETE(m_pGrid);
 }
 
 //Functions
 void App_FlowField::Start()
 {
+	m_TrimWorldSize = 50.f;
+	float worldDimensions{ 100.0f };
+	m_pGrid = new Grid(Elite::Vector2(worldDimensions, worldDimensions), Elite::Vector2(10.f, 10.f));
 }
 
 void App_FlowField::Update(float deltaTime)
 {
-	UNREFERENCED_PARAMETER(deltaTime);
-
 	//INPUT
-	bool const middleMousePressed = INPUTMANAGER->IsMouseButtonUp(InputMouseButton::eMiddle);
-	if (middleMousePressed)
+	if (INPUTMANAGER->IsMouseButtonUp(InputMouseButton::eLeft))// if left mousebutton is released
 	{
-		MouseData mouseData = { INPUTMANAGER->GetMouseData(Elite::InputType::eMouseButton, Elite::InputMouseButton::eMiddle) };
-		Elite::Vector2 mousePos = DEBUGRENDERER2D->GetActiveCamera()->ConvertScreenToWorld({ (float)mouseData.X, (float)mouseData.Y });
-
-		////Find closest node to click pos
-		//int closestNode = m_pGridGraph->GetNodeIdxAtWorldPos(mousePos);
-		//if (m_StartSelected)
-		//{
-		//	startPathIdx = closestNode;
-		//	CalculatePath();
-		//}
-		//else
-		//{
-		//	endPathIdx = closestNode;
-		//	CalculatePath();
-		//}
+		// Set the mouse data/pos
+		auto const mouseData = INPUTMANAGER->GetMouseData(InputType::eMouseButton, InputMouseButton::eLeft);
+		auto mousePos{ DEBUGRENDERER2D->GetActiveCamera()->ConvertScreenToWorld({ static_cast<float>(mouseData.X), static_cast<float>(mouseData.Y) }) };
+		
+		// If not true, add obstacle
+		if (!m_MadeObstacles)
+			m_pGrid->AddObstacle(mousePos);
 	}
-
+	else if (INPUTMANAGER->IsMouseButtonUp(InputMouseButton::eMiddle))// if middle mousebutton is released
+	{
+		// Set the mouse data/pos
+		auto const mouseData = INPUTMANAGER->GetMouseData(InputType::eMouseButton, InputMouseButton::eMiddle);
+		auto mousePos{ DEBUGRENDERER2D->GetActiveCamera()->ConvertScreenToWorld({ static_cast<float>(mouseData.X), static_cast<float>(mouseData.Y) }) };
+		
+		// if not true, add goal
+		if (!m_MadeGoals)
+			m_pGrid->AddGoal(mousePos);
+	}
 
 	//IMGUI
 	UpdateImGui();
+
+	m_pGrid->Update(deltaTime);
 }
 
 void App_FlowField::UpdateImGui()
@@ -74,9 +78,9 @@ void App_FlowField::UpdateImGui()
 
 
 		/*Spacing*/
-		ImGui::Spacing(); 
-		ImGui::Separator(); 
-		ImGui::Spacing(); 
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
 		ImGui::Spacing();
 
 		ImGui::Text("STATS");
@@ -87,18 +91,64 @@ void App_FlowField::UpdateImGui()
 
 
 		/*Spacing*/
-		ImGui::Spacing(); 
-		ImGui::Separator(); 
-		ImGui::Spacing(); 
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
 		ImGui::Spacing();
 
 		ImGui::Text("Flow field");
 		ImGui::Spacing();
 		ImGui::Spacing();
 
-	
+
+
+		// obstacles
+		if (!m_MadeObstacles)
+		{
+			if (ImGui::Button("Obstacles ready"))
+				m_MadeObstacles = true;
+		}
+		else
+			ImGui::Text("Obstacles ready");
+		//----
+
+		//goals
+		if (!m_MadeGoals)
+		{
+			if (ImGui::Button("Goals ready"))
+				m_MadeGoals = true;
+
+		}
+		else
+			ImGui::Text("Goals ready");
+		//----
+
+
 		ImGui::Checkbox("Trim World", &m_TrimWorld);
-		ImGui::Spacing();
+
+		// This goddamn shit took me 30 min to figure out (on top of the 2 days earlier this semester)
+		// Toggle the grid
+
+		ImGui::Checkbox("Draw grid", &m_IsGridDrawn);
+		m_pGrid->ToggleDrawGrid(m_IsGridDrawn);
+
+		//// Toggle the obstacles
+		
+		ImGui::Checkbox("Draw obstacles", &m_IsObstacleDrawn);
+		m_pGrid->ToggleDrawObstacles(m_IsObstacleDrawn);
+
+
+		// Toggle the goal(s)
+
+		ImGui::Checkbox("Draw goals", &m_IsGoalDrawn);
+		m_pGrid->ToggleDrawGoals(m_IsGoalDrawn);
+
+		// Toggle the directions
+
+		ImGui::Checkbox("Draw direction", &m_IsDirectionDrawn);
+		m_pGrid->ToggleDrawDirections(m_IsDirectionDrawn);
+
+
 
 		ImGui::Spacing();
 		ImGui::Separator();
@@ -115,15 +165,17 @@ void App_FlowField::UpdateImGui()
 
 void App_FlowField::Render(float deltaTime) const
 {
+	m_pGrid->Render(deltaTime);
+
 	if (m_TrimWorld)
 	{
 		std::vector<Elite::Vector2> points =
 		{
-			{ -m_TrimWorldSize,m_TrimWorldSize },
-			{ m_TrimWorldSize,m_TrimWorldSize },
-			{ m_TrimWorldSize,-m_TrimWorldSize },
-			{-m_TrimWorldSize,-m_TrimWorldSize }
+			{ -m_TrimWorldSize, m_TrimWorldSize },
+			{ m_TrimWorldSize, m_TrimWorldSize },
+			{ m_TrimWorldSize, -m_TrimWorldSize },
+			{ -m_TrimWorldSize, -m_TrimWorldSize }
 		};
-		DEBUGRENDERER2D->DrawPolygon(&points[0], 4, { 1,0,0,1 }, 0.4f);
+		DEBUGRENDERER2D->DrawPolygon(&points[0], 4, { 1, 0, 0, 1 }, 0.4f);
 	}
 }

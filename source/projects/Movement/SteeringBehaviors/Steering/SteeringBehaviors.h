@@ -31,8 +31,6 @@ public:
 	{ return static_cast<T*>(this); }
 
 
-	//TODO: Get bool to set the steering behaivior at that point
-
 
 protected:
 	TargetData m_Target;
