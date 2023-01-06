@@ -2,19 +2,52 @@
 #include "stdafx.h"
 
 //Includes
+#include "FlowFieldAlgorithms.h"
 #include "Grid.h"
 
 
 Grid::Grid(const Elite::Vector2& worldSize, const Elite::Vector2& gridResolution)
 	:m_WorldDimensions{ worldSize }
-	,m_ColmnRow(gridResolution)
+	,m_GridSize(gridResolution)
 	,m_SquareSize{ worldSize.x / gridResolution.x, worldSize.y / gridResolution.y }
 {
 	InitializeGrid();
 }
+
 Grid::~Grid()
 {
 	SAFE_DELETE(m_pGrid);
+}
+
+
+bool Grid::MoveSqaure(const Elite::Vector2& currentPos, Elite::Vector2& targetPos, int goalNr, bool firstMove)
+{
+	//TODO: research - make my own
+
+	if (firstMove || Elite::Distance(currentPos, targetPos) <= m_MindDistanceFromTarget)
+	{
+		const int sqrIdx{ GetSquareIdxAtPos(currentPos) }; //sqr index of square the agent is currently in 
+		const Elite::Vector2 nextSqrPosFromDirection{ currentPos + (m_pGrid->at(sqrIdx).flowDirections[goalNr].GetNormalized() * (m_SquareSize.x + (m_SquareSize.x / 2))) }; //a position from the current position of the agent along the direction the agent should be following over a length (1.5 a square's length)	
+		const int newSqrIdx{ GetSquareIdxAtPos(nextSqrPosFromDirection) }; //the square idx of the square at this new position
+		targetPos = GetMidOfSquare(newSqrIdx); //next target for the agent = the middle of this new square
+		return true;
+	}
+
+	return false;
+}
+
+Elite::Vector2 Grid::GetValidRandomPos()
+{
+	int randomIdx{};
+
+	do
+	{
+		randomIdx = Elite::randomInt(m_pGrid->size() - 1);
+	} 
+	while (m_pGrid->at(randomIdx).squareType != SquareType::Default);
+
+
+	return GetMidOfSquare(randomIdx);;
 }
 
 
@@ -33,12 +66,18 @@ void Grid::Render(float deltaTime) const
 		DrawGoals();
 
 	// Draws the direction of each square
-	//if (m_DrawDirections)
-	//	DrawDirections();
+	if (m_DrawDirections)
+		DrawDirections();
 }
 
 void Grid::Update(float deltaTime)
 {
+	if (m_MadeGoalVector && !madeFlowFields)
+	{
+		madeFlowFields = true;
+		MakeFlowfield();
+	}
+
 }
 
 
@@ -58,7 +97,6 @@ void Grid::AddObstacle(const Elite::Vector2& obstaclePos)
 	{
 		squareType = SquareType::Default;
 	}
-
 }
 
 void Grid::AddGoal(const Elite::Vector2& goalPos)
@@ -78,22 +116,92 @@ void Grid::AddGoal(const Elite::Vector2& goalPos)
 		sqrType = SquareType::Default;
 	}
 }
-void Grid::MakeGoalVector()
+
+
+void Grid::MakeFlowfield()
 {
-	m_MadeGoalVector = true;
+	// Every square around a square
+	const std::vector<Elite::Vector2> flowfieldFlowDirections
+	{	{ 1, 0 }, 
+		{ 1, 1 }, 
+		{ 0, 1 }, 
+		{ -1, 1 }, 
+		{ -1, 0 }, 
+		{ -1, -1 },
+		{ 0, -1 }, 
+		{1,-1} 
+	}; 
+
+
+	//finding a goals
+	std::vector<int> goalIndxs{};
+
+	for (const auto& gridSqr : *m_pGrid)
+	{
+		if (gridSqr.squareType == Grid::SquareType::Goal)
+			goalIndxs.push_back(gridSqr.column + (gridSqr.row * m_GridSize.x));
+	}
+
+
+	Algorithms::Dijkstra* dijkstraAlgorithm = new Algorithms::Dijkstra(&m_GridSize);
+
+
 	
-	// Check every square
+	//for every goal: run algorithm and make flowfield;
+	for (int idx{}; idx < goalIndxs.size(); ++idx)
+	{
+		dijkstraAlgorithm->ActiveAlgorithm(idx, goalIndxs[idx], m_pGrid);
+		dijkstraAlgorithm->FlowFieldCreation(idx, m_pGrid, flowfieldFlowDirections);
+	}
+
+	delete dijkstraAlgorithm;
+
+}
+
+void Grid::CreateGoalVector()
+{
+	//m_MadeGoalVector = true;
+	//
+	//// Go over all the squares in the grid
+	//for (int idx{}; idx < m_pGrid->size(); ++idx)
+	//{
+	//	if (m_pGrid->at(idx).squareType == SquareType::Goal)
+	//	{
+	//		for (int idx2{}; idx2 < m_pGrid->size(); ++idx2)
+	//		{
+	//			m_pGrid->at(idx2).flowDirections.push_back({ 0, 0 });
+	//		}
+	//		m_Goals.push_back(GetMidOfSquare(idx));
+	//	}
+	//}
+
+
+	m_MadeGoalVector = true;
+
+	// Go over all the squares in the grid
 	for (int idx{}; idx < m_pGrid->size(); ++idx)
-	{	
-		// If it is a goal, push the middle on the vector
+	{
 		if (m_pGrid->at(idx).squareType == SquareType::Goal)
 		{
+			m_pGrid->at(idx).flowDirections.push_back({ 0, 0 });
+
 			m_Goals.push_back(GetMidOfSquare(idx));
 		}
 	}
 }
 
-
+int Grid::GetNewGoal(int currentGoal) const
+{
+	int newGoalIdx{};
+	do
+	{
+		newGoalIdx = Elite::randomInt(m_Goals.size() - 1);
+	} 
+	while (newGoalIdx == currentGoal);
+	
+	
+	return newGoalIdx;
+}
 
 //------------------
 // Helper functins
@@ -101,7 +209,7 @@ void Grid::MakeGoalVector()
 void Grid::InitializeGrid()
 {
 	// Initialze the grid
-	m_pGrid = new std::vector<GridSquare>{};
+	m_pGrid = new std::vector<Square>{};
 
 	// Initialize the world bounds
 	const float worldBottom{ -m_WorldDimensions.y / 2 };
@@ -113,14 +221,14 @@ void Grid::InitializeGrid()
 
 	// Don't want these to be ramade every loop, only overwriten
 	Elite::Vector2 BottomLeftPos{};
-	GridSquare square{};
+	Square square{};
 
-	for (int rowIdx{}; rowIdx < m_ColmnRow.y; ++rowIdx)// Loop over all the rows
+	for (int rowIdx{}; rowIdx < m_GridSize.y; ++rowIdx)// Loop over all the rows
 	{
 		// Calculate the bottom
 		BottomLeftPos.y = worldBottom + (m_SquareSize.y * rowIdx) * (worldTop - worldBottom) / m_WorldDimensions.y;
 		
-		for (int columnIdx{}; columnIdx < m_ColmnRow.x; ++columnIdx)// Loop over all the colmns
+		for (int columnIdx{}; columnIdx < m_GridSize.x; ++columnIdx)// Loop over all the colmns
 		{
 			// Calculate the left
 			BottomLeftPos.x = worldLeft + (m_SquareSize.x * columnIdx) * (worldRight - worldLeft) / m_WorldDimensions.x;
@@ -136,10 +244,11 @@ void Grid::InitializeGrid()
 	}
 }
 
+
 void Grid::DrawGridSquare(int idx, const Elite::Color& color, bool fillSqr) const
 {
 	// Make a vector of points
-	Elite::Vector2 squarePoint[4]{};
+	Elite::Vector2 squarePoint[4]{};// A square always has 4 points.... i hope
 	const auto& square = m_pGrid->at(idx);
 
 	// Initialize those points
@@ -158,6 +267,7 @@ void Grid::DrawGridSquare(int idx, const Elite::Color& color, bool fillSqr) cons
 		DEBUGRENDERER2D->DrawPolygon(&squarePoint[0], 4, color, DEBUGRENDERER2D->NextDepthSlice());
 	}
 }
+
 void Grid::DrawGrid() const
 {	
 	// Check every square
@@ -171,6 +281,7 @@ void Grid::DrawGrid() const
 		DrawGridSquare(idx, m_GridColor, false);
 	}
 }
+
 void Grid::DrawObstacles() const
 {
 	// Check every square
@@ -184,6 +295,7 @@ void Grid::DrawObstacles() const
 		DrawGridSquare(idx, m_ObstacleColor, true);
 	}
 }
+
 void Grid::DrawGoals() const
 {
 	// Check every square
@@ -211,33 +323,38 @@ void Grid::DrawDirections() const
 			continue;
 
 		// Else, draw the direction
-		DEBUGRENDERER2D->DrawDirection(GetMidOfSquare(idx), m_pGrid->at(idx).flowDirections[directionNr], directionLength, m_DirectionColor);
-		DEBUGRENDERER2D->DrawSolidCircle(Elite::Vector2{ GetMidOfSquare(idx).x + directionLength, GetMidOfSquare(idx).y + (directionLength / 2.0f) }, 0.5f, Elite::Vector2{0.0f, 0.0f}, Elite::Color{1.0f, 1.0f, 1.0f});
+		DEBUGRENDERER2D->DrawDirection(GetMidOfSquare(idx), m_pGrid->at(idx).flowDirections[directionNr].GetNormalized(), directionLength, m_DirectionColor);
+	//	DEBUGRENDERER2D->DrawSolidCircle(Elite::Vector2{ GetMidOfSquare(idx).x + directionLength, GetMidOfSquare(idx).y + (directionLength / 2.0f) }, 0.5f, Elite::Vector2{0.0f, 0.0f}, Elite::Color{1.0f, 1.0f, 1.0f});
 		DEBUGRENDERER2D->DrawPoint(GetMidOfSquare(idx), 5.f, { 0, 0, 0 });
 	}
 }
 
+
 int Grid::GetSquareIdxAtPos(const Elite::Vector2& pos) const
 {
-	for (int rowIdx{}; rowIdx < m_ColmnRow.y; ++rowIdx) // Going over all the rows
+	for (int rowIdx{}; rowIdx < m_GridSize.y; ++rowIdx) // Going over all the rows
 	{
-		for (int ColumnIdx{}; ColumnIdx < m_ColmnRow.x; ++ColumnIdx)// Going over all the colmns
+		for (int ColumnIdx{}; ColumnIdx < m_GridSize.x; ++ColumnIdx)// Going over all the colmns
 		{
-			int index{ ColumnIdx + (rowIdx * (int)m_ColmnRow.x) };
+
+			int index{ ColumnIdx + (rowIdx * (int)m_GridSize.x) };
 			// Getting the bottom left of that square
-			Elite::Vector2 BottomLeft{ m_pGrid->at(index).bottomLeft };// don't get why it needs to be at()
+			Elite::Vector2 BottomLeft{ m_pGrid->at(index).bottomLeft };
 	
-			// Is the position withing the square ?
-			if (pos.x >= BottomLeft.x && 
-				pos.x <= (BottomLeft.x + m_SquareSize.x) &&
-				pos.y >= BottomLeft.y &&
+
+			// If the position is within the square, return the index
+			if (pos.x >= BottomLeft.x						&& 
+				pos.x <= (BottomLeft.x + m_SquareSize.x)	&&
+				pos.y >= BottomLeft.y						&&
 				pos.y <= (BottomLeft.y + m_SquareSize.y)
-				)
+			   )
 			{
 				return index;
 			}
+
 		}
 	}
 	
+	// Return 0 to not get an out of bounds problem
 	return 0;
 }

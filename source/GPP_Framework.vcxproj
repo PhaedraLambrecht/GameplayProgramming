@@ -237,6 +237,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="projects\Movement\Pathfinding\FlowField\FlowFieldAlgorithms.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\Grid.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\App_FlowField.h" />
     <ClInclude Include="framework\EliteAI\EliteData\EBlackboard.h" />

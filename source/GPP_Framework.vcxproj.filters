@@ -150,6 +150,7 @@
     <ClInclude Include="projects\DecisionMaking\InfluenceMaps\BehaviorsInfluence.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\App_FlowField.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\Grid.h" />
+    <ClInclude Include="projects\Movement\Pathfinding\FlowField\FlowFieldAlgorithms.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

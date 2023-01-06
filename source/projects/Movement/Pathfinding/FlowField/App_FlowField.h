@@ -25,14 +25,15 @@ public:
 private:
 
 
-	bool m_VisualizeTarget = true;
-	bool m_TrimWorld = true;
+	//bool m_VisualizeTarget = true;
+	bool m_TrimWorld = false;
 	float m_TrimWorldSize;
 
 
 	Grid* m_pGrid;
 	bool m_MadeObstacles{ false };
 	bool m_MadeGoals{ false };
+	bool m_MadeFlowfield{ false };
 
 
 	// For visualization toggles

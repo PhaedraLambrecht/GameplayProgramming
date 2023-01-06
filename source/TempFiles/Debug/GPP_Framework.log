@@ -1,8 +1,18 @@
 ﻿  Grid.cpp
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(86,22): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(164,22): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(177,22): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(190,22): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(207,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\FlowFieldAlgorithms.h(42,32): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\FlowFieldAlgorithms.h(58,41): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\FlowFieldAlgorithms.h(139,24): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\FlowFieldAlgorithms.h(211,24): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(142,39): warning C4244: 'argument': conversion from 'float' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(151,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(182,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(274,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(288,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(302,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(319,22): warning C4018: '<': signed/unsigned mismatch
   GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
   0 File(s) copied

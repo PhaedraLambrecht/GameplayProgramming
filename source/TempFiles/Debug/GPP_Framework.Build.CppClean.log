@@ -2,7 +2,6 @@ c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.pch
 c:\dae\gameplayprogramming\source\tempfiles\debug\vc143.pdb
 c:\dae\gameplayprogramming\source\tempfiles\debug\vc143.idb
 c:\dae\gameplayprogramming\source\tempfiles\debug\stdafx.obj
-c:\dae\gameplayprogramming\source\tempfiles\debug\gl3w.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\sdlwindow.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\eimmediateui.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\etimer_sdl.obj
@@ -22,7 +21,7 @@ c:\dae\gameplayprogramming\source\tempfiles\debug\egraphconnectiontypes.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\efinitestatemachine.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\ebehaviortree.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_flowfield.obj
-c:\dae\gameplayprogramming\source\tempfiles\debug\steeringagent.obj
+c:\dae\gameplayprogramming\source\tempfiles\debug\grid.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\obstacle.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_steeringbehaviors.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\spacepartitioning.obj
@@ -42,12 +41,14 @@ c:\dae\gameplayprogramming\source\tempfiles\debug\statesandtransitions.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_agariogame.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_agariogame_bt.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\main.obj
+c:\dae\gameplayprogramming\source\tempfiles\debug\gl3w.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\navigationcolliderelement.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\baseagent.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\agariofood.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\agariocontactlistener.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\agarioagent.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\steeringbehaviors.obj
+c:\dae\gameplayprogramming\source\tempfiles\debug\steeringagent.obj
 c:\dae\gameplayprogramming\bin\debug\gpp_framework.exe
 c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.ilk
 c:\dae\gameplayprogramming\bin\debug\gpp_framework.pdb

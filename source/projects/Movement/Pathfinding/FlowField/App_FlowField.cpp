@@ -13,6 +13,7 @@ App_FlowField::~App_FlowField()
 	SAFE_DELETE(m_pGrid);
 }
 
+
 //Functions
 void App_FlowField::Start()
 {
@@ -24,7 +25,7 @@ void App_FlowField::Start()
 void App_FlowField::Update(float deltaTime)
 {
 	//INPUT
-	if (INPUTMANAGER->IsMouseButtonUp(InputMouseButton::eLeft))// if left mousebutton is released
+	if (INPUTMANAGER->IsMouseButtonUp(InputMouseButton::eLeft))// If left mousebutton is released
 	{
 		// Set the mouse data/pos
 		auto const mouseData = INPUTMANAGER->GetMouseData(InputType::eMouseButton, InputMouseButton::eLeft);
@@ -33,8 +34,9 @@ void App_FlowField::Update(float deltaTime)
 		// If not true, add obstacle
 		if (!m_MadeObstacles)
 			m_pGrid->AddObstacle(mousePos);
+
 	}
-	else if (INPUTMANAGER->IsMouseButtonUp(InputMouseButton::eMiddle))// if middle mousebutton is released
+	else if (INPUTMANAGER->IsMouseButtonUp(InputMouseButton::eMiddle))// If middle mousebutton is released
 	{
 		// Set the mouse data/pos
 		auto const mouseData = INPUTMANAGER->GetMouseData(InputType::eMouseButton, InputMouseButton::eMiddle);
@@ -43,6 +45,7 @@ void App_FlowField::Update(float deltaTime)
 		// if not true, add goal
 		if (!m_MadeGoals)
 			m_pGrid->AddGoal(mousePos);
+
 	}
 
 	//IMGUI
@@ -122,6 +125,20 @@ void App_FlowField::UpdateImGui()
 		else
 			ImGui::Text("Goals ready");
 		//----
+
+		// Make flow fields
+		if (m_MadeGoals && m_MadeObstacles)
+		{
+			if (!m_MadeFlowfield)
+			{
+				if (ImGui::Button("make flowfields"))
+				{
+					m_pGrid->CreateGoalVector();
+					m_MadeFlowfield = true;
+					m_pGrid->ToggleDrawObstacles(m_IsObstacleDrawn);
+				}
+			}
+		}
 
 
 		ImGui::Checkbox("Trim World", &m_TrimWorld);
