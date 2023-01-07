@@ -20,50 +20,45 @@ Grid::~Grid()
 }
 
 
-bool Grid::MoveSqaure(const Elite::Vector2& currentPos, Elite::Vector2& targetPos, int goalNr, bool firstMove)
-{
-	//TODO: research - make my own
+//bool Grid::MoveSqaure(const Elite::Vector2& currentPos, Elite::Vector2& targetPos, int goalNr, bool firstMove)
+//{
+//	//TODO: research - make my own
+//
+//	if (firstMove || Elite::Distance(currentPos, targetPos) <= m_MindDistanceFromTarget)
+//	{
+//		const int sqrIdx{ GetSquareIdxAtPos(currentPos) }; //sqr index of square the agent is currently in 
+//		const Elite::Vector2 nextSqrPosFromDirection{ currentPos + (m_pGrid->at(sqrIdx).flowDirections[goalNr].GetNormalized() * (m_SquareSize.x + (m_SquareSize.x / 2))) }; //a position from the current position of the agent along the direction the agent should be following over a length (1.5 a square's length)	
+//		const int newSqrIdx{ GetSquareIdxAtPos(nextSqrPosFromDirection) }; //the square idx of the square at this new position
+//		targetPos = GetMidOfSquare(newSqrIdx); //next target for the agent = the middle of this new square
+//		return true;
+//	}
+//
+//	return false;
+//}
 
-	if (firstMove || Elite::Distance(currentPos, targetPos) <= m_MindDistanceFromTarget)
-	{
-		const int sqrIdx{ GetSquareIdxAtPos(currentPos) }; //sqr index of square the agent is currently in 
-		const Elite::Vector2 nextSqrPosFromDirection{ currentPos + (m_pGrid->at(sqrIdx).flowDirections[goalNr].GetNormalized() * (m_SquareSize.x + (m_SquareSize.x / 2))) }; //a position from the current position of the agent along the direction the agent should be following over a length (1.5 a square's length)	
-		const int newSqrIdx{ GetSquareIdxAtPos(nextSqrPosFromDirection) }; //the square idx of the square at this new position
-		targetPos = GetMidOfSquare(newSqrIdx); //next target for the agent = the middle of this new square
-		return true;
-	}
-
-	return false;
-}
-
-Elite::Vector2 Grid::GetValidRandomPos()
-{
-	int randomIdx{};
-
-	do
-	{
-		randomIdx = Elite::randomInt(m_pGrid->size() - 1);
-	} 
-	while (m_pGrid->at(randomIdx).squareType != SquareType::Default);
-
-
-	return GetMidOfSquare(randomIdx);;
-}
+//Elite::Vector2 Grid::GetValidRandomPos()
+//{
+//	int randomIdx{};
+//
+//	do
+//	{
+//		randomIdx = Elite::randomInt(m_pGrid->size() - 1);
+//	} 
+//	while (m_pGrid->at(randomIdx).squareType != SquareType::Default);
+//
+//
+//	return GetMidOfSquare(randomIdx);;
+//}
 
 
 void Grid::Render(float deltaTime) const
 {
-	// Draws the grid in it's total
-	if (m_DrawGrid) 
-		DrawGrid();
+	//// Draws the grid in it's total
+	//if (m_DrawGrid) 
+	//	DrawGrid();
 
-	// Draws each obsticals
-	if (m_DrawObstacles) 
-		DrawObstacles();
-
-	// Draws each goal
-	if (m_DrawGoals)
-		DrawGoals();
+	// Draws each obsticals and the goal
+	DrawGrid();
 
 	// Draws the direction of each square
 	if (m_DrawDirections)
@@ -72,19 +67,19 @@ void Grid::Render(float deltaTime) const
 
 void Grid::Update(float deltaTime)
 {
-	if (m_MadeGoalVector && !madeFlowFields)
+	if (m_MadeGoal && !m_MadeFlowFields)
 	{
-		madeFlowFields = true;
+		m_MadeFlowFields = true;
 		MakeFlowfield();
+		m_MadeGoal = false;
 	}
-
 }
 
 
 void Grid::AddObstacle(const Elite::Vector2& obstaclePos)
 {
 	// Get the index of the position
-	int squareIdx{ GetSquareIdxAtPos(obstaclePos) };
+	int squareIdx{ GetIdxAtPos(obstaclePos) };
 	// Get the type of that square
 	Grid::SquareType& squareType{ m_pGrid->at(squareIdx).squareType };
 
@@ -102,19 +97,25 @@ void Grid::AddObstacle(const Elite::Vector2& obstaclePos)
 void Grid::AddGoal(const Elite::Vector2& goalPos)
 {
 	// Get the index of the position
-	int index{ GetSquareIdxAtPos(goalPos) };
+	int index{ GetIdxAtPos(goalPos) };
 	// Get the type of that square
 	Grid::SquareType& sqrType{ m_pGrid->at(index).squareType };
 
 
-	if (sqrType != SquareType::Goal)
-	{
-		sqrType = SquareType::Goal;
-	}
-	else
-	{ 
-		sqrType = SquareType::Default;
-	}
+
+		if (sqrType != SquareType::Goal)
+		{
+			if (m_CurrentGoalCount != m_MaxGoals)
+			{
+				sqrType = SquareType::Goal;
+				++m_CurrentGoalCount;
+			}
+		}
+		else
+		{ 
+			sqrType = SquareType::Default;
+			--m_CurrentGoalCount;
+		}
 }
 
 
@@ -155,28 +156,13 @@ void Grid::MakeFlowfield()
 	}
 
 	delete dijkstraAlgorithm;
+	m_MadeFlowFields = false;
 
 }
 
-void Grid::CreateGoalVector()
+void Grid::CreateGoal()
 {
-	//m_MadeGoalVector = true;
-	//
-	//// Go over all the squares in the grid
-	//for (int idx{}; idx < m_pGrid->size(); ++idx)
-	//{
-	//	if (m_pGrid->at(idx).squareType == SquareType::Goal)
-	//	{
-	//		for (int idx2{}; idx2 < m_pGrid->size(); ++idx2)
-	//		{
-	//			m_pGrid->at(idx2).flowDirections.push_back({ 0, 0 });
-	//		}
-	//		m_Goals.push_back(GetMidOfSquare(idx));
-	//	}
-	//}
-
-
-	m_MadeGoalVector = true;
+	m_MadeGoal = true;
 
 	// Go over all the squares in the grid
 	for (int idx{}; idx < m_pGrid->size(); ++idx)
@@ -185,23 +171,23 @@ void Grid::CreateGoalVector()
 		{
 			m_pGrid->at(idx).flowDirections.push_back({ 0, 0 });
 
-			m_Goals.push_back(GetMidOfSquare(idx));
+			m_goal = GetSquareCenter(idx);
 		}
 	}
 }
 
-int Grid::GetNewGoal(int currentGoal) const
-{
-	int newGoalIdx{};
-	do
-	{
-		newGoalIdx = Elite::randomInt(m_Goals.size() - 1);
-	} 
-	while (newGoalIdx == currentGoal);
-	
-	
-	return newGoalIdx;
-}
+//int Grid::GetNewGoal(int currentGoal) const
+//{
+//	int newGoalIdx{};
+//	do
+//	{
+//		newGoalIdx = Elite::randomInt(m_Goals.size() - 1);
+//	} 
+//	while (newGoalIdx == currentGoal);
+//	
+//	
+//	return newGoalIdx;
+//}
 
 //------------------
 // Helper functins
@@ -268,45 +254,50 @@ void Grid::DrawGridSquare(int idx, const Elite::Color& color, bool fillSqr) cons
 	}
 }
 
+//void Grid::DrawGrid() const
+//{	
+//	// Check every square
+//	for (int idx{}; idx < m_pGrid->size(); ++idx)
+//	{
+//		// If it isn't a default, stop the loop
+//		if (m_pGrid->at(idx).squareType != SquareType::Default)
+//			continue;
+//
+//	
+//	}
+//}
+
 void Grid::DrawGrid() const
-{	
-	// Check every square
-	for (int idx{}; idx < m_pGrid->size(); ++idx)
-	{
-		// If it isn't a default, stop the loop
-		if (m_pGrid->at(idx).squareType != SquareType::Default)
-			continue;
-
-		// Else, draw the square (red)
-		DrawGridSquare(idx, m_GridColor, false);
-	}
-}
-
-void Grid::DrawObstacles() const
 {
 	// Check every square
 	for (int idx{}; idx < m_pGrid->size(); ++idx)
 	{
-		// If it isn't an obstacle, stop the loop
-		if (m_pGrid->at(idx).squareType != SquareType::Obstacle) 
-			continue;
+		//TODO: reseearch - look into making this switch
 
-		// Else, draw the square (blue)
-		DrawGridSquare(idx, m_ObstacleColor, true);
-	}
-}
-
-void Grid::DrawGoals() const
-{
-	// Check every square
-	for (int idx{}; idx < m_pGrid->size(); ++idx)
-	{
-		// If it isn't a goal, stop the loop
-		if (m_pGrid->at(idx).squareType != SquareType::Goal)
-			continue;
-
-		// Else, draw the square (green filiing)
-		DrawGridSquare(idx, m_GoalColor, true);
+		if (m_pGrid->at(idx).squareType == SquareType::Obstacle)// If it is an obstacle
+		{
+			if (m_DrawObstacles)
+			{
+				// Draw the square (blue)
+				DrawGridSquare(idx, m_ObstacleColor, true);
+			}
+		}
+		else if(m_pGrid->at(idx).squareType == SquareType::Goal)// If it is a goal
+		{
+			if (m_DrawGoals)
+			{
+				// Draw the square (green filiing)
+				DrawGridSquare(idx, m_GoalColor, true);
+			}
+		}
+		else // If it is a normal square
+		{
+			if (m_DrawGrid)
+			{
+				//draw the square (red)
+				DrawGridSquare(idx, m_GridColor, false);
+			}
+		}
 	}
 }
 
@@ -323,14 +314,14 @@ void Grid::DrawDirections() const
 			continue;
 
 		// Else, draw the direction
-		DEBUGRENDERER2D->DrawDirection(GetMidOfSquare(idx), m_pGrid->at(idx).flowDirections[directionNr].GetNormalized(), directionLength, m_DirectionColor);
+		DEBUGRENDERER2D->DrawDirection(GetSquareCenter(idx), m_pGrid->at(idx).flowDirections[directionNr].GetNormalized(), directionLength, m_DirectionColor);
 	//	DEBUGRENDERER2D->DrawSolidCircle(Elite::Vector2{ GetMidOfSquare(idx).x + directionLength, GetMidOfSquare(idx).y + (directionLength / 2.0f) }, 0.5f, Elite::Vector2{0.0f, 0.0f}, Elite::Color{1.0f, 1.0f, 1.0f});
-		DEBUGRENDERER2D->DrawPoint(GetMidOfSquare(idx), 5.f, { 0, 0, 0 });
+		DEBUGRENDERER2D->DrawPoint(GetSquareCenter(idx), 5.f, { 0, 0, 0 });
 	}
 }
 
 
-int Grid::GetSquareIdxAtPos(const Elite::Vector2& pos) const
+int Grid::GetIdxAtPos(const Elite::Vector2& pos) const
 {
 	for (int rowIdx{}; rowIdx < m_GridSize.y; ++rowIdx) // Going over all the rows
 	{

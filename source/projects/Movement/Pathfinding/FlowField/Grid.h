@@ -40,8 +40,8 @@ public:
 	void Update(float deltaTime);
 
 
-	bool MoveSqaure(const Elite::Vector2& currentPos, Elite::Vector2& targetPos, int goalNr, bool firstMove);
-	Elite::Vector2 GetValidRandomPos();
+	//bool MoveSqaure(const Elite::Vector2& currentPos, Elite::Vector2& targetPos, int goalNr, bool firstMove);
+	//Elite::Vector2 GetValidRandomPos();
 	void MakeFlowfield();
 
 
@@ -51,14 +51,13 @@ public:
 
 
 	//goal vector
-	void CreateGoalVector();
-	bool GoalVectorReady() { return m_MadeGoalVector; };
-	int GetNewGoal(int currentGoal) const;
+	void CreateGoal();
+	//int GetNewGoal(int currentGoal) const;
 
 	// Toggles for visuals
 	void ToggleDrawGrid(bool canDraw) { m_DrawGrid = canDraw; };
 	void ToggleDrawObstacles(bool canDraw) { m_DrawObstacles = canDraw; };
-	void ToggleDrawGoals(bool canDraw) { m_DrawGoals = canDraw; };
+	void ToggleDrawGoal(bool canDraw) { m_DrawGoals = canDraw; };
 	void ToggleDrawDirections(bool canDraw) { m_DrawDirections = canDraw; };
 
 
@@ -86,14 +85,18 @@ private:
 	bool m_DrawGoals{ true };
 	bool m_DrawDirections{ true };
 
+	bool m_MadeFlowFields{ false };
 
-	bool madeFlowFields{ false };
+	// Only 1 goal
+	bool m_MadeGoal{ false };
+	Elite::Vector2 m_goal{};// Algorithm can't handle more than 1 goal
+	int m_CurrentGoalCount{};
+	int m_MaxGoals{ 1 };
 
-	bool m_MadeGoalVector{ false };
-	std::vector<Elite::Vector2> m_Goals{};
 
 
-	float m_MindDistanceFromTarget{ 2.f };
+
+	//float m_MindDistanceFromTarget{ 2.f };
 
 
 	//-------------------
@@ -105,14 +108,15 @@ private:
 	void DrawGridSquare(int idx, const Elite::Color& color, bool fillSqr) const;
 	void DrawGrid() const;
 	void DrawDirections() const;
-	void DrawObstacles() const;
-	void DrawGoals() const;
+	void DrawGrid() const;
 
+//	bool GoalVectorReady() { return m_MadeGoalVector; };
+	
 	//get the mid position of a square
-	Elite::Vector2 GetMidOfSquare(size_t idx) const
+	Elite::Vector2 GetSquareCenter(size_t idx) const
 	{
 		return m_pGrid->at(idx).bottomLeft + (m_SquareSize / 2.f);
 	};
-	int GetSquareIdxAtPos(const Elite::Vector2& pos) const;
+	int GetIdxAtPos(const Elite::Vector2& pos) const;
 };
 

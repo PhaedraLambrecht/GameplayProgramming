@@ -99,69 +99,54 @@ void App_FlowField::UpdateImGui()
 		ImGui::Spacing();
 		ImGui::Spacing();
 
-		ImGui::Text("Flow field");
+		ImGui::Text("Flow fields");
 		ImGui::Spacing();
 		ImGui::Spacing();
 
 
-
-		// obstacles
-		if (!m_MadeObstacles)
-		{
-			if (ImGui::Button("Obstacles ready"))
-				m_MadeObstacles = true;
-		}
-		else
-			ImGui::Text("Obstacles ready");
-		//----
-
-		//goals
-		if (!m_MadeGoals)
-		{
-			if (ImGui::Button("Goals ready"))
-				m_MadeGoals = true;
-
-		}
-		else
-			ImGui::Text("Goals ready");
-		//----
-
-		// Make flow fields
-		if (m_MadeGoals && m_MadeObstacles)
-		{
-			if (!m_MadeFlowfield)
-			{
-				if (ImGui::Button("make flowfields"))
-				{
-					m_pGrid->CreateGoalVector();
-					m_MadeFlowfield = true;
-					m_pGrid->ToggleDrawObstacles(m_IsObstacleDrawn);
-				}
-			}
-		}
-
-
-		ImGui::Checkbox("Trim World", &m_TrimWorld);
 
 		// This goddamn shit took me 30 min to figure out (on top of the 2 days earlier this semester)
-		// Toggle the grid
+		ImGui::Text("Getting ready");
+		
+		// obstacles
+		ImGui::Checkbox("Obstacles ready", &m_MadeObstacles);
 
+		//goals
+		ImGui::Checkbox("Goals ready", &m_MadeGoals);
+
+
+		// Make flow fields
+		if ( m_MadeGoals && m_MadeObstacles )
+		{
+			ImGui::Checkbox("Made flowfields", &m_MadeFlowfield);
+
+			if (m_MadeFlowfield)
+			{
+				m_pGrid->CreateGoal();
+				m_pGrid->ToggleDrawObstacles(m_IsObstacleDrawn);
+			}
+
+		}
+
+
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Text("Visualization");
+		//ImGui::Checkbox("Trim World", &m_TrimWorld);
+
+		// Toggle the grid
 		ImGui::Checkbox("Draw grid", &m_IsGridDrawn);
 		m_pGrid->ToggleDrawGrid(m_IsGridDrawn);
 
-		//// Toggle the obstacles
-		
+		// Toggle the obstacles
 		ImGui::Checkbox("Draw obstacles", &m_IsObstacleDrawn);
 		m_pGrid->ToggleDrawObstacles(m_IsObstacleDrawn);
 
-
 		// Toggle the goal(s)
-
 		ImGui::Checkbox("Draw goals", &m_IsGoalDrawn);
-		m_pGrid->ToggleDrawGoals(m_IsGoalDrawn);
+		m_pGrid->ToggleDrawGoal(m_IsGoalDrawn);
 
 		// Toggle the directions
-
 		ImGui::Checkbox("Draw direction", &m_IsDirectionDrawn);
 		m_pGrid->ToggleDrawDirections(m_IsDirectionDrawn);
 
