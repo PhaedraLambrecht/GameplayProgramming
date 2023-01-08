@@ -49,6 +49,7 @@
     <ClCompile Include="projects\DecisionMaking\InfluenceMaps\App_AgarioGame_InfluenceBT.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\FlowField\App_FlowField.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\FlowField\Grid.cpp" />
+    <ClCompile Include="projects\Movement\Pathfinding\FlowField\FlowAgent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="projects\App_Selector.h" />
@@ -151,6 +152,7 @@
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\App_FlowField.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\Grid.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\FlowFieldAlgorithms.h" />
+    <ClInclude Include="projects\Movement\Pathfinding\FlowField\FlowAgent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

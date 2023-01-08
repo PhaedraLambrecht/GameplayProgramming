@@ -4,6 +4,8 @@
 // Includes & Forward Declarations
 //-----------------------------------------------------------------
 #include "framework/EliteInterfaces/EIApp.h"
+
+#include "FlowAgent.h"
 #include "Grid.h"
 
 
@@ -31,9 +33,9 @@ private:
 
 
 	Grid* m_pGrid;
-	bool m_MadeObstacles{ false };
-	bool m_MadeGoals{ false };
-	bool m_MadeFlowfield{ false };
+	bool m_AreObstaclesMade{ false };
+	bool m_IsGoalMade{ false };
+	bool m_IsFlowFieldMade{ false };
 
 
 	// For visualization toggles
@@ -43,9 +45,17 @@ private:
 	bool m_IsDirectionDrawn{ true };
 
 
+	// Agents
+	std::vector<FlowAgent*>* m_pAgents{ nullptr };
+	int m_MaxAgents{ 10 };
+	bool m_AreAgentsSpawned{ false };
+
+	int m_AgentSpawns{};
+	int m_MaxAgentSpawns{ 3 };
 
 	// Helper functions
 	void UpdateImGui();
+	void SpawnAgents();
 };
 
 

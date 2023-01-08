@@ -41,7 +41,7 @@ public:
 
 
 	//bool MoveSqaure(const Elite::Vector2& currentPos, Elite::Vector2& targetPos, int goalNr, bool firstMove);
-	//Elite::Vector2 GetValidRandomPos();
+	Elite::Vector2 GetRandomPos();
 	void MakeFlowfield();
 
 
@@ -108,7 +108,6 @@ private:
 	void DrawGridSquare(int idx, const Elite::Color& color, bool fillSqr) const;
 	void DrawGrid() const;
 	void DrawDirections() const;
-	void DrawGrid() const;
 
 //	bool GoalVectorReady() { return m_MadeGoalVector; };
 	

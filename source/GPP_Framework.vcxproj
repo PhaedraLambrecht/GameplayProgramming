@@ -182,6 +182,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="projects\Movement\Pathfinding\FlowField\FlowAgent.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\FlowField\Grid.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\FlowField\App_FlowField.cpp" />
     <ClCompile Include="framework\EliteAI\EliteDecisionMaking\EliteBehaviorTree\EBehaviorTree.cpp" />
@@ -237,6 +238,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="projects\Movement\Pathfinding\FlowField\FlowAgent.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\FlowFieldAlgorithms.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\Grid.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\App_FlowField.h" />

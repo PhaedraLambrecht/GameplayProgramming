@@ -2,6 +2,7 @@
 #include "stdafx.h"
 
 //Includes
+#include "FlowAgent.h"
 #include "App_Flowfield.h"
 
 
@@ -10,6 +11,13 @@ using namespace Elite;
 //Destructor
 App_FlowField::~App_FlowField()
 {
+	for (auto& agent : *m_pAgents)
+	{
+		SAFE_DELETE(agent);
+	}
+	SAFE_DELETE(m_pAgents);
+
+
 	SAFE_DELETE(m_pGrid);
 }
 
@@ -17,6 +25,9 @@ App_FlowField::~App_FlowField()
 //Functions
 void App_FlowField::Start()
 {
+	m_pAgents = new std::vector< FlowAgent*>();
+
+
 	m_TrimWorldSize = 50.f;
 	float worldDimensions{ 100.0f };
 	m_pGrid = new Grid(Elite::Vector2(worldDimensions, worldDimensions), Elite::Vector2(10.f, 10.f));
@@ -32,7 +43,7 @@ void App_FlowField::Update(float deltaTime)
 		auto mousePos{ DEBUGRENDERER2D->GetActiveCamera()->ConvertScreenToWorld({ static_cast<float>(mouseData.X), static_cast<float>(mouseData.Y) }) };
 		
 		// If not true, add obstacle
-		if (!m_MadeObstacles)
+		if (!m_AreObstaclesMade)
 			m_pGrid->AddObstacle(mousePos);
 
 	}
@@ -43,7 +54,7 @@ void App_FlowField::Update(float deltaTime)
 		auto mousePos{ DEBUGRENDERER2D->GetActiveCamera()->ConvertScreenToWorld({ static_cast<float>(mouseData.X), static_cast<float>(mouseData.Y) }) };
 		
 		// if not true, add goal
-		if (!m_MadeGoals)
+		if (!m_IsGoalMade)
 			m_pGrid->AddGoal(mousePos);
 
 	}
@@ -52,8 +63,43 @@ void App_FlowField::Update(float deltaTime)
 	UpdateImGui();
 
 	m_pGrid->Update(deltaTime);
+
+
+	for (auto& agent : *m_pAgents)
+	{
+			agent->Update(deltaTime);
+	}
 }
 
+void App_FlowField::Render(float deltaTime) const
+{
+	m_pGrid->Render(deltaTime);
+
+	for (auto& agent : *m_pAgents)
+	{
+		agent->Render(deltaTime);
+	}
+
+
+	if (m_TrimWorld)
+	{
+		std::vector<Elite::Vector2> points =
+		{
+			{ -m_TrimWorldSize, m_TrimWorldSize },
+			{ m_TrimWorldSize, m_TrimWorldSize },
+			{ m_TrimWorldSize, -m_TrimWorldSize },
+			{ -m_TrimWorldSize, -m_TrimWorldSize }
+		};
+		DEBUGRENDERER2D->DrawPolygon(&points[0], 4, { 1, 0, 0, 1 }, 0.4f);
+	}
+
+
+}
+
+
+//------------------
+// Helper functins
+//------------------
 void App_FlowField::UpdateImGui()
 {
 #ifdef PLATFORM_WINDOWS
@@ -109,24 +155,37 @@ void App_FlowField::UpdateImGui()
 		ImGui::Text("Getting ready");
 		
 		// obstacles
-		ImGui::Checkbox("Obstacles ready", &m_MadeObstacles);
+		ImGui::Checkbox("Obstacles ready", &m_AreObstaclesMade);
 
 		//goals
-		ImGui::Checkbox("Goals ready", &m_MadeGoals);
+		ImGui::Checkbox("Goals ready", &m_IsGoalMade);
 
+		// Allowing agents to spawn when needed
+		ImGui::Checkbox("Spawn agents", &m_AreAgentsSpawned);
 
+		
 		// Make flow fields
-		if ( m_MadeGoals && m_MadeObstacles )
+		if ( m_IsGoalMade && m_AreObstaclesMade )
 		{
-			ImGui::Checkbox("Made flowfields", &m_MadeFlowfield);
+			ImGui::Checkbox("Made flowfields", &m_IsFlowFieldMade);
 
-			if (m_MadeFlowfield)
+			if (m_IsFlowFieldMade)
 			{
 				m_pGrid->CreateGoal();
 				m_pGrid->ToggleDrawObstacles(m_IsObstacleDrawn);
 			}
 
+
+			// Max 30 agents cuz this is not a miracle pc
+			if (m_AreAgentsSpawned && (m_AgentSpawns != m_MaxAgentSpawns) )
+			{
+				SpawnAgents();
+				++m_AgentSpawns;
+				m_AreAgentsSpawned = false;
+			}
+
 		}
+
 
 
 		ImGui::Spacing();
@@ -164,20 +223,10 @@ void App_FlowField::UpdateImGui()
 #endif
 }
 
-
-void App_FlowField::Render(float deltaTime) const
+void App_FlowField::SpawnAgents()
 {
-	m_pGrid->Render(deltaTime);
-
-	if (m_TrimWorld)
+	for (int agentIdx{}; agentIdx < m_MaxAgents; ++agentIdx)
 	{
-		std::vector<Elite::Vector2> points =
-		{
-			{ -m_TrimWorldSize, m_TrimWorldSize },
-			{ m_TrimWorldSize, m_TrimWorldSize },
-			{ m_TrimWorldSize, -m_TrimWorldSize },
-			{ -m_TrimWorldSize, -m_TrimWorldSize }
-		};
-		DEBUGRENDERER2D->DrawPolygon(&points[0], 4, { 1, 0, 0, 1 }, 0.4f);
+		m_pAgents->push_back( new FlowAgent( m_pGrid->GetRandomPos() ) );
 	}
 }

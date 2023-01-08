@@ -36,28 +36,25 @@ Grid::~Grid()
 //	return false;
 //}
 
-//Elite::Vector2 Grid::GetValidRandomPos()
-//{
-//	int randomIdx{};
-//
-//	do
-//	{
-//		randomIdx = Elite::randomInt(m_pGrid->size() - 1);
-//	} 
-//	while (m_pGrid->at(randomIdx).squareType != SquareType::Default);
-//
-//
-//	return GetMidOfSquare(randomIdx);;
-//}
+Elite::Vector2 Grid::GetRandomPos()
+{
+	// TODO: research - look more into cuz wtf + want them to spawn at mouseclick
+	int randomIdx{};
+
+	do
+	{
+		randomIdx = Elite::randomInt(m_pGrid->size() - 1);
+	} 
+	while (m_pGrid->at(randomIdx).squareType != SquareType::Default);
+
+
+	return GetSquareCenter(randomIdx);;
+}
 
 
 void Grid::Render(float deltaTime) const
 {
-	//// Draws the grid in it's total
-	//if (m_DrawGrid) 
-	//	DrawGrid();
-
-	// Draws each obsticals and the goal
+	// Draws each cell in the grid
 	DrawGrid();
 
 	// Draws the direction of each square
@@ -253,19 +250,6 @@ void Grid::DrawGridSquare(int idx, const Elite::Color& color, bool fillSqr) cons
 		DEBUGRENDERER2D->DrawPolygon(&squarePoint[0], 4, color, DEBUGRENDERER2D->NextDepthSlice());
 	}
 }
-
-//void Grid::DrawGrid() const
-//{	
-//	// Check every square
-//	for (int idx{}; idx < m_pGrid->size(); ++idx)
-//	{
-//		// If it isn't a default, stop the loop
-//		if (m_pGrid->at(idx).squareType != SquareType::Default)
-//			continue;
-//
-//	
-//	}
-//}
 
 void Grid::DrawGrid() const
 {
