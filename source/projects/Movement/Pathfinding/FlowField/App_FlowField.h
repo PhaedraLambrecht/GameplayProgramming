@@ -46,7 +46,7 @@ private:
 
 
 	// Agents
-	std::vector<FlowAgent*>* m_pAgents{ nullptr };
+	std::vector<FlowAgent*>* m_pAgents{};
 	int m_MaxAgents{ 10 };
 	bool m_AreAgentsSpawned{ false };
 

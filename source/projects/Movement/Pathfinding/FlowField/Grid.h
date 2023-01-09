@@ -40,8 +40,10 @@ public:
 	void Update(float deltaTime);
 
 
-	//bool MoveSqaure(const Elite::Vector2& currentPos, Elite::Vector2& targetPos, int goalNr, bool firstMove);
+	bool MoveToNextSquare(const Elite::Vector2& agentPos, Elite::Vector2& targetPos, bool hasAlreadyMoved);
 	Elite::Vector2 GetRandomPos();
+	bool AgentReachedGoal(const Elite::Vector2& agentPos);
+
 	void MakeFlowfield();
 
 
@@ -50,9 +52,10 @@ public:
 	void AddGoal(const Elite::Vector2& goalPos);
 
 
-	//goal vector
+	//goal creation
 	void CreateGoal();
 	//int GetNewGoal(int currentGoal) const;
+
 
 	// Toggles for visuals
 	void ToggleDrawGrid(bool canDraw) { m_DrawGrid = canDraw; };
@@ -87,6 +90,7 @@ private:
 
 	bool m_MadeFlowFields{ false };
 
+
 	// Only 1 goal
 	bool m_MadeGoal{ false };
 	Elite::Vector2 m_goal{};// Algorithm can't handle more than 1 goal
@@ -111,6 +115,7 @@ private:
 
 //	bool GoalVectorReady() { return m_MadeGoalVector; };
 	
+
 	//get the mid position of a square
 	Elite::Vector2 GetSquareCenter(size_t idx) const
 	{

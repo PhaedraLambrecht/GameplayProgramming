@@ -6,10 +6,10 @@
 #include "Grid.h"
 
 
-Grid::Grid(const Elite::Vector2& worldSize, const Elite::Vector2& gridResolution)
+Grid::Grid(const Elite::Vector2& worldSize, const Elite::Vector2& gridSize)
 	:m_WorldDimensions{ worldSize }
-	,m_GridSize(gridResolution)
-	,m_SquareSize{ worldSize.x / gridResolution.x, worldSize.y / gridResolution.y }
+	,m_GridSize(gridSize)
+	,m_SquareSize{ worldSize.x / gridSize.x, worldSize.y / gridSize.y }
 {
 	InitializeGrid();
 }
@@ -20,21 +20,41 @@ Grid::~Grid()
 }
 
 
-//bool Grid::MoveSqaure(const Elite::Vector2& currentPos, Elite::Vector2& targetPos, int goalNr, bool firstMove)
-//{
-//	//TODO: research - make my own
-//
-//	if (firstMove || Elite::Distance(currentPos, targetPos) <= m_MindDistanceFromTarget)
-//	{
-//		const int sqrIdx{ GetSquareIdxAtPos(currentPos) }; //sqr index of square the agent is currently in 
-//		const Elite::Vector2 nextSqrPosFromDirection{ currentPos + (m_pGrid->at(sqrIdx).flowDirections[goalNr].GetNormalized() * (m_SquareSize.x + (m_SquareSize.x / 2))) }; //a position from the current position of the agent along the direction the agent should be following over a length (1.5 a square's length)	
-//		const int newSqrIdx{ GetSquareIdxAtPos(nextSqrPosFromDirection) }; //the square idx of the square at this new position
-//		targetPos = GetMidOfSquare(newSqrIdx); //next target for the agent = the middle of this new square
-//		return true;
-//	}
-//
-//	return false;
-//}
+// Funcitons Specifically for the agents
+bool Grid::MoveToNextSquare(const Elite::Vector2& currentPos, Elite::Vector2& targetPos, bool firstMove)
+{
+	const float distance{ Elite::Distance(currentPos, targetPos) };
+
+	// If this is the first move, or the distance between the current position and target position is less than or equal to 2, we need to find a new target position
+	if (firstMove || (distance <= 2.0f) )
+	{
+
+		// Get the index of the square the agent is currently in
+		const int CurrentSquareIdx = GetIdxAtPos(currentPos);
+
+
+		// Calculate a position
+		const Elite::Vector2 normalizedFlowDirection{ m_pGrid->at(CurrentSquareIdx).flowDirections[0].GetNormalized() };
+		const float length{ m_SquareSize.x + (m_SquareSize.x / 2) };
+		
+		//from the current position of the agent along the direction the agent should be following over a length ( 1.5 times a square's length)
+		const Elite::Vector2 nextSqrPosFromDirection{ currentPos + (normalizedFlowDirection * length) };
+
+
+		// Get the index of the square at this new position
+		const int newIdx{ GetIdxAtPos(nextSqrPosFromDirection) };
+
+
+		// Set the next target position for the agent to the center of this new square
+		targetPos = GetSquareCenter(newIdx);
+
+
+		return true;
+	}
+
+
+	return false;
+}
 
 Elite::Vector2 Grid::GetRandomPos()
 {
@@ -51,7 +71,16 @@ Elite::Vector2 Grid::GetRandomPos()
 	return GetSquareCenter(randomIdx);;
 }
 
+bool Grid::AgentReachedGoal(const Elite::Vector2& agentPos)
+{
+	bool isAtGoal{ GetIdxAtPos(agentPos) == GetIdxAtPos(m_goal) };
 
+	return  isAtGoal;
+}
+
+
+
+// Functions
 void Grid::Render(float deltaTime) const
 {
 	// Draws each cell in the grid

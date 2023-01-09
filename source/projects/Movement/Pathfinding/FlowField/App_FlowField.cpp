@@ -41,7 +41,7 @@ void App_FlowField::Update(float deltaTime)
 		// Set the mouse data/pos
 		auto const mouseData = INPUTMANAGER->GetMouseData(InputType::eMouseButton, InputMouseButton::eLeft);
 		auto mousePos{ DEBUGRENDERER2D->GetActiveCamera()->ConvertScreenToWorld({ static_cast<float>(mouseData.X), static_cast<float>(mouseData.Y) }) };
-		
+
 		// If not true, add obstacle
 		if (!m_AreObstaclesMade)
 			m_pGrid->AddObstacle(mousePos);
@@ -52,7 +52,7 @@ void App_FlowField::Update(float deltaTime)
 		// Set the mouse data/pos
 		auto const mouseData = INPUTMANAGER->GetMouseData(InputType::eMouseButton, InputMouseButton::eMiddle);
 		auto mousePos{ DEBUGRENDERER2D->GetActiveCamera()->ConvertScreenToWorld({ static_cast<float>(mouseData.X), static_cast<float>(mouseData.Y) }) };
-		
+
 		// if not true, add goal
 		if (!m_IsGoalMade)
 			m_pGrid->AddGoal(mousePos);
@@ -65,10 +65,23 @@ void App_FlowField::Update(float deltaTime)
 	m_pGrid->Update(deltaTime);
 
 
+
+	Elite::Vector2 agentPos{};
+
+
 	for (auto& agent : *m_pAgents)
 	{
+		agentPos = agent->GetPos();
+
+
+		agent->SetHasReachedGoal(m_pGrid->AgentReachedGoal(agentPos));
+		if (agent->GetHasReachedGoal() == false);
+		{
+			m_pGrid->MoveToNextSquare(agentPos, agent->GetTargetPos(), agent->GetFirstMove());
 			agent->Update(deltaTime);
+		}
 	}
+
 }
 
 void App_FlowField::Render(float deltaTime) const
@@ -78,8 +91,13 @@ void App_FlowField::Render(float deltaTime) const
 	for (auto& agent : *m_pAgents)
 	{
 		agent->Render(deltaTime);
+	
+		//if (m_TrimWorld)
+		//{
+		//	agent->TrimToWorld(m_TrimWorldSize, m_TrimWorld);
+		//}
 	}
-
+	
 
 	if (m_TrimWorld)
 	{
@@ -90,7 +108,9 @@ void App_FlowField::Render(float deltaTime) const
 			{ m_TrimWorldSize, -m_TrimWorldSize },
 			{ -m_TrimWorldSize, -m_TrimWorldSize }
 		};
-		DEBUGRENDERER2D->DrawPolygon(&points[0], 4, { 1, 0, 0, 1 }, 0.4f);
+		DEBUGRENDERER2D->DrawPolygon(&points[0], 4, { 1, 1, 1, 1 }, 0.4f);
+
+		
 	}
 
 
@@ -120,7 +140,8 @@ void App_FlowField::UpdateImGui()
 		//Elements
 		ImGui::Text("CONTROLS");
 		ImGui::Indent();
-		ImGui::Text("LMB: place target");
+		ImGui::Text("LMB: place Obstacle");
+		ImGui::Text("MMB: place target");
 		ImGui::Text("RMB: move cam");
 		ImGui::Text("Scrollwheel: zoom cam.");
 		ImGui::Unindent();
@@ -153,7 +174,7 @@ void App_FlowField::UpdateImGui()
 
 		// This goddamn shit took me 30 min to figure out (on top of the 2 days earlier this semester)
 		ImGui::Text("Getting ready");
-		
+
 		// obstacles
 		ImGui::Checkbox("Obstacles ready", &m_AreObstaclesMade);
 
@@ -163,9 +184,9 @@ void App_FlowField::UpdateImGui()
 		// Allowing agents to spawn when needed
 		ImGui::Checkbox("Spawn agents", &m_AreAgentsSpawned);
 
-		
+
 		// Make flow fields
-		if ( m_IsGoalMade && m_AreObstaclesMade )
+		if (m_IsGoalMade && m_AreObstaclesMade)
 		{
 			ImGui::Checkbox("Made flowfields", &m_IsFlowFieldMade);
 
@@ -177,7 +198,7 @@ void App_FlowField::UpdateImGui()
 
 
 			// Max 30 agents cuz this is not a miracle pc
-			if (m_AreAgentsSpawned && (m_AgentSpawns != m_MaxAgentSpawns) )
+			if (m_AreAgentsSpawned && (m_AgentSpawns != m_MaxAgentSpawns))
 			{
 				SpawnAgents();
 				++m_AgentSpawns;
@@ -191,7 +212,7 @@ void App_FlowField::UpdateImGui()
 		ImGui::Spacing();
 		ImGui::Spacing();
 		ImGui::Text("Visualization");
-		//ImGui::Checkbox("Trim World", &m_TrimWorld);
+		ImGui::Checkbox("Trim World", &m_TrimWorld);
 
 		// Toggle the grid
 		ImGui::Checkbox("Draw grid", &m_IsGridDrawn);
@@ -227,6 +248,6 @@ void App_FlowField::SpawnAgents()
 {
 	for (int agentIdx{}; agentIdx < m_MaxAgents; ++agentIdx)
 	{
-		m_pAgents->push_back( new FlowAgent( m_pGrid->GetRandomPos() ) );
+		m_pAgents->push_back(new FlowAgent(m_pGrid->GetRandomPos()));
 	}
 }
