@@ -32,15 +32,13 @@ namespace Algorithms
 			int maxDiistance{ static_cast<int>(pGrid->size() + 1) }; // Max distance
 
 
-
-
 			// For the neighbor validation/index
 			int neighborColumn{};
 			int neighborRow{};
 			int neighborNodeIdx{};
 
 
-			for (int nodeIdx{}; nodeIdx < pGrid->size(); ++nodeIdx)
+			for (int nodeIdx{}; nodeIdx < int(pGrid->size()); ++nodeIdx)
 			{
 				// if the distance vector (if the idx exceeds the max size) is bigger, continue
 				if (m_GridsDistance[nodeIdx] >= maxDiistance)
@@ -53,10 +51,10 @@ namespace Algorithms
 
 
 				int closestDistance{ maxDiistance };
-				int closestNeighborIdx{ 0 };
+				int closestNeighborIdx{};
 
 
-				for (int neighborIdx{}; neighborIdx < flowDirections.size(); ++neighborIdx)
+				for (int neighborIdx{}; neighborIdx < int(flowDirections.size()); ++neighborIdx)
 				{
 
 					neighborColumn = int(flowDirections[neighborIdx].x) + m_ColmnIdx;
@@ -139,7 +137,7 @@ namespace Algorithms
 			
 		
 			// Setting up dijkstra grid
-			for (int idx{}; idx < pGrid->size(); ++idx)
+			for (int idx{}; idx < int(pGrid->size()); ++idx)
 			{
 				if (pGrid->at(idx).squareType == Grid::SquareType::Obstacle)
 				{
@@ -250,7 +248,7 @@ namespace Algorithms
 		}
 
 		// Draw the costs
-		// TODO: look more into this, get influence in here later as well
+		// TODO: research - look more into this, get influence in here later as well
 };
 
 

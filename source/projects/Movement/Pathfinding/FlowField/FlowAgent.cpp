@@ -94,32 +94,3 @@ void FlowAgent::DrawTarget() const
 	DEBUGRENDERER2D->DrawCircle(m_TargetPos, 2.0f, { 1.0f, 1.0f, 1.0f }, DEBUGRENDERER2D->NextDepthSlice());
 }
 
-
-//void FlowAgent::TrimToWorld(float worldBounds, bool isWorldLooping) 
-//{
-//	TrimToWorld({ 0, 0 }, { worldBounds, worldBounds }, isWorldLooping);
-//}
-//void FlowAgent::TrimToWorld(const Elite::Vector2& bottomLeft, const Elite::Vector2& topRight, bool isWorldLooping /* = true */) const
-//{
-//	auto pos = m_pAgent->GetPosition();
-//
-//	if (isWorldLooping)
-//	{
-//		if (pos.x > topRight.x)
-//			pos.x = bottomLeft.x;
-//		else if (pos.x < bottomLeft.x)
-//			pos.x = topRight.x;
-//
-//		if (pos.y > topRight.y)
-//			pos.y = bottomLeft.y;
-//		else if (pos.y < bottomLeft.y)
-//			pos.y = topRight.y;
-//	}
-//	else
-//	{
-//		pos.x = Elite::Clamp(pos.x, bottomLeft.x, topRight.x);
-//		pos.y = Elite::Clamp(pos.y, bottomLeft.y, topRight.y);
-//	}
-//
-//	m_pAgent->SetPosition(pos);
-//}

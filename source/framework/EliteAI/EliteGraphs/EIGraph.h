@@ -19,7 +19,7 @@ namespace Elite
 	public:
 		// shorthand typedefs
 		using NodeVector = std::vector<T_NodeType*>;
-		using ConnectionList = std::list<T_ConnectionType*>; // TODO: function definition doesn't recognize this?
+		using ConnectionList = std::list<T_ConnectionType*>;
 		using ConnectionListVector = std::vector<ConnectionList>;
 
 	public:
@@ -32,7 +32,7 @@ namespace Elite
 		T_NodeType* GetNode(int idx) const;
 		bool IsNodeValid(int idx) const;
 		NodeVector GetAllNodes() const;
-		NodeVector GetAllActiveNodes() const;// TODO: not my code, look more into this 
+		NodeVector GetAllActiveNodes() const;
 
 
 		T_ConnectionType* GetConnection(int from, int to) const;

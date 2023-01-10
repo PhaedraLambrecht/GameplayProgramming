@@ -58,17 +58,16 @@ bool Grid::MoveToNextSquare(const Elite::Vector2& currentPos, Elite::Vector2& ta
 
 Elite::Vector2 Grid::GetRandomPos()
 {
-	// TODO: research - look more into cuz wtf + want them to spawn at mouseclick
-	int randomIdx{};
-
-	do
+	// TODO: research - want them to spawn at mouseclick
+	for (int idx{ Elite::randomInt(m_pGrid->size() - 1) }; idx < m_pGrid->size(); idx++)
 	{
-		randomIdx = Elite::randomInt(m_pGrid->size() - 1);
-	} 
-	while (m_pGrid->at(randomIdx).squareType != SquareType::Default);
+		if (m_pGrid->at(idx).squareType == SquareType::Default) 
+		{
+			return GetSquareCenter(idx);
+		}
+	}
 
-
-	return GetSquareCenter(randomIdx);;
+	return GetSquareCenter(0);
 }
 
 bool Grid::AgentReachedGoal(const Elite::Vector2& agentPos)
@@ -128,20 +127,19 @@ void Grid::AddGoal(const Elite::Vector2& goalPos)
 	Grid::SquareType& sqrType{ m_pGrid->at(index).squareType };
 
 
-
-		if (sqrType != SquareType::Goal)
+	if (sqrType != SquareType::Goal)
+	{
+		if (m_CurrentGoalCount != m_MaxGoals)
 		{
-			if (m_CurrentGoalCount != m_MaxGoals)
-			{
-				sqrType = SquareType::Goal;
-				++m_CurrentGoalCount;
-			}
+			sqrType = SquareType::Goal;
+			++m_CurrentGoalCount;
 		}
-		else
-		{ 
-			sqrType = SquareType::Default;
-			--m_CurrentGoalCount;
-		}
+	}
+	else
+	{ 
+		sqrType = SquareType::Default;
+		--m_CurrentGoalCount;
+	}
 }
 
 
@@ -202,18 +200,6 @@ void Grid::CreateGoal()
 	}
 }
 
-//int Grid::GetNewGoal(int currentGoal) const
-//{
-//	int newGoalIdx{};
-//	do
-//	{
-//		newGoalIdx = Elite::randomInt(m_Goals.size() - 1);
-//	} 
-//	while (newGoalIdx == currentGoal);
-//	
-//	
-//	return newGoalIdx;
-//}
 
 //------------------
 // Helper functins
@@ -328,7 +314,6 @@ void Grid::DrawDirections() const
 
 		// Else, draw the direction
 		DEBUGRENDERER2D->DrawDirection(GetSquareCenter(idx), m_pGrid->at(idx).flowDirections[directionNr].GetNormalized(), directionLength, m_DirectionColor);
-	//	DEBUGRENDERER2D->DrawSolidCircle(Elite::Vector2{ GetMidOfSquare(idx).x + directionLength, GetMidOfSquare(idx).y + (directionLength / 2.0f) }, 0.5f, Elite::Vector2{0.0f, 0.0f}, Elite::Color{1.0f, 1.0f, 1.0f});
 		DEBUGRENDERER2D->DrawPoint(GetSquareCenter(idx), 5.f, { 0, 0, 0 });
 	}
 }

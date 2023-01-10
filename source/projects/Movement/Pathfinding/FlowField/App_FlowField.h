@@ -55,7 +55,10 @@ private:
 
 	// Helper functions
 	void UpdateImGui();
+
+	// Agents
 	void SpawnAgents();
+	void UpdateAgents(float deltaTime);
 };
 
 

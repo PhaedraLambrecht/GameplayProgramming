@@ -111,8 +111,7 @@ namespace Elite
 	};
 
 
-	// TODO: not my code, look more into this 
-	class FlowFieldNode : public GraphNode2D
+	/*class FlowFieldNode : public GraphNode2D
 	{
 	public:
 		FlowFieldNode(int idx)
@@ -150,5 +149,5 @@ namespace Elite
 		size_t m_IntegrationValue{};
 		bool m_ShowCost{};
 		bool m_ShowIntegration{};
-	};
+	};*/
 }

@@ -64,78 +64,7 @@ void App_FlowField::Update(float deltaTime)
 
 	m_pGrid->Update(deltaTime);
 
-
-
-
-
-
-
-
-
-
-	bool hasReachedGoal{};
-	Elite::Vector2 agentPos{};
-	int numAgentsToBeRemoved{};
-
-	// Iterate over all the agents
-	for (auto& agent : *m_pAgents)
-	{
-		agentPos = agent->GetPos();
-
-
-		// Check if the agent has reached the goal
-		hasReachedGoal = m_pGrid->AgentReachedGoal(agentPos);
-		agent->SetHasReachedGoal(hasReachedGoal);
-
-
-
-
-		// Move to the next square if they haven't reached the goal
-		if (agent->GetHasReachedGoal() == false)
-		{
-			m_pGrid->MoveToNextSquare(agentPos, agent->GetTargetPos(), agent->GetFirstMove());
-		}
-
-
-		agent->Update(deltaTime);
-
-
-		// Check if agent needs to be removed
-		if (agent->GetNeedsToGo())
-		{
-			++numAgentsToBeRemoved;
-		}
-	
-		// Remove agents that need to go
-		for (int idx{}; idx < numAgentsToBeRemoved; ++idx)
-		{
-			// then erase it
-			m_pAgents->erase(
-			// remove if the agent needs to be removed
-			std::remove_if
-			(
-				m_pAgents->begin(), 
-				m_pAgents->end(), 
-				[](FlowAgent* agent)
-			{
-				if (agent->GetNeedsToGo())
-				{
-					delete agent;
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-				
-				}
-			), 
-			m_pAgents->end());
-		}
-
-
-
-	}
+	UpdateAgents(deltaTime);
 
 }
 
@@ -143,11 +72,13 @@ void App_FlowField::Render(float deltaTime) const
 {
 	m_pGrid->Render(deltaTime);
 
+
 	for (auto& agent : *m_pAgents)
 	{
 		agent->Render(deltaTime);
 	}
-	
+
+
 
 	if (m_TrimWorld)
 	{
@@ -159,11 +90,7 @@ void App_FlowField::Render(float deltaTime) const
 			{ -m_TrimWorldSize, -m_TrimWorldSize }
 		};
 		DEBUGRENDERER2D->DrawPolygon(&points[0], 4, { 1, 1, 1, 1 }, 0.4f);
-
-		
 	}
-
-
 }
 
 
@@ -262,9 +189,9 @@ void App_FlowField::UpdateImGui()
 		ImGui::Spacing();
 		ImGui::Spacing();
 		ImGui::Text("Visualization");
-	//	ImGui::Checkbox("Trim World", &m_TrimWorld);
+		//	ImGui::Checkbox("Trim World", &m_TrimWorld);
 
-		// Toggle the grid
+			// Toggle the grid
 		ImGui::Checkbox("Draw grid", &m_IsGridDrawn);
 		m_pGrid->ToggleDrawGrid(m_IsGridDrawn);
 
@@ -299,5 +226,77 @@ void App_FlowField::SpawnAgents()
 	for (int agentIdx{}; agentIdx < m_MaxAgents; ++agentIdx)
 	{
 		m_pAgents->push_back(new FlowAgent(m_pGrid->GetRandomPos()));
+	}
+}
+
+void App_FlowField::UpdateAgents(float deltaTime)
+{
+	bool hasReachedGoal{};
+	Elite::Vector2 agentPos{};
+	int numAgentsToBeRemoved{};
+
+	// Iterate over all the agents
+	for (auto& agent : *m_pAgents)
+	{
+		agentPos = agent->GetPos();
+
+
+		// Check if the agent has reached the goal
+		hasReachedGoal = m_pGrid->AgentReachedGoal(agentPos);
+		agent->SetHasReachedGoal(hasReachedGoal);
+
+
+
+
+		// Move to the next square if they haven't reached the goal
+		if (agent->GetHasReachedGoal() == false)
+		{
+			m_pGrid->MoveToNextSquare(agentPos, agent->GetTargetPos(), agent->GetFirstMove());
+		}
+
+
+		agent->Update(deltaTime);
+
+
+		// Check if agent needs to be removed
+		if (agent->GetNeedsToGo())
+		{
+			++numAgentsToBeRemoved;
+		}
+
+		// Remove agents that need to go
+		for (int idx{}; idx < numAgentsToBeRemoved; ++idx)
+		{
+			// then erase it
+			m_pAgents->erase(
+				// remove if the agent needs to be removed
+				std::remove_if
+				(
+					m_pAgents->begin(),
+					m_pAgents->end(),
+					[](FlowAgent* agent)
+					{
+						if (agent->GetNeedsToGo())
+						{
+
+							delete agent;
+							return true;
+						}
+						else
+						{
+							return false;
+						}
+
+					}
+				),
+				m_pAgents->end());
+
+
+			// Gives abillity to keep spawning agents
+			if (idx % 10)
+			{
+				--m_AgentSpawns;
+			}
+		}
 	}
 }
