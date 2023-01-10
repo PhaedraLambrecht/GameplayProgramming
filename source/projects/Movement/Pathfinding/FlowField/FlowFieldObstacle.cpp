@@ -2,7 +2,7 @@
 #include "FlowFieldObstacle.h"
 
 
-Obstacle::Obstacle(Elite::Vector2 center, Elite::Vector2 dimensions)
+FlowFieldObstacle::FlowFieldObstacle(Elite::Vector2 center, Elite::Vector2 dimensions)
 {
 	//Create Rigidbody
 	const Elite::RigidBodyDefine define = Elite::RigidBodyDefine(0.01f, 0.1f, Elite::eStatic, false);
@@ -18,7 +18,7 @@ Obstacle::Obstacle(Elite::Vector2 center, Elite::Vector2 dimensions)
 }
 
 
-Obstacle::~Obstacle()
+FlowFieldObstacle::~FlowFieldObstacle()
 {
 	SAFE_DELETE(m_pRigidBody);
 }

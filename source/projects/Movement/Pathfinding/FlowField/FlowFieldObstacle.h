@@ -1,18 +1,18 @@
 #pragma once
 
 
-class Obstacle
+class FlowFieldObstacle
 {
 public:
 	
-	Obstacle(Elite::Vector2 center, Elite::Vector2 dimensions);
-	~Obstacle();
+	FlowFieldObstacle(Elite::Vector2 center, Elite::Vector2 dimensions);
+	~FlowFieldObstacle();
 
 	// Move and copy
-	Obstacle(const Obstacle& Obstacle) = delete;
-	Obstacle(Obstacle&& Obstacle) = delete;
-	Obstacle& operator=(const Obstacle& Obstacle) = delete;
-	Obstacle& operator=(Obstacle&& Obstacle) = delete;
+	FlowFieldObstacle(const FlowFieldObstacle& FlowFieldObstacle) = delete;
+	FlowFieldObstacle(FlowFieldObstacle&& FlowFieldObstacle) = delete;
+	FlowFieldObstacle& operator=(const FlowFieldObstacle& FlowFieldObstacle) = delete;
+	FlowFieldObstacle& operator=(FlowFieldObstacle&& FlowFieldObstacle) = delete;
 
 
 

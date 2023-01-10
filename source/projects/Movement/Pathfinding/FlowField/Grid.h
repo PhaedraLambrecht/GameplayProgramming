@@ -1,5 +1,6 @@
 #pragma once
-class Obstacles;
+
+class FlowFieldObstacle;
 
 class Grid
 {
@@ -47,8 +48,8 @@ public:
 	void MakeFlowfield();
 
 
-	// Adding obstacles/goals(s)
-	void AddObstacle(const Elite::Vector2& obstaclePos);
+	// Adding FlowFieldObstacles/goals(s)
+	void AddObstacle(const Elite::Vector2& Obstacle);
 	void AddGoal(const Elite::Vector2& goalPos);
 
 
@@ -59,7 +60,7 @@ public:
 
 	// Toggles for visuals
 	void ToggleDrawGrid(bool canDraw) { m_DrawGrid = canDraw; };
-	void ToggleDrawObstacles(bool canDraw) { m_DrawObstacles = canDraw; };
+	void ToggleDrawObstacles(bool canDraw) { m_DrawObstacle = canDraw; };
 	void ToggleDrawGoal(bool canDraw) { m_DrawGoals = canDraw; };
 	void ToggleDrawDirections(bool canDraw) { m_DrawDirections = canDraw; };
 
@@ -84,7 +85,7 @@ private:
 
 	// Visualization bools
 	bool m_DrawGrid{ true };
-	bool m_DrawObstacles{ true };
+	bool m_DrawObstacle{ true };
 	bool m_DrawGoals{ true };
 	bool m_DrawDirections{ false };
 
@@ -97,9 +98,9 @@ private:
 	int m_CurrentGoalCount{};
 	int m_MaxGoals{ 1 };
 
-	// Obstacles
-	std::vector<Obstacles*> m_pObstacles{ };
-	bool m_MadeObstacles{ false };
+	// FlowFieldObstacles
+	std::vector<FlowFieldObstacle*> m_pObstacles{ };
+	bool m_MadeObstacle{ false };
 
 
 

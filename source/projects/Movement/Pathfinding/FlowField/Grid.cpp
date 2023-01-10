@@ -19,7 +19,7 @@ Grid::~Grid()
 {
 	for (auto& obstacle : m_pObstacles)
 	{
-		SAFE_DELETE(obstacle);
+		delete obstacle;
 	}
 	m_pObstacles.clear();
 
@@ -109,18 +109,18 @@ void Grid::Update(float deltaTime)
 
 
 
-	if (m_MadeObstacles)
+	if (m_MadeObstacle)
 	{
 		MakeObstacleBodies();
-		m_MadeObstacles = false;
+		m_MadeObstacle = false;
 	}
 }
 
 
-void Grid::AddObstacle(const Elite::Vector2& obstaclePos)
+void Grid::AddObstacle(const Elite::Vector2& ObstaclePos)
 {
 	// Get the index of the position
-	int squareIdx{ GetIdxAtPos(obstaclePos) };
+	int squareIdx{ GetIdxAtPos(ObstaclePos) };
 	// Get the type of that square
 	Grid::SquareType& squareType{ m_pGrid->at(squareIdx).squareType };
 
@@ -163,7 +163,7 @@ void Grid::MakeFlowfield()
 {
 	// Every square around a square
 	const std::vector<Elite::Vector2> flowfieldFlowDirections
-	{ { 1, 0 },
+	{	{ 1, 0 },
 		{ 1, 1 },
 		{ 0, 1 },
 		{ -1, 1 },
@@ -194,6 +194,9 @@ void Grid::MakeFlowfield()
 		dijkstraAlgorithm->ActiveAlgorithm(idx, goalIndxs[idx], m_pGrid);
 		dijkstraAlgorithm->FlowFieldCreation(idx, m_pGrid, flowfieldFlowDirections);
 	}
+
+	m_MadeObstacle = true;
+
 
 	delete dijkstraAlgorithm;
 	m_MadeFlowFields = false;
@@ -291,7 +294,7 @@ void Grid::DrawGrid() const
 
 		if (m_pGrid->at(idx).squareType == SquareType::Obstacle)// If it is an obstacle
 		{
-			if (m_DrawObstacles)
+			if (m_DrawObstacle)
 			{
 				// Draw the square (blue)
 				DrawGridSquare(idx, m_ObstacleColor, true);
@@ -339,17 +342,12 @@ void Grid::MakeObstacleBodies()
 
 	for (auto& sqr : *m_pGrid)
 	{
-		if (sqr.squareType != SquareType::Obstacle) 
-			continue;
+		if (sqr.squareType == SquareType::Obstacle)
 
-
-		Obstacle* pObstacle{ sqr.bottomLeft + Elite::Vector2{2.5f, 2.5f}, m_SquareSize / 2.0f };
-	
-
-		m_pObstacles.push_back(new Obstacle(sqr.bottomLeft + Elite::Vector2(2.5f, 2.5f), m_SquareSize / 2.f) );
+		{
+			m_pObstacles.push_back(new FlowFieldObstacle{ Elite::Vector2 {sqr.bottomLeft.x + 5.1f, sqr.bottomLeft.y + 5.1f }, Elite::Vector2{ m_SquareSize.x - 2.0f, m_SquareSize.y - 2.0f } } );
+		}
 	}
-
-
 }
 
 

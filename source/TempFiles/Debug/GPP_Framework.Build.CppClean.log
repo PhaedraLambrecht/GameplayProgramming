@@ -19,7 +19,9 @@ c:\dae\gameplayprogramming\source\tempfiles\debug\egraphconnectiontypes.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\efinitestatemachine.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\ebehaviortree.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_flowfield.obj
+c:\dae\gameplayprogramming\source\tempfiles\debug\grid.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\flowagent.obj
+c:\dae\gameplayprogramming\source\tempfiles\debug\flowfieldobstacle.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\spacepartitioning.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\flockingsteeringbehaviors.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\flock.obj
@@ -49,6 +51,13 @@ c:\dae\gameplayprogramming\source\tempfiles\debug\steeringbehaviors.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\steeringagent.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\obstacle.obj
 c:\dae\gameplayprogramming\source\tempfiles\debug\app_steeringbehaviors.obj
+c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.ilk
+c:\dae\gameplayprogramming\bin\debug\gpp_framework.exe
+c:\dae\gameplayprogramming\bin\debug\gpp_framework.pdb
+c:\dae\gameplayprogramming\source\..\bin\debug\gpp_framework.pdb
 c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.tlog\cl.command.1.tlog
 c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.tlog\cl.read.1.tlog
 c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.tlog\cl.write.1.tlog
+c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.tlog\link.command.1.tlog
+c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.tlog\link.read.1.tlog
+c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.tlog\link.write.1.tlog

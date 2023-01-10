@@ -44,7 +44,7 @@ void App_FlowField::Update(float deltaTime)
 
 		// If not true, add obstacle
 		if (!m_AreObstaclesMade)
-			m_pGrid->AddObstacle(mousePos);
+			m_pGrid->AddObstacle(mousePos);;
 
 	}
 	else if (INPUTMANAGER->IsMouseButtonUp(InputMouseButton::eMiddle))// If middle mousebutton is released

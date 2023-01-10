@@ -51,7 +51,7 @@ private:
 	bool m_AreAgentsSpawned{ false };
 
 	int m_AgentSpawns{};
-	int m_MaxAgentSpawns{ 5 };
+	int m_MaxAgentSpawns{ 3 }; // let's not kill my pc
 
 	// Helper functions
 	void UpdateImGui();
