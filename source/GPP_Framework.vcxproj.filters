@@ -50,6 +50,7 @@
     <ClCompile Include="projects\Movement\Pathfinding\FlowField\App_FlowField.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\FlowField\Grid.cpp" />
     <ClCompile Include="projects\Movement\Pathfinding\FlowField\FlowAgent.cpp" />
+    <ClCompile Include="projects\Movement\Pathfinding\FlowField\FlowFieldObstacle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="projects\App_Selector.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\Grid.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\FlowFieldAlgorithms.h" />
     <ClInclude Include="projects\Movement\Pathfinding\FlowField\FlowAgent.h" />
+    <ClInclude Include="projects\Movement\Pathfinding\FlowField\FlowFieldObstacle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

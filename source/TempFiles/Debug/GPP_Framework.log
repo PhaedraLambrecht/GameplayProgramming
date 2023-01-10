@@ -1,18 +1,50 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppClean.targets(77,5): warning : The process cannot access the file 'c:\dae\gameplayprogramming\source\tempfiles\debug\gpp_framework.pch' because it is being used by another process.
-  stdafx.cpp
+﻿  stdafx.cpp
+  FlowFieldObstacle.cpp
   FlowAgent.cpp
   Grid.cpp
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\FlowFieldAlgorithms.h(210,24): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(61,61): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(177,39): warning C4244: 'argument': conversion from 'float' to '_Ty', possible loss of data
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(22,3): warning C4150: deletion of pointer to incomplete type 'Obstacles'; no destructor called
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.h(2,7): message : see declaration of 'Obstacles'
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(183,39): warning C4244: 'argument': conversion from 'float' to '_Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(186,22): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(202,22): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(282,22): warning C4018: '<': signed/unsigned mismatch
-C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(319,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(288,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(325,22): warning C4018: '<': signed/unsigned mismatch
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(349,15): error C2665: 'std::vector<Obstacles *,std::allocator<Obstacles *>>::push_back': no overloaded function could convert all the argument types
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.34.31933\include\vector(939,23): message : could be 'void std::vector<Obstacles *,std::allocator<Obstacles *>>::push_back(_Ty &&)'
+          with
+          [
+              _Ty=Obstacles *
+          ]
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(349,15): message : 'void std::vector<Obstacles *,std::allocator<Obstacles *>>::push_back(_Ty &&)': cannot convert argument 1 from 'Obstacle *' to '_Ty &&'
+          with
+          [
+              _Ty=Obstacles *
+          ]
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(349,38): message : Reason: cannot convert from 'Obstacle *' to '_Ty'
+          with
+          [
+              _Ty=Obstacles *
+          ]
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(349,38): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or parenthesized function-style cast
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.34.31933\include\vector(935,23): message : or       'void std::vector<Obstacles *,std::allocator<Obstacles *>>::push_back(const _Ty &)'
+          with
+          [
+              _Ty=Obstacles *
+          ]
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(349,15): message : 'void std::vector<Obstacles *,std::allocator<Obstacles *>>::push_back(const _Ty &)': cannot convert argument 1 from 'Obstacle *' to 'const _Ty &'
+          with
+          [
+              _Ty=Obstacles *
+          ]
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(349,38): message : Reason: cannot convert from 'Obstacle *' to 'const _Ty'
+          with
+          [
+              _Ty=Obstacles *
+          ]
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(349,38): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or parenthesized function-style cast
+C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.cpp(349,15): message : while trying to match the argument list '(Obstacle *)'
   App_FlowField.cpp
   EBehaviorTree.cpp
   EFiniteStateMachine.cpp
@@ -30,9 +62,9 @@ C:\DAE\GameplayProgramming\source\projects\Movement\Pathfinding\FlowField\Grid.c
   SDLDebugRenderer2D.cpp
   SDLFrame.cpp
   ETimer_SDL.cpp
-  EImmediateUI.cpp
   Generating Code...
   Compiling...
+  EImmediateUI.cpp
   SDLWindow.cpp
   gl3w.c
   main.cpp
@@ -60,9 +92,9 @@ C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\F
 C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\Flock.cpp(423,25): warning C4018: '<': signed/unsigned mismatch
   FlockingSteeringBehaviors.cpp
   SpacePartitioning.cpp
-  App_SteeringBehaviors.cpp
   Generating Code...
   Compiling...
+  App_SteeringBehaviors.cpp
   Obstacle.cpp
   SteeringAgent.cpp
   SteeringBehaviors.cpp
@@ -72,5 +104,3 @@ C:\DAE\GameplayProgramming\source\projects\Movement\SteeringBehaviors\Flocking\F
   BaseAgent.cpp
   NavigationColliderElement.cpp
   Generating Code...
-  GPP_Framework.vcxproj -> C:\DAE\GameplayProgramming\bin\Debug\GPP_Framework.exe
-  0 File(s) copied

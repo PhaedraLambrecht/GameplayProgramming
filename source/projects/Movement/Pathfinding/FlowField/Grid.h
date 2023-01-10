@@ -1,5 +1,5 @@
 #pragma once
-
+class Obstacles;
 
 class Grid
 {
@@ -97,6 +97,9 @@ private:
 	int m_CurrentGoalCount{};
 	int m_MaxGoals{ 1 };
 
+	// Obstacles
+	std::vector<Obstacles*> m_pObstacles{ };
+	bool m_MadeObstacles{ false };
 
 
 
@@ -112,8 +115,7 @@ private:
 	void DrawGridSquare(int idx, const Elite::Color& color, bool fillSqr) const;
 	void DrawGrid() const;
 	void DrawDirections() const;
-
-//	bool GoalVectorReady() { return m_MadeGoalVector; };
+	void MakeObstacleBodies();
 	
 
 	//get the mid position of a square

@@ -207,7 +207,7 @@ namespace Algorithms
 			
 			
 			// Loop over all the elements in the nextToVisitIdxs vector
-			for (int Idx{}; Idx < nextToVisitIdxs.size(); ++Idx)
+			for (int Idx{}; Idx < int(nextToVisitIdxs.size()); ++Idx)
 			{
 				// Get the column and row of the current index
 				

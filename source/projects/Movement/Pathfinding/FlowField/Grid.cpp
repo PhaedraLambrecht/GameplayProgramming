@@ -3,19 +3,27 @@
 
 //Includes
 #include "FlowFieldAlgorithms.h"
+#include "FlowFieldObstacle.h"
 #include "Grid.h"
 
 
 Grid::Grid(const Elite::Vector2& worldSize, const Elite::Vector2& gridSize)
 	:m_WorldDimensions{ worldSize }
-	,m_GridSize(gridSize)
-	,m_SquareSize{ worldSize.x / gridSize.x, worldSize.y / gridSize.y }
+	, m_GridSize(gridSize)
+	, m_SquareSize{ worldSize.x / gridSize.x, worldSize.y / gridSize.y }
 {
 	InitializeGrid();
 }
 
 Grid::~Grid()
 {
+	for (auto& obstacle : m_pObstacles)
+	{
+		SAFE_DELETE(obstacle);
+	}
+	m_pObstacles.clear();
+
+
 	SAFE_DELETE(m_pGrid);
 }
 
@@ -26,7 +34,7 @@ bool Grid::MoveToNextSquare(const Elite::Vector2& currentPos, Elite::Vector2& ta
 	const float distance{ Elite::Distance(currentPos, targetPos) };
 
 	// If this is the first move, or the distance between the current position and target position is less than or equal to 2, we need to find a new target position
-	if (firstMove || (distance <= 2.0f) )
+	if (firstMove || (distance <= 2.0f))
 	{
 
 		// Get the index of the square the agent is currently in
@@ -36,7 +44,7 @@ bool Grid::MoveToNextSquare(const Elite::Vector2& currentPos, Elite::Vector2& ta
 		// Calculate a position
 		const Elite::Vector2 normalizedFlowDirection{ m_pGrid->at(CurrentSquareIdx).flowDirections[0].GetNormalized() };
 		const float length{ m_SquareSize.x + (m_SquareSize.x / 2) };
-		
+
 		//from the current position of the agent along the direction the agent should be following over a length ( 1.5 times a square's length)
 		const Elite::Vector2 nextSqrPosFromDirection{ currentPos + (normalizedFlowDirection * length) };
 
@@ -59,9 +67,9 @@ bool Grid::MoveToNextSquare(const Elite::Vector2& currentPos, Elite::Vector2& ta
 Elite::Vector2 Grid::GetRandomPos()
 {
 	// TODO: research - want them to spawn at mouseclick
-	for (int idx{ Elite::randomInt(m_pGrid->size() - 1) }; idx < m_pGrid->size(); idx++)
+	for (int idx{ Elite::randomInt(m_pGrid->size() - 1) }; idx < int(m_pGrid->size()); idx++)
 	{
-		if (m_pGrid->at(idx).squareType == SquareType::Default) 
+		if (m_pGrid->at(idx).squareType == SquareType::Default)
 		{
 			return GetSquareCenter(idx);
 		}
@@ -87,7 +95,7 @@ void Grid::Render(float deltaTime) const
 
 	// Draws the direction of each square
 	if (m_DrawDirections)
-		DrawDirections();	
+		DrawDirections();
 }
 
 void Grid::Update(float deltaTime)
@@ -97,6 +105,14 @@ void Grid::Update(float deltaTime)
 		m_MadeFlowFields = true;
 		MakeFlowfield();
 		m_MadeGoal = false;
+	}
+
+
+
+	if (m_MadeObstacles)
+	{
+		MakeObstacleBodies();
+		m_MadeObstacles = false;
 	}
 }
 
@@ -136,7 +152,7 @@ void Grid::AddGoal(const Elite::Vector2& goalPos)
 		}
 	}
 	else
-	{ 
+	{
 		sqrType = SquareType::Default;
 		--m_CurrentGoalCount;
 	}
@@ -147,15 +163,15 @@ void Grid::MakeFlowfield()
 {
 	// Every square around a square
 	const std::vector<Elite::Vector2> flowfieldFlowDirections
-	{	{ 1, 0 }, 
-		{ 1, 1 }, 
-		{ 0, 1 }, 
-		{ -1, 1 }, 
-		{ -1, 0 }, 
+	{ { 1, 0 },
+		{ 1, 1 },
+		{ 0, 1 },
+		{ -1, 1 },
+		{ -1, 0 },
 		{ -1, -1 },
-		{ 0, -1 }, 
-		{1,-1} 
-	}; 
+		{ 0, -1 },
+		{1,-1}
+	};
 
 
 	//finding a goals
@@ -171,9 +187,9 @@ void Grid::MakeFlowfield()
 	Algorithms::Dijkstra* dijkstraAlgorithm = new Algorithms::Dijkstra(&m_GridSize);
 
 
-	
+
 	//for every goal: run algorithm and make flowfield;
-	for (int idx{}; idx < goalIndxs.size(); ++idx)
+	for (int idx{}; idx < int(goalIndxs.size()); ++idx)
 	{
 		dijkstraAlgorithm->ActiveAlgorithm(idx, goalIndxs[idx], m_pGrid);
 		dijkstraAlgorithm->FlowFieldCreation(idx, m_pGrid, flowfieldFlowDirections);
@@ -189,7 +205,7 @@ void Grid::CreateGoal()
 	m_MadeGoal = true;
 
 	// Go over all the squares in the grid
-	for (int idx{}; idx < m_pGrid->size(); ++idx)
+	for (int idx{}; idx < int(m_pGrid->size()); ++idx)
 	{
 		if (m_pGrid->at(idx).squareType == SquareType::Goal)
 		{
@@ -225,16 +241,16 @@ void Grid::InitializeGrid()
 	{
 		// Calculate the bottom
 		BottomLeftPos.y = worldBottom + (m_SquareSize.y * rowIdx) * (worldTop - worldBottom) / m_WorldDimensions.y;
-		
+
 		for (int columnIdx{}; columnIdx < m_GridSize.x; ++columnIdx)// Loop over all the colmns
 		{
 			// Calculate the left
 			BottomLeftPos.x = worldLeft + (m_SquareSize.x * columnIdx) * (worldRight - worldLeft) / m_WorldDimensions.x;
-			
+
 			square.row = rowIdx;
 			square.column = columnIdx;
 			square.bottomLeft = BottomLeftPos;
-			
+
 
 			// push it on the grid vector
 			m_pGrid->push_back(square);
@@ -281,7 +297,7 @@ void Grid::DrawGrid() const
 				DrawGridSquare(idx, m_ObstacleColor, true);
 			}
 		}
-		else if(m_pGrid->at(idx).squareType == SquareType::Goal)// If it is a goal
+		else if (m_pGrid->at(idx).squareType == SquareType::Goal)// If it is a goal
 		{
 			if (m_DrawGoals)
 			{
@@ -304,7 +320,7 @@ void Grid::DrawDirections() const
 {
 	int directionNr{ 0 };
 	float directionLength{ 4.f };
-	
+
 	// Go over every square
 	for (int idx{}; idx < m_pGrid->size(); ++idx)
 	{
@@ -318,6 +334,24 @@ void Grid::DrawDirections() const
 	}
 }
 
+void Grid::MakeObstacleBodies()
+{
+
+	for (auto& sqr : *m_pGrid)
+	{
+		if (sqr.squareType != SquareType::Obstacle) 
+			continue;
+
+
+		Obstacle* pObstacle{ sqr.bottomLeft + Elite::Vector2{2.5f, 2.5f}, m_SquareSize / 2.0f };
+	
+
+		m_pObstacles.push_back(new Obstacle(sqr.bottomLeft + Elite::Vector2(2.5f, 2.5f), m_SquareSize / 2.f) );
+	}
+
+
+}
+
 
 int Grid::GetIdxAtPos(const Elite::Vector2& pos) const
 {
@@ -329,21 +363,21 @@ int Grid::GetIdxAtPos(const Elite::Vector2& pos) const
 			int index{ ColumnIdx + (rowIdx * (int)m_GridSize.x) };
 			// Getting the bottom left of that square
 			Elite::Vector2 BottomLeft{ m_pGrid->at(index).bottomLeft };
-	
+
 
 			// If the position is within the square, return the index
-			if (pos.x >= BottomLeft.x						&& 
-				pos.x <= (BottomLeft.x + m_SquareSize.x)	&&
-				pos.y >= BottomLeft.y						&&
+			if (pos.x >= BottomLeft.x &&
+				pos.x <= (BottomLeft.x + m_SquareSize.x) &&
+				pos.y >= BottomLeft.y &&
 				pos.y <= (BottomLeft.y + m_SquareSize.y)
-			   )
+				)
 			{
 				return index;
 			}
 
 		}
 	}
-	
+
 	// Return 0 to not get an out of bounds problem
 	return 0;
 }
