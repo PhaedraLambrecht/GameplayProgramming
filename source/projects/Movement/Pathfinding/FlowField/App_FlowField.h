@@ -28,7 +28,7 @@ private:
 
 
 	//bool m_VisualizeTarget = true;
-	bool m_TrimWorld = false;
+	bool m_TrimWorld{ false };
 	float m_TrimWorldSize;
 
 
@@ -51,7 +51,7 @@ private:
 	bool m_AreAgentsSpawned{ false };
 
 	int m_AgentSpawns{};
-	int m_MaxAgentSpawns{ 3 };
+	int m_MaxAgentSpawns{ 5 };
 
 	// Helper functions
 	void UpdateImGui();

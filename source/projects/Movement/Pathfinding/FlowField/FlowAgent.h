@@ -34,6 +34,7 @@ public:
 	void SetHasReachedGoal(bool reachedGoal);
 	bool GetHasReachedGoal() const;
 	bool GetFirstMove() const;
+	bool GetNeedsToGo() const;
 
 
 private:
@@ -47,8 +48,12 @@ private:
 
 
 	bool m_HasReachedGoal{ false };
+	bool m_NeedsToGo{ false };
 	bool m_HasMadeFirstMove{ true };
 	
+
+	float m_CurrentTime{};
+	const float m_MaxWaitTime{ 1.f };
 
 	//-------------------
 	// Helper functions

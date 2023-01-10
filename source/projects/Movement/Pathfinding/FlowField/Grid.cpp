@@ -73,7 +73,7 @@ Elite::Vector2 Grid::GetRandomPos()
 
 bool Grid::AgentReachedGoal(const Elite::Vector2& agentPos)
 {
-	bool isAtGoal{ GetIdxAtPos(agentPos) == GetIdxAtPos(m_goal) };
+	bool isAtGoal{ Elite::Distance(agentPos, m_Goal) <= m_SquareSize.x / 2.f };
 
 	return  isAtGoal;
 }
@@ -88,7 +88,7 @@ void Grid::Render(float deltaTime) const
 
 	// Draws the direction of each square
 	if (m_DrawDirections)
-		DrawDirections();
+		DrawDirections();	
 }
 
 void Grid::Update(float deltaTime)
@@ -197,7 +197,7 @@ void Grid::CreateGoal()
 		{
 			m_pGrid->at(idx).flowDirections.push_back({ 0, 0 });
 
-			m_goal = GetSquareCenter(idx);
+			m_Goal = GetSquareCenter(idx);
 		}
 	}
 }

@@ -89,6 +89,7 @@ namespace Algorithms
 		}
 		
 
+	
 	protected:
 
 		struct nonVisitedIdx
@@ -97,8 +98,9 @@ namespace Algorithms
 			int distance{};
 		};
 
-		const Elite::Vector2* m_GridSize{}; // Colmn = x, row = y
 		std::vector<int> m_GridsDistance{}; // Distances from the source node to each point in the flow field
+		
+		const Elite::Vector2* m_GridSize{}; // Colmn = x, row = y
 
 		int m_ColmnIdx{};
 		int m_RowIdx{};
@@ -166,8 +168,9 @@ namespace Algorithms
 			
 			
 			// Start point 
-			int startColumn{};
-			int startRow{};
+			// There are issues whem these aren't size_t
+			size_t startColumn{};
+			size_t startRow{};
 			int neighborNodeIdx{};
 			
 			// Setting the initial index around the start node
@@ -175,8 +178,7 @@ namespace Algorithms
 			{
 				startColumn = pGrid->at(goalGridIdx).column + int(neighbors[idx].x);
 				startRow = pGrid->at(goalGridIdx).row + int(neighbors[idx].y);
-			
-			
+		
 				// Checking it's bounds
 				if (startColumn >= m_GridSize->x || startRow >= m_GridSize->y)
 					continue;
@@ -186,7 +188,7 @@ namespace Algorithms
 				neighborNodeIdx = startColumn + (startRow * int(m_GridSize->x));
 			
 			
-				// if the swquare isn't an obstacle
+				// if the square isn't an obstacle
 				if (pGrid->at(neighborNodeIdx).squareType != Grid::SquareType::Obstacle)
 				{
 					// Set the distance to 1
@@ -195,8 +197,6 @@ namespace Algorithms
 					nextToVisitIdxs.push_back(nonVisitedIdx{ neighborNodeIdx, 1 });
 				}
 			}
-			
-			
 			
 
 			// Dijkstra's algorithm
@@ -248,6 +248,9 @@ namespace Algorithms
 				}
 			}
 		}
+
+		// Draw the costs
+		// TODO: look more into this, get influence in here later as well
 };
 
 

@@ -66,20 +66,75 @@ void App_FlowField::Update(float deltaTime)
 
 
 
+
+
+
+
+
+
+
+	bool hasReachedGoal{};
 	Elite::Vector2 agentPos{};
+	int numAgentsToBeRemoved{};
 
-
+	// Iterate over all the agents
 	for (auto& agent : *m_pAgents)
 	{
 		agentPos = agent->GetPos();
 
 
-		agent->SetHasReachedGoal(m_pGrid->AgentReachedGoal(agentPos));
-		if (agent->GetHasReachedGoal() == false);
+		// Check if the agent has reached the goal
+		hasReachedGoal = m_pGrid->AgentReachedGoal(agentPos);
+		agent->SetHasReachedGoal(hasReachedGoal);
+
+
+
+
+		// Move to the next square if they haven't reached the goal
+		if (agent->GetHasReachedGoal() == false)
 		{
 			m_pGrid->MoveToNextSquare(agentPos, agent->GetTargetPos(), agent->GetFirstMove());
-			agent->Update(deltaTime);
 		}
+
+
+		agent->Update(deltaTime);
+
+
+		// Check if agent needs to be removed
+		if (agent->GetNeedsToGo())
+		{
+			++numAgentsToBeRemoved;
+		}
+	
+		// Remove agents that need to go
+		for (int idx{}; idx < numAgentsToBeRemoved; ++idx)
+		{
+			// then erase it
+			m_pAgents->erase(
+			// remove if the agent needs to be removed
+			std::remove_if
+			(
+				m_pAgents->begin(), 
+				m_pAgents->end(), 
+				[](FlowAgent* agent)
+			{
+				if (agent->GetNeedsToGo())
+				{
+					delete agent;
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				
+				}
+			), 
+			m_pAgents->end());
+		}
+
+
+
 	}
 
 }
@@ -91,11 +146,6 @@ void App_FlowField::Render(float deltaTime) const
 	for (auto& agent : *m_pAgents)
 	{
 		agent->Render(deltaTime);
-	
-		//if (m_TrimWorld)
-		//{
-		//	agent->TrimToWorld(m_TrimWorldSize, m_TrimWorld);
-		//}
 	}
 	
 
@@ -197,7 +247,7 @@ void App_FlowField::UpdateImGui()
 			}
 
 
-			// Max 30 agents cuz this is not a miracle pc
+			// Max 50 agents
 			if (m_AreAgentsSpawned && (m_AgentSpawns != m_MaxAgentSpawns))
 			{
 				SpawnAgents();
@@ -212,7 +262,7 @@ void App_FlowField::UpdateImGui()
 		ImGui::Spacing();
 		ImGui::Spacing();
 		ImGui::Text("Visualization");
-		ImGui::Checkbox("Trim World", &m_TrimWorld);
+	//	ImGui::Checkbox("Trim World", &m_TrimWorld);
 
 		// Toggle the grid
 		ImGui::Checkbox("Draw grid", &m_IsGridDrawn);

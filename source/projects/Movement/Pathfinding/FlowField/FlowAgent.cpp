@@ -31,12 +31,22 @@ void FlowAgent::Render(float dt)
 void FlowAgent::Update(float dt)
 {
 	m_HasMadeFirstMove = false;
-
+	
+	
 	if (m_HasReachedGoal)
 	{
 		m_pAgent->SetLinearVelocity({ 0,0 });
+		
+		if (m_CurrentTime < m_MaxWaitTime)
+		{
+			m_CurrentTime += dt;
+		}
+		else
+		{
+			m_NeedsToGo = true;
+			m_CurrentTime = m_MaxWaitTime;
+		}
 	}
-
 
 
 	m_pBehavior->SetTarget(m_TargetPos);
@@ -68,6 +78,11 @@ bool FlowAgent::GetHasReachedGoal() const
 bool FlowAgent::GetFirstMove() const
 {
 	return m_HasMadeFirstMove;
+}
+
+bool FlowAgent::GetNeedsToGo() const
+{
+	return m_NeedsToGo;
 }
 
 

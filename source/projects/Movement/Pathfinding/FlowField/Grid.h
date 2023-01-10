@@ -86,14 +86,14 @@ private:
 	bool m_DrawGrid{ true };
 	bool m_DrawObstacles{ true };
 	bool m_DrawGoals{ true };
-	bool m_DrawDirections{ true };
+	bool m_DrawDirections{ false };
 
 	bool m_MadeFlowFields{ false };
 
 
 	// Only 1 goal
 	bool m_MadeGoal{ false };
-	Elite::Vector2 m_goal{};// Algorithm can't handle more than 1 goal
+	Elite::Vector2 m_Goal{};// Algorithm can't handle more than 1 goal
 	int m_CurrentGoalCount{};
 	int m_MaxGoals{ 1 };
 
