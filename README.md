@@ -1,6 +1,9 @@
 # Gameplay Programming Research Topic - Flow Fields
 
 
+![FlowFields_HowItWorks]https://user-images.githubusercontent.com/113975573/211923700-67323933-6597-4834-a07c-80c5d6882751.mp4
+
+
 
 ## Introduction
 
@@ -138,6 +141,10 @@ If the left mouse button is pressed then there will be an obstacle placed on tha
 To be able to place the obstacles one should have the checkbox “obstacles ready” disabled.
 Removing the obstacles is done in the same way as making them, click on the square with the left mouse button when “obstacles ready is disabled.
 
+![Adding Obstacles and goals]https://user-images.githubusercontent.com/113975573/211924208-09c10c17-b281-406f-9bfe-6bc8e3f6de38.mp4
+
+
+
 
 **Placing agents**
 
@@ -151,6 +158,27 @@ I definitely want to continue looking into this subject and potentially even add
 I would love to look into flow field with other algorithms.
 
 
+![Showcasing the final result] https://user-images.githubusercontent.com/113975573/211924567-08292caf-be34-4811-9cf1-c64db51f7b61.mp4
 
-https://user-images.githubusercontent.com/113975573/211921855-15a3dc7f-34d7-4445-9cbb-a13a90d9a46d.mp4
+
+
+
+## References
+
+1.	https://github.com/vonWolfehaus/flow-field
+
+2.	https://leifnode.com/2013/12/flow-field-pathfinding/
+
+3.	https://tyskwo.com/work/91_flow-field-pathfinding/
+
+4.	https://www.youtube.com/watch?v=ZJZu3zLMYAc
+
+5.	http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter23_Crowd_Pathfinding_and_Steering_Using_Flow_Field_Tiles.pdfard
+
+6.	Understanding Goal-Based Vector Field Pathfinding (tutsplus.com) - still needed to be looked into
+
+7.	https://github.com/GaelS/flowfield
+
+8.	Planetary Annihilation: March 22nd LiveStream - YouTube
+
 
