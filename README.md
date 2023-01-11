@@ -130,5 +130,24 @@ Update in the agent class checks if the agent has reached the goal. If it has th
 If the agent has not reached the end than the next target gets set and the agent will update.
 The movement of the agent is managed by the basic seek behaviour.
 
+## Extra’s
+
+**Placing obstacles**
+
+If the left mouse button is pressed then there will be an obstacle placed on that square.
+To be able to place the obstacles one should have the checkbox “obstacles ready” disabled.
+Removing the obstacles is done in the same way as making them, click on the square with the left mouse button when “obstacles ready is disabled.
+
+
+**Placing agents**
+
+When the goal and the obstacles are made only then can the agents be spawned at random position.
+Once the first set of agents are gone you can spawn more agents.
+
+
+## Future research
+
+I definitely want to continue looking into this subject and potentially even add influence maps and working with those two to create a possible view of agents behaving like ants but having a set goal and a way to go there.
+I would love to look into flow field with other algorithms.
 
 
