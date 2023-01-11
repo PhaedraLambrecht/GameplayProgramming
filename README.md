@@ -15,7 +15,10 @@ A few examples of the use case of flow fields are,
 * Planet coaster: creating believable crowds.
 * Physics: to look at fluid dynamics
 * Planetary Annihilation: used for pathfinding of the units send into the world (example of cost field for tanks).
+[Planetary Annihilation Example](![Planetary Annihilation](https://user-images.githubusercontent.com/113975573/211901126-ac0b321f-9dae-4519-b444-9591f3f746d0.png)
 
+
+[My implementation](![FlowField_without_agents](https://user-images.githubusercontent.com/113975573/211901229-70d7b047-edc3-42ba-93c9-2ddc529733df.png)
 
 
 ## Implementation
@@ -30,6 +33,7 @@ The agents will follow the directions of the node it is on to the goal.
 ### Grid and algorithm(s)
 
 **Grid class**
+
 In this class I create the grid and use it to create directions for the flow field.
 First the directions get initialized, then I loop over the grid to find all the goals (only 1 goal possible).
 For every goal index I call the algorithm and the flow field creation.
@@ -58,6 +62,7 @@ For every goal index I call the algorithm and the flow field creation.
 ```
 
 **Algorithm(s): Dijkstra**
+
 First I set up the costs to be able to use the Dijkstra algorithm.
 Iterating over the entire grid and checking if it is an obstacle or not, when it is an obstacle I set the cost too 100. Otherwise I set the cost to the max cost (which was calculated earlier).
 
@@ -117,6 +122,7 @@ Short Explanation of Dijkstra’s algorithm
         -	Add this neighbour to the vector of next to visit squares.
 
 **Agent management**
+
 The agents have their own class. This class works together with the grid class to get the agents to move forward.
 This is mainly shown in the MoveToNextSquare function (in grid).
 
