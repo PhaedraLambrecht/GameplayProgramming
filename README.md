@@ -15,10 +15,10 @@ A few examples of the use case of flow fields are,
 * Planet coaster: creating believable crowds.
 * Physics: to look at fluid dynamics
 * Planetary Annihilation: used for pathfinding of the units send into the world (example of cost field for tanks).
-[Planetary Annihilation Example](![Planetary Annihilation](https://user-images.githubusercontent.com/113975573/211901126-ac0b321f-9dae-4519-b444-9591f3f746d0.png)
+![Planetary Annihilation](https://user-images.githubusercontent.com/113975573/211901126-ac0b321f-9dae-4519-b444-9591f3f746d0.png)
 
 
-[My implementation](![FlowField_without_agents](https://user-images.githubusercontent.com/113975573/211901229-70d7b047-edc3-42ba-93c9-2ddc529733df.png)
+![FlowField_without_agents](https://user-images.githubusercontent.com/113975573/211901229-70d7b047-edc3-42ba-93c9-2ddc529733df.png)
 
 
 ## Implementation
@@ -150,4 +150,7 @@ Once the first set of agents are gone you can spawn more agents.
 I definitely want to continue looking into this subject and potentially even add influence maps and working with those two to create a possible view of agents behaving like ants but having a set goal and a way to go there.
 I would love to look into flow field with other algorithms.
 
+
+
+https://user-images.githubusercontent.com/113975573/211921855-15a3dc7f-34d7-4445-9cbb-a13a90d9a46d.mp4
 
