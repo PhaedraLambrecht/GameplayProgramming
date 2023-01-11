@@ -155,7 +155,7 @@ namespace Algorithms
 			
 			
 			// Used to calculate the neighbor of an index, no diagonals (x = column, y = row) 
-			std::vector<Elite::Vector2> neighbors // TODO: research - look into doing diagonals 
+			std::vector<Elite::Vector2> neighbors
 			{	{ 1, 0 }, 
 				{ -1, 0 }, 
 				{ 0, 1 }, 
@@ -172,14 +172,16 @@ namespace Algorithms
 			int neighborNodeIdx{};
 			
 			// Setting the initial index around the start node
-			for (int idx{}; idx < 4; ++idx) // four because 4 around original node (no diagonals remember)
+			for (int idx{}; idx < 4; ++idx) // four because 4 around original node
 			{
 				startColumn = pGrid->at(goalGridIdx).column + int(neighbors[idx].x);
 				startRow = pGrid->at(goalGridIdx).row + int(neighbors[idx].y);
 		
 				// Checking it's bounds
 				if (startColumn >= m_GridSize->x || startRow >= m_GridSize->y)
+				{
 					continue;
+				}
 			
 			
 				// Calculating the neighbors index

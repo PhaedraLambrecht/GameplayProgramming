@@ -86,7 +86,6 @@ bool Grid::AgentReachedGoal(const Elite::Vector2& agentPos)
 }
 
 
-
 // Functions
 void Grid::Render(float deltaTime) const
 {
@@ -103,7 +102,7 @@ void Grid::Update(float deltaTime)
 	if (m_MadeGoal && !m_MadeFlowFields)
 	{
 		m_MadeFlowFields = true;
-		MakeFlowfield();
+		CreateFlowfield();
 		m_MadeGoal = false;
 	}
 
@@ -117,6 +116,7 @@ void Grid::Update(float deltaTime)
 }
 
 
+// Flow field creation
 void Grid::AddObstacle(const Elite::Vector2& ObstaclePos)
 {
 	// Get the index of the position
@@ -158,8 +158,7 @@ void Grid::AddGoal(const Elite::Vector2& goalPos)
 	}
 }
 
-
-void Grid::MakeFlowfield()
+void Grid::CreateFlowfield()
 {
 	// Every square around a square
 	const std::vector<Elite::Vector2> flowfieldFlowDirections
@@ -290,7 +289,7 @@ void Grid::DrawGrid() const
 	// Check every square
 	for (int idx{}; idx < m_pGrid->size(); ++idx)
 	{
-		//TODO: reseearch - look into making this switch
+		//TODO: reseearch - look into making this a switch
 
 		if (m_pGrid->at(idx).squareType == SquareType::Obstacle)// If it is an obstacle
 		{

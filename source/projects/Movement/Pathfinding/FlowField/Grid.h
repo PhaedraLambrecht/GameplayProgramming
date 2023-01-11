@@ -45,7 +45,7 @@ public:
 	Elite::Vector2 GetRandomPos();
 	bool AgentReachedGoal(const Elite::Vector2& agentPos);
 
-	void MakeFlowfield();
+	void CreateFlowfield();
 
 
 	// Adding FlowFieldObstacles/goals(s)
