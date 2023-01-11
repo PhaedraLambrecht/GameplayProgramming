@@ -175,10 +175,10 @@ I would love to look into flow field with other algorithms.
 
 5.	http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter23_Crowd_Pathfinding_and_Steering_Using_Flow_Field_Tiles.pdfard
 
-6.	Understanding Goal-Based Vector Field Pathfinding (tutsplus.com)
+6.	https://gamedevelopment.tutsplus.com/tutorials/understanding-goal-based-vector-field-pathfinding--gamedev-9007
 
 7.	https://github.com/GaelS/flowfield
 
-8.	Planetary Annihilation: March 22nd LiveStream
+8.	https://www.youtube.com/watch?v=5Qyl7h7D1Q8
 
 
