@@ -116,12 +116,13 @@ Short Explanation of Dijkstra’s algorithm
       -	The cost will be set to cost + 1.
         -	Add this neighbour to the vector of next to visit squares.
 
+**Agent management**
+The agents have their own class. This class works together with the grid class to get the agents to move forward.
+This is mainly shown in the MoveToNextSquare function (in grid).
 
-
-
-
-
-
+Update in the agent class checks if the agent has reached the goal. If it has then the agent doesn’t move any longer and will be deleted after a certain amount of time.
+If the agent has not reached the end than the next target gets set and the agent will update.
+The movement of the agent is managed by the basic seek behaviour.
 
 
 
