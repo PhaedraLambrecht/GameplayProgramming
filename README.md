@@ -41,7 +41,7 @@ In this class I create the grid and use it to create directions for the flow fie
 First the directions get initialized, then I loop over the grid to find all the goals (only 1 goal possible).
 For every goal index I call the algorithm and the flow field creation.
 
-```
+```c++
 	//finding a goals
 	std::vector<int> goalIndxs{};
 
@@ -69,7 +69,7 @@ For every goal index I call the algorithm and the flow field creation.
 First I set up the costs to be able to use the Dijkstra algorithm.
 Iterating over the entire grid and checking if it is an obstacle or not, when it is an obstacle I set the cost too 100. Otherwise I set the cost to the max cost (which was calculated earlier).
 
-```
+```c++
 // Max distance + 1, used for unexplored indexes
 	int maxDistance{ static_cast<int>(pGrid->size()) + 1 };
 
