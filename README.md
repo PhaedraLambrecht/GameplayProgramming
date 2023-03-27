@@ -89,7 +89,7 @@ Iterating over the entire grid and checking if it is an obstacle or not, when it
 
 The beginning point is set by going over the neighbours of the goal. Then I check if the square is withing the grid and if it isn’t an obstacle. When these conditions are met the cost gets set to 1.
 
-```
+```c++
 for (int idx{}; idx < 4; ++idx) // four because 4 around original node
 {
     startColumn = pGrid->at(goalGridIdx).column + int(neighbors[idx].x);
